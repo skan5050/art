@@ -23,10 +23,14 @@ SETTINGS = {
     "copyright_en": "© {year} {brand}",
     "painting_prefix_ru": "картина",
     "painting_prefix_en": "painting",
+    "header_note_ru": "Картины в наличии и на заказ",
+    "header_note_en": "Paintings ready to hang and made to order",
+    "map_tiles_url": "",
 }
 
 # Надписи, которые на этом сайте звучат иначе, чем по умолчанию: ключ → (RU, EN).
 LABELS = {
+    "painting.status_page_sold": ("SOLD / Продано", "SOLD / Sold"),
     "catalog.order_cta": ("Любой сюжет можно обсудить", "Any subject is up for discussion"),
     "painting.sold_note": (
         "Эта картина уже дома у своего владельца. Можно заказать новую — по ее мотивам и с вашими деталями.",
@@ -104,6 +108,17 @@ BLOCKS = [
         "text_en": "Width × height, cm. The size of the painting itself, without a frame.",
     },
     {
+        "key": "delivery-steps", "name": "Доставка — три коротких пункта",
+        "usage": "Страница «Доставка», над картой. Строки «Заголовок | текст»",
+        "text_ru": "Упаковка | Защищаем работу при перевозке\nОтправка | Способ согласовываем с вами\nСтоимость | Считаем для вашего маршрута до отправки",
+        "text_en": "Packaging | We protect the work in transit\nShipping | We agree the method with you\nCost | We work it out for your route before shipping",
+    },
+    {
+        "key": "about-steps", "name": "Как мы работаем — шаги",
+        "usage": "Страница «О нас» под текстом. Строки «Заголовок | текст». Пусто — блок не показывается",
+        "text_ru": "", "text_en": "",
+    },
+    {
         "key": "footer-order", "name": "Подпись в футере",
         "usage": "Футер, над кнопками",
         "text_ru": "Картина — отдельно, дорога — отдельно. Отправляем через СДЭК или согласованную с вами ТК; стоимость доставки оплачивается дополнительно.",
@@ -166,7 +181,7 @@ PAGES = [
         "seo_description_en": "Choose a painting for your home or tell us about your idea. Ready works and paintings made to order: favourite subjects, clear details and a little cosiness.",
     },
     {
-        "kind": "about", "slug_ru": "о-нас", "slug_en": "about",
+        "kind": "about", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Обсудить заказ", "cta_button_en": "Discuss an order", "slug_ru": "о-нас", "slug_en": "about",
         "title_ru": "Чтобы дома было чуть больше вас", "title_en": "A little more of you at home",
         "nav_title_ru": "О нас", "nav_title_en": "About",
         "body_ru": (
@@ -185,7 +200,7 @@ PAGES = [
         "seo_description_en": "We help you start with a simple “I like it”. Get to know how we help choose a ready painting and discuss a work based on your idea.",
     },
     {
-        "kind": "catalog", "slug_ru": "каталог", "slug_en": "catalog",
+        "kind": "catalog", "cta_text_ru": "Любой сюжет можно обсудить", "cta_text_en": "Any subject is up for discussion", "cta_button_ru": "Заказать картину", "cta_button_en": "Order a painting", "slug_ru": "каталог", "slug_en": "catalog",
         "title_ru": "Каталог картин", "title_en": "Painting catalogue",
         "nav_title_ru": "Каталог", "nav_title_en": "Catalogue",
         "intro_ru": "Какой сюжет хочется забрать домой? Выберите рубрику, посмотрите работы и откройте ту, к которой хочется вернуться взглядом.",
@@ -195,7 +210,7 @@ PAGES = [
         "seo_description_en": "The sea without a suitcase, flowers without a vase and other subjects for your home. Browse paintings by category and find one you will want to come back to.",
     },
     {
-        "kind": "sold", "slug_ru": "проданные-картины", "slug_en": "sold",
+        "kind": "sold", "kicker_ru": "Проданные картины / SOLD", "kicker_en": "Sold paintings / SOLD", "cta_text_ru": "Понравилась проданная работа?", "cta_text_en": "Liked a sold work?", "cta_button_ru": "Заказать похожую", "cta_button_en": "Order a similar one", "slug_ru": "проданные-картины", "slug_en": "sold",
         "title_ru": "Уже дома. Но могут вдохновить вашу историю", "title_en": "Already home. But they can inspire your story",
         "nav_title_ru": "SOLD", "nav_title_en": "SOLD",
         "intro_ru": "Эти работы нашли своих владельцев. Если одна из них вам особенно понравилась, нажмите «Заказать похожую». Возьмем ее за ориентир и обсудим новую картину: размер, оттенки, сюжет и детали. Та же любовь к живописи — но уже ваша история.",
@@ -208,7 +223,7 @@ PAGES = [
         "seo_description_en": "These paintings have already found their home. Browse the sold works and pick an example your new story can start from.",
     },
     {
-        "kind": "reviews", "slug_ru": "отзывы", "slug_en": "reviews",
+        "kind": "reviews", "cta_text_ru": "Поможем выбрать вашу картину", "cta_text_en": "We will help you choose your painting", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "отзывы", "slug_en": "reviews",
         "title_ru": "Отзывы", "title_en": "Reviews",
         "intro_ru": "Здесь говорят те, у кого картины уже дома. Спасибо за впечатления — приятно узнавать, как работа стала частью чьего-то пространства.",
         "intro_en": "Here you hear from people whose paintings are already at home. Thank you for sharing — it is lovely to learn how a work became part of someone’s space.",
@@ -219,7 +234,7 @@ PAGES = [
         "seo_description_en": "Customers’ impressions of paintings and orders. Once reviews are published, you can read here how a work became part of someone’s home.",
     },
     {
-        "kind": "delivery", "slug_ru": "доставка", "slug_en": "delivery",
+        "kind": "delivery", "cta_text_ru": "Уточнить доставку в ваш город", "cta_text_en": "Check delivery to your city", "cta_button_ru": "Обсудить доставку", "cta_button_en": "Discuss delivery", "slug_ru": "доставка", "slug_en": "delivery",
         "title_ru": "Картина собирается к вам в гости", "title_en": "A painting is coming to visit",
         "nav_title_ru": "Доставка", "nav_title_en": "Delivery",
         "intro_ru": "Чемодан ей не нужен. А подходящая упаковка и согласованный маршрут — очень даже.",
@@ -285,7 +300,7 @@ PAGES = [
         "seo_description_en": "Give someone a pleasant decision to make: choosing their own painting. We will discuss the amount, format and terms before issuing the certificate.",
     },
     {
-        "kind": "custom", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
+        "kind": "custom", "cta_text_ru": "А можно такую, но немного другую?", "cta_text_en": "Could I have one like this, but a little different?", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
         "title_ru": "Сначала ваша идея. Потом — картина", "title_en": "Your idea first. Then the painting",
         "nav_title_ru": "Картины на заказ", "nav_title_en": "Paintings to order",
         "body_ru": (
@@ -304,7 +319,7 @@ PAGES = [
         "seo_description_en": "Have an idea for a painting but no exact plan yet? Send an example, a size or a few words about the mood — we will start from there.",
     },
     {
-        "kind": "studio", "slug_ru": "студия", "slug_en": "studio",
+        "kind": "studio", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "студия", "slug_en": "studio",
         "title_ru": "Немного о нашей мастерской", "title_en": "A little about our studio",
         "nav_title_ru": "О студии", "nav_title_en": "The studio",
         "body_ru": (
@@ -335,7 +350,7 @@ PAGES = [
 ]
 
 # Порядок пунктов верхнего меню (SOLD можно включить в админке).
-MENU = ["about", "catalog", ("sold", False), "reviews", "delivery", "contacts"]
+MENU = ["about", "catalog", "sold", "reviews", "delivery", "contacts"]
 
 HOME_SECTIONS = [
     {
@@ -344,7 +359,7 @@ HOME_SECTIONS = [
         "text_ru": "Море без билетов, цветы без вазы, любимый город без чемодана. Начните с сюжета, который вам близок. В каталоге есть готовые работы и примеры для заказа — статус каждой картины указан в карточке.",
         "text_en": "The sea without tickets, flowers without a vase, a favourite city without a suitcase. Start with the subject closest to you. The catalogue has ready works and examples for orders — each painting’s status is shown on its card.",
     },
-    {"kind": "categories", "title_ru": "Найдите свой сюжет", "title_en": "Find your subject", "button_ru": "Весь каталог", "button_en": "Whole catalogue"},
+    {"kind": "categories", "title_ru": "Найдите свой сюжет", "title_en": "Find your subject", "button_ru": "Весь каталог", "button_en": "Whole catalogue", "limit": 12},
     {"kind": "available", "title_ru": "В наличии", "title_en": "Available now", "button_ru": "Все работы", "button_en": "All works", "limit": 4},
     {"kind": "custom", "title_ru": "Картины под заказ", "title_en": "Made to order", "button_ru": "Все работы", "button_en": "All works", "limit": 4},
     {
@@ -364,6 +379,14 @@ HOME_SECTIONS = [
 ]
 
 
+CTA_DEFAULT = ("Нужен другой размер или сюжет?", "Need a different size or subject?", "Заказать картину", "Order a painting")
+CTA = {
+    "животные-и-птицы": ("Картина с вашим любимым животным", "A painting of your favourite animal", "Обсудить заказ", "Discuss an order"),
+    "животные": ("Картина с вашим любимым животным", "A painting of your favourite animal", "Обсудить заказ", "Discuss an order"),
+    "портрет-и-фигура": ("Портрет по вашей фотографии?", "A portrait from your photo?", "Обсудить заказ", "Discuss an order"),
+}
+
+
 def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, cover=None, children=None):
     return {
         "name_ru": name_ru, "slug_ru": slug_ru, "name_en": name_en, "slug_en": slug_en,
@@ -372,6 +395,8 @@ def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, s
         "seo_title_en": seo_title_en, "seo_description_en": seo_desc_en,
         "cover": cover, "children": children or [],
         "cover_alt_ru": "", "cover_alt_en": "",
+        "cta_text_ru": CTA.get(slug_ru, CTA_DEFAULT)[0], "cta_text_en": CTA.get(slug_ru, CTA_DEFAULT)[1],
+        "cta_button_ru": CTA.get(slug_ru, CTA_DEFAULT)[2], "cta_button_en": CTA.get(slug_ru, CTA_DEFAULT)[3],
     }
 
 

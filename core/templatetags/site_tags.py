@@ -53,6 +53,19 @@ def sizes_json(options):
     ], ensure_ascii=False)
 
 
+@register.filter
+def pairs(text):
+    """Строки «Заголовок | текст» → список пар для блоков шагов и преимуществ."""
+    result = []
+    for line in (text or "").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        head, _, tail = line.partition("|")
+        result.append({"title": head.strip(), "text": tail.strip()})
+    return result
+
+
 @register.simple_tag
 def status_label(painting):
     return label(f"status.{painting.status}")

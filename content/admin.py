@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from core.admin import SEO_FIELDSET, site_link, thumb
 
-from .models import Article, CertificateNominal, HomeSection, MenuItem, Page, Review, StudioImage
+from .models import Article, CertificateNominal, HomeSection, MediaAsset, MenuItem, Page, Review, StudioImage
 
 
 @admin.register(Page)
@@ -20,8 +20,9 @@ class PageAdmin(admin.ModelAdmin):
             "published", "order",
         )})
         text = ("Тексты", {"fields": (
-            ("intro_ru", "intro_en"), ("body_ru", "body_en"), ("note_ru", "note_en"), ("empty_ru", "empty_en"),
-            ("button_ru", "button_en"), "image", ("image_alt_ru", "image_alt_en"),
+            ("kicker_ru", "kicker_en"), ("intro_ru", "intro_en"), ("body_ru", "body_en"), ("note_ru", "note_en"), ("empty_ru", "empty_en"),
+            ("button_ru", "button_en"), ("cta_text_ru", "cta_text_en"), ("cta_button_ru", "cta_button_en"),
+            "image", ("image_alt_ru", "image_alt_en"),
         )})
         banner = ("Баннер главной — все надписи редактируются здесь, а не в изображении", {"fields": (
             "banner_image", "banner_image_mobile", ("banner_focus_x", "banner_focus_y"),
@@ -78,7 +79,7 @@ class HomeSectionAdmin(admin.ModelAdmin):
     list_display = ("kind", "title_ru", "order", "visible")
     list_editable = ("order", "visible")
     filter_horizontal = ("paintings",)
-    fields = ("kind", ("title_ru", "title_en"), ("text_ru", "text_en"), ("button_ru", "button_en"), "image", "paintings", "limit", "order", "visible")
+    fields = ("kind", ("kicker_ru", "kicker_en"), ("title_ru", "title_en"), ("text_ru", "text_en"), ("button_ru", "button_en"), "image", "paintings", "limit", "order", "visible")
     readonly_fields = ("kind",)
 
     def has_add_permission(self, request):
@@ -89,7 +90,7 @@ class HomeSectionAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("author_ru", "short_text", "photo_thumb", "published", "order")
     list_editable = ("published", "order")
-    fields = (("text_ru", "text_en"), ("author_ru", "author_en"), ("city_ru", "city_en"), "photo", "painting", "published", "order")
+    fields = (("text_ru", "text_en"), ("author_ru", "author_en"), ("city_ru", "city_en"), "date", "photo", "painting", "featured", "published", "order")
     autocomplete_fields = ("painting",)
 
     @admin.display(description="Текст")
@@ -116,3 +117,27 @@ class StudioImageAdmin(admin.ModelAdmin):
     @admin.display(description="Изображение")
     def preview(self, obj):
         return thumb(obj.image, 64)
+
+
+@admin.register(MediaAsset)
+class MediaAssetAdmin(admin.ModelAdmin):
+    list_display = ("preview", "title", "snippet_text", "uploaded_at")
+    search_fields = ("title", "alt_ru", "alt_en")
+    fields = ("image", "preview_large", "title", ("alt_ru", "alt_en"), ("caption_ru", "caption_en"), "snippet_text")
+    readonly_fields = ("preview_large", "snippet_text")
+
+    @admin.display(description="Фото")
+    def preview(self, obj):
+        return thumb(obj.image, 56)
+
+    @admin.display(description="Предпросмотр")
+    def preview_large(self, obj):
+        return thumb(obj.image, 320)
+
+    @admin.display(description="Вставка в текст")
+    def snippet_text(self, obj):
+        from django.utils.html import format_html
+
+        if not obj.image:
+            return "—"
+        return format_html('<code style="user-select:all">{}</code><br><small>Скопируйте строку в текст страницы или статьи отдельным абзацем; на следующей строке можно добавить подпись.</small>', obj.snippet)

@@ -15,7 +15,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from catalog.models import Category, Technique
-from content.models import Article, HomeSection, MenuItem, Page
+from content.models import Article, HomeSection, MenuItem, Page, StudioImage
 from core.labels import DEFAULT_LABELS
 from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize
 
@@ -51,6 +51,7 @@ class Command(BaseCommand):
             self.menu(data.MENU, pages)
             self.home_sections(data.HOME_SECTIONS)
             self.articles(articles.ARTICLES)
+            self.studio(getattr(data, "STUDIO_IMAGES", []))
         self.stdout.write(self.style.SUCCESS(f"Наполнение сайта «{data.SETTINGS['brand_name_ru']}» загружено."))
 
     # --- помощники ---
@@ -171,3 +172,16 @@ class Command(BaseCommand):
             obj = self.upsert(Article, {"slug_ru": item["slug_ru"]}, item, files)
             if categories:
                 obj.related_categories.set(Category.objects.filter(slug_ru__in=categories))
+
+    def studio(self, items):
+        if StudioImage.objects.exists() and not self.update:
+            return
+        if self.update:
+            StudioImage.objects.all().delete()
+        for i, item in enumerate(items):
+            item = dict(item)
+            filename = item.pop("image")
+            obj = StudioImage(order=i * 10, **item)
+            self.attach(obj, "image", filename)
+            if obj.image:
+                obj.save()

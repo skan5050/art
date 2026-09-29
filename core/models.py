@@ -32,6 +32,9 @@ class SiteSettings(TranslatableMixin, models.Model):
         help_text="Тогда слоган не дублируется отдельной надписью рядом с логотипом.",
     )
 
+    header_note_ru = models.CharField("Подпись в шапке (RU)", max_length=120, blank=True, help_text="Короткая строка справа в шапке внутренних страниц.")
+    header_note_en = models.CharField("Подпись в шапке (EN)", max_length=120, blank=True)
+
     # Адрес сайта
     base_url = models.URLField(
         "Основной адрес сайта", blank=True,
@@ -79,6 +82,13 @@ class SiteSettings(TranslatableMixin, models.Model):
         "Подпись источника карты", max_length=255,
         default='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     )
+
+    # Формы
+    consent_checkbox = models.BooleanField(
+        "Галочка согласия в формах", default=True,
+        help_text="Отправка возможна только с отметкой согласия. Текст — надпись form.consent; ссылка — страница, указанная ниже.",
+    )
+    privacy_page_url = models.CharField("Ссылка на политику обработки данных", max_length=255, blank=True)
 
     # Уведомления
     notify_emails = models.CharField(
@@ -399,6 +409,10 @@ class SeoFields(models.Model):
     indexable = models.BooleanField(
         "Показывать в поиске", default=True,
         help_text="Если выключено — noindex и исключение из sitemap.xml.",
+    )
+    canonical_override = models.CharField(
+        "Canonical вручную", max_length=500, blank=True,
+        help_text="Обычно пусто: canonical формируется автоматически. Указывайте адрес основной версии только для дублей, например /каталог/море/.",
     )
 
     class Meta:

@@ -71,7 +71,13 @@ def build_meta(request, obj=None, *, h1="", fallback_description="", page_num=1,
     canonical, alternates = "", []
     if obj is not None:
         suffix = f"?page={page_num}" if page_num > 1 else ""
-        canonical = settings.absolute(obj.url(lang) + suffix, request)
+        override = (getattr(obj, "canonical_override", "") or "").strip()
+        if override.startswith("http"):
+            canonical = override
+        elif override.startswith("/"):
+            canonical = settings.absolute(override, request)
+        else:
+            canonical = settings.absolute(obj.url(lang) + suffix, request)
         present = [code for code in LANGS if obj.has_lang(code)]
         if len(present) > 1:
             for code in present:

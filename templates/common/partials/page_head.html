@@ -1,0 +1,6 @@
+{% comment %}Заголовок страницы: надпись-кикер, H1, вводный текст. Параметры: h1, kicker, intro, head_class.{% endcomment %}
+<header class="page-head {{ head_class|default:'' }}">
+  {% if kicker %}<p class="page-kicker">{{ kicker|brandify }}</p>{% endif %}
+  <h1 class="page-title">{{ h1|brandify }}</h1>
+  {% if intro %}<div class="page-intro">{{ intro|rich }}</div>{% endif %}
+</header>

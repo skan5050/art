@@ -92,27 +92,37 @@
       }
       select.value = ""; sync();
     };
-    form._selectSize = function (value) { select.value = value || ""; sync(); if (value) { var d = $("details", form); if (d) d.open = true; } };
+    form._selectSize = function (value) { select.value = value || ""; sync(); };
     sync();
   }
 
-  /* ---------- Способ связи: подсказка поля контакта ---------- */
+  /* ---------- Способ связи, номинал сертификата, вложение ---------- */
   function setupContact(form) {
     var input = $("[data-contact-input]", form);
+    var method = $("[data-contact-method]", form);
     var update = function () {
-      var r = $("input[name=contact_method]:checked", form);
-      if (!r || !input) return;
-      input.placeholder = r.getAttribute("data-placeholder") || "";
-      input.type = r.value === "email" ? "email" : (r.value === "phone" || r.value === "whatsapp" ? "tel" : "text");
-      input.autocomplete = r.value === "email" ? "email" : (r.value === "phone" || r.value === "whatsapp" ? "tel" : "off");
+      if (!method || !input) return;
+      var opt = method.options[method.selectedIndex];
+      var v = method.value;
+      input.placeholder = opt ? (opt.getAttribute("data-placeholder") || "") : "";
+      input.type = v === "email" ? "email" : (v === "phone" || v === "whatsapp" ? "tel" : "text");
+      input.autocomplete = v === "email" ? "email" : (v === "phone" || v === "whatsapp" ? "tel" : "off");
     };
-    $$("input[name=contact_method]", form).forEach(function (r) { r.addEventListener("change", update); });
+    if (method) method.addEventListener("change", update);
     update();
-    var customToggle = $$("input[name=certificate_amount]", form);
+    var amount = $("[data-cert-amount]", form);
     var customInput = $("[data-cert-custom]", form);
-    customToggle.forEach(function (r) {
-      r.addEventListener("change", function () { if (customInput) customInput.hidden = r.value !== "custom" || !r.checked; });
-    });
+    if (amount && customInput) {
+      amount.addEventListener("change", function () { customInput.hidden = amount.value !== "custom"; });
+    }
+    var file = $("[data-file-input]", form);
+    var fileLabel = $("[data-file-label]", form);
+    if (file && fileLabel) {
+      var initial = fileLabel.textContent;
+      file.addEventListener("change", function () {
+        fileLabel.textContent = file.files && file.files[0] ? file.files[0].name : initial;
+      });
+    }
   }
 
   function uuid() {
@@ -134,13 +144,23 @@
       if (!slot) return;
       slot.textContent = errors[key]; slot.hidden = false;
       var field = slot.closest(".field"); if (field) field.classList.add("has-error");
-      var details = slot.closest("details"); if (details) details.open = true;
       if (!first) first = field && $("input:not([type=hidden]), select, textarea", field);
     });
     var status = $("[data-form-status]", form);
     status.textContent = message || ""; status.hidden = !message;
     (first || status).focus && (first || status).focus();
   }
+
+  /* Цели аналитики: клик по телефону и мессенджеру — отдельно от успешной заявки */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    var goal = href.indexOf("tel:") === 0 ? "phone_click" : (/t\.me|wa\.me|whatsapp|max\.ru|vk\.com|viber/.test(href) ? "messenger_click" : "");
+    if (!goal) return;
+    try { if (window.ym && window.ART_METRIKA_ID) ym(window.ART_METRIKA_ID, "reachGoal", goal); } catch (err) {}
+    try { if (window.gtag) gtag("event", goal); } catch (err) {}
+  });
 
   function reachGoal() {
     try { if (window.ym && window.ART_METRIKA_ID) ym(window.ART_METRIKA_ID, "reachGoal", "lead_sent"); } catch (e) {}
@@ -214,8 +234,13 @@
       var ctx = trigger.getAttribute("data-context-name");
       var ctxBox = $("[data-form-context]", form);
       ctxBox.hidden = !ctx; $("[data-form-context-name]", form).textContent = ctx || "";
+      $("[data-form-context-meta]", form).textContent = trigger.getAttribute("data-context-meta") || "";
+      var thumb = $("[data-form-context-img]", form), thumbSrc = trigger.getAttribute("data-thumb");
+      if (thumb) { thumb.hidden = !thumbSrc; if (thumbSrc) thumb.src = thumbSrc; }
       $("[data-similar-note]", form).hidden = kind !== "similar";
       $("[data-cert-fields]", form).hidden = kind !== "certificate";
+      $$("[data-optional-field]", form).forEach(function (f) { f.hidden = kind === "certificate"; });
+      modal.classList.toggle("has-context", !!ctx);
       var sizeField = $("[data-size-field]", form);
       if (sizeField) sizeField.hidden = kind === "certificate" || kind === "delivery" || kind === "question" || (kind === "painting" && status === "available");
       if (form._setSizes) {
@@ -264,6 +289,7 @@
         mainImg.alt = btn.getAttribute("data-alt");
         zoom.href = btn.getAttribute("data-full");
         $$("[data-thumb]", gallery).forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+        var idx = $("[data-gallery-index]", gallery); if (idx) idx.textContent = btn.getAttribute("data-index");
       });
     });
     var lb = $("[data-lightbox]");

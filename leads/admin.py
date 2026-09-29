@@ -33,13 +33,14 @@ class LeadAdmin(admin.ModelAdmin):
     readonly_fields = (
         "created_at", "kind", "lang", "painting_link", "painting_title", "painting_status", "category", "source_link",
         "name", "contact_method", "contact", "city", "deadline", "comment", "size_display",
-        "certificate_amount", "certificate_format", "notification_error",
+        "certificate_amount", "certificate_format", "certificate_recipient", "consent_given", "notification_error",
     )
     fieldsets = (
         ("Обработка", {"fields": ("status", "manager_note")}),
         ("Контакт", {"fields": ("name", "contact_method", "contact", "city")}),
         ("Контекст обращения", {"fields": ("kind", "painting_link", "painting_title", "painting_status", "category", "source_link", "lang", "created_at")}),
-        ("Пожелания", {"fields": ("size_display", "deadline", "comment", "certificate_amount", "certificate_format")}),
+        ("Пожелания", {"fields": ("size_display", "deadline", "comment", "certificate_amount", "certificate_format", "certificate_recipient")}),
+        ("Согласие", {"fields": ("consent_given",)}),
         ("Служебное", {"fields": ("notification_error",), "classes": ("collapse",)}),
     )
 

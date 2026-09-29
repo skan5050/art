@@ -1,0 +1,43 @@
+{% load static %}{% comment %}
+Сквозной компонент «География наших продаж» (раздел 8 ТЗ): один источник данных, подключается на «Доставке» и в SOLD.
+Показывает только подтвержденные продажи. Подложка — векторные контуры стран, без внешних сервисов.
+{% endcomment %}{% shared "sales-map" as geo %}
+{% if geo %}
+<section class="section geo-section" id="geography-sales" aria-labelledby="geo-title-{{ map_id|default:'m' }}">
+  <div class="container">
+    <div class="geo-head">
+      <h2 class="section-title" id="geo-title-{{ map_id|default:'m' }}">{{ geo.t.title }}</h2>
+      {% if geo.t.text %}<div class="section-text">{{ geo.t.text|rich }}</div>{% endif %}
+    </div>
+    <div class="geo-layout">
+      <div class="geo-map" data-sales-map data-geo="{% static 'geo/countries.json' %}" data-tiles="{{ site.map_tiles_url }}"
+           data-attribution="{{ site.map_attribution }}" role="region" aria-label="{{ geo.t.title }}"
+           data-cities="{{ map_id|default:'m' }}-cities">
+        <noscript><p class="geo-noscript">{% t "map.list" %}: {% for c in cities %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</p></noscript>
+      </div>
+      <aside class="geo-panel">
+        <p class="geo-panel-kicker">{% t "map.your_city" %}</p>
+        <p class="geo-panel-city" data-geo-selected>{% if cities %}{{ cities.0.name }}{% else %}—{% endif %}</p>
+        <p class="geo-panel-caption" data-geo-selected-caption>{% if cities %}{{ cities.0.caption }}{% else %}{{ map_empty|default:"" }}{% endif %}</p>
+        {% if cities %}
+        <div class="geo-controls">
+          <label class="visually-hidden" for="{{ map_id|default:'m' }}-search">{% t "map.search" %}</label>
+          <input id="{{ map_id|default:'m' }}-search" type="search" placeholder="{% t 'map.search' %}" data-geo-search>
+          <label class="visually-hidden" for="{{ map_id|default:'m' }}-country">{% t "map.country" %}</label>
+          <select id="{{ map_id|default:'m' }}-country" data-geo-country>
+            <option value="">{% t "map.all_countries" %}</option>
+            {% regroup cities by country as countries %}{% for g in countries %}<option value="{{ g.grouper }}">{{ g.grouper }}</option>{% endfor %}
+          </select>
+        </div>
+        <ul class="geo-list" data-geo-list aria-label="{% t 'map.list' %}">
+          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-lat="{{ c.lat }}" data-lng="{{ c.lng }}" data-caption="{{ c.caption }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
+        </ul>
+        {% endif %}
+        {% if cta_button %}<a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery">{{ cta_button }}</a>{% endif %}
+      </aside>
+    </div>
+    <p class="geo-caption">{{ map_caption|default:"" }}</p>
+    {{ cities|json_script:map_json_id }}
+  </div>
+</section>
+{% endif %}

@@ -6,5 +6,6 @@
       {% else %}<span class="cat-card-placeholder" aria-hidden="true"></span>{% endif %}
     </span>
     <span class="cat-card-title"><span>{{ cat.t.name }}</span>{% icon "arrow" "icon cat-card-arrow" %}</span>
+    {% if cat.t.caption %}<span class="cat-card-caption">{{ cat.t.caption }}</span>{% endif %}
   </a>
 </li>

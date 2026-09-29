@@ -6,6 +6,7 @@
   data-title-delivery="{% t 'form.title.delivery' %}" data-title-question="{% t 'form.title.general' %}">
   <div class="modal-box">
     <button class="modal-close" type="button" data-modal-close aria-label="{% t 'nav.close' %}">{% icon "close" %}</button>
+    <p class="modal-kicker">{% t "form.kicker" %}</p>
     <h2 class="modal-title" id="order-modal-title" data-modal-title>{% t "form.title.general" %}</h2>
     {% if form_intro and form_intro.t.text %}<p class="modal-intro">{{ form_intro.t.text|brandify }}</p>{% endif %}
     <div data-modal-body>

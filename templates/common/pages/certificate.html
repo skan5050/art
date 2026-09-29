@@ -1,17 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  {% include "partials/breadcrumbs.html" %}
+  {% if theme == "a" %}<p class="page-label">{{ page.nav_title }}</p>{% else %}<h1 class="page-title page-title-poster">{{ page.t.title }}</h1>{% endif %}
   <div class="cert-layout">
-    <div>
-      <h1 class="page-title">{{ page.t.title }}</h1>
-      {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
-      <div class="prose">{{ page.t.body|rich }}</div>
-      {% if site.certificate_image %}<figure class="cert-image">{% picture site.certificate_image widths="480,960" sizes="(min-width: 960px) 40vw, 100vw" alt=page.t.image_alt %}</figure>{% endif %}
+    <div class="cert-visual-col">
+      {% if site.certificate_image %}
+      <figure class="cert-image">{% picture site.certificate_image widths="480,960" sizes="(min-width: 960px) 45vw, 100vw" alt=page.t.image_alt lazy=False %}</figure>
+      {% else %}
+      <div class="cert-visual" role="img" aria-label="{% t 'cert.visual_title' %} {{ brand }}">
+        <p class="cert-visual-brand">{{ brand }}</p>
+        <p class="cert-visual-title">{% t "cert.visual_title" %}</p>
+        <p class="cert-visual-note">{% t "cert.visual_note" %}</p>
+      </div>
+      {% endif %}
+      <p class="cert-under">{% t "cert.visual_under" %}</p>
+      {% if theme == "d" %}<a class="link-arrow" href="#cert-terms">{% t "cert.terms_link" %} {% icon "arrow" %}</a>{% endif %}
     </div>
-    <section class="form-card" id="order" aria-labelledby="cert-form-title">
-      <h2 class="form-card-title" id="cert-form-title">{{ page.t.button|default:"" }}{% if not page.t.button %}{% t "form.title.certificate" %}{% endif %}</h2>
-      {% include "partials/order_form.html" with fid="cert" fkind="certificate" fpainting=None fcategory=None form_sizes=None %}
+    <section class="cert-form-col" id="order" aria-labelledby="cert-form-title">
+      {% if theme == "a" %}<h1 class="about-title" id="cert-form-title">{{ page.t.title }}</h1>{% else %}<h2 class="cert-sub" id="cert-form-title">{{ page.t.intro|default:page.nav_title }}</h2>{% endif %}
+      <div class="prose" id="cert-terms">{{ page.t.body|rich }}</div>
+      {% include "partials/order_form.html" with fid="cert" fkind="certificate" fpainting=None fcategory=None form_sizes=None submit_label=page.t.button %}
+      <p class="field-hint">{% t "cert.hint" %}</p>
     </section>
   </div>
 </div>

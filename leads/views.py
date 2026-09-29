@@ -130,6 +130,9 @@ def submit(request):
         if contact_error:
             errors["contact"] = contact_error
 
+    if site.consent_checkbox and data.get("consent") not in ("1", "on", "true"):
+        errors["consent"] = label("form.error.consent")
+
     # Контекст определяется на сервере по идентификаторам, а не по тексту из браузера.
     kind = data.get("kind", "general")
     if kind not in dict(Lead.KINDS):
@@ -163,6 +166,8 @@ def submit(request):
         comment=data.get("comment", "").strip()[:5000],
         idempotency_key=key,
         ip_hash=ip_hash,
+        consent_given=data.get("consent") in ("1", "on", "true"),
+        certificate_recipient=data.get("certificate_recipient", "").strip()[:160],
     )
 
     # Желаемый размер новой картины (раздел 5.3): значения фиксируются в заявке.
@@ -282,8 +287,10 @@ def _notify(lead, site, request):
         lines.append(f"Рубрика: {lead.category.name_ru}")
     if lead.size_display:
         lines.append(f"Желаемый размер: {lead.size_display}")
-    if lead.certificate_amount:
-        lines.append(f"Сертификат: {lead.certificate_amount} {lead.get_certificate_format_display()}")
+    if lead.certificate_amount or lead.kind == "certificate":
+        lines.append(f"Сертификат: {lead.certificate_amount or 'номинал не выбран'} {lead.get_certificate_format_display()}")
+    if lead.certificate_recipient:
+        lines.append(f"Получатель сертификата: {lead.certificate_recipient}")
     for label_text, value in (("Город", lead.city), ("Срок", lead.deadline), ("Комментарий", lead.comment)):
         if value:
             lines.append(f"{label_text}: {value}")

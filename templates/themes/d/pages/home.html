@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block body_class %}page-home{% endblock %}
+{% block header %}{% include "partials/header.html" with is_home=True %}{% endblock %}
+{% block content %}
+{% for s in sections %}
+  {% if s.kind == "intro" %}
+  <section class="d-intro">
+    <div class="container d-intro-row">
+      <div>
+        {% if s.obj.t.title %}<h2 class="d-intro-title">{{ s.obj.t.title|brandify }}</h2>{% endif %}
+        {% if s.obj.t.text %}<div class="d-intro-text">{{ s.obj.t.text|rich }}</div>{% endif %}
+      </div>
+      {% if site_pages.certificate %}<a class="btn btn-accent d-intro-cert" href="{{ site_pages.certificate.url }}">{% t "btn.certificate" %}</a>{% endif %}
+    </div>
+  </section>
+  {% elif s.kind == "categories" and s.categories %}
+  <section class="section section-categories">
+    <div class="container">
+      <div class="section-head">
+        <div>{% if s.obj.t.kicker %}<p class="section-kicker">{{ s.obj.t.kicker }}</p>{% endif %}
+        {% if s.obj.t.title %}<h2 class="section-title">{{ s.obj.t.title|brandify }}</h2>{% endif %}</div>
+        {% if s.obj.t.button %}<a class="link-arrow" href="{% page_url 'catalog' %}">{{ s.obj.t.button }} {% icon "arrow" %}</a>{% endif %}
+      </div>
+      <ul class="cat-grid">{% for cat in s.categories %}{% include "partials/category_card.html" %}{% endfor %}</ul>
+    </div>
+  </section>
+  {% elif s.kind == "order" %}
+  <section class="d-order">
+    <div class="container d-order-row">
+      <h2 class="d-order-title">{{ s.obj.t.title|brandify }}</h2>
+      <div class="d-order-side">
+        {% if s.obj.t.text %}<div class="d-order-text">{{ s.obj.t.text|rich }}</div>{% endif %}
+        <a class="btn btn-primary" href="{% page_url 'contacts' %}?order=custom#order" data-order data-kind="custom">{% if s.obj.t.button %}{{ s.obj.t.button }}{% else %}{% t "btn.order" %}{% endif %}</a>
+      </div>
+    </div>
+  </section>
+  {% elif s.kind == "available" or s.kind == "custom" or s.kind == "sold" %}
+  <section class="section section-works">
+    <div class="container">
+      <div class="section-head">
+        <div>{% if s.obj.t.kicker %}<p class="section-kicker">{{ s.obj.t.kicker }}</p>{% endif %}<h2 class="section-title">{{ s.obj.t.title|brandify }}</h2></div>
+        {% if s.kind == "sold" and site_pages.sold %}<a class="link-arrow" href="{{ site_pages.sold.url }}">{{ s.obj.t.button|default:site_pages.sold.nav_title }} {% icon "arrow" %}</a>
+        {% elif s.obj.t.button %}<a class="link-arrow" href="{% page_url 'catalog' %}">{{ s.obj.t.button }} {% icon "arrow" %}</a>{% endif %}
+      </div>
+      <ul class="art-grid">{% for p in s.paintings %}{% include "catalog/_painting_card.html" %}{% endfor %}</ul>
+    </div>
+  </section>
+  {% elif s.kind == "reviews" %}
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">{{ s.obj.t.title|brandify }}</h2>{% if site_pages.reviews %}<a class="link-arrow" href="{{ site_pages.reviews.url }}">{{ s.obj.t.button|default:site_pages.reviews.nav_title }} {% icon "arrow" %}</a>{% endif %}</div>
+      <ul class="review-grid">{% for r in s.reviews %}{% include "partials/review.html" %}{% endfor %}</ul>
+    </div>
+  </section>
+  {% elif s.kind == "delivery" %}
+  <section class="section">
+    <div class="container delivery-strip">
+      <div><h2 class="section-title">{{ s.obj.t.title|brandify }}</h2><div>{{ s.obj.t.text|rich }}</div></div>
+      {% if site_pages.delivery %}<a class="btn btn-outline" href="{{ site_pages.delivery.url }}">{{ s.obj.t.button|default:site_pages.delivery.nav_title }}</a>{% endif %}
+    </div>
+  </section>
+  {% elif s.kind == "guides" %}
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">{{ s.obj.t.title|brandify }}</h2>{% if site_pages.guides %}<a class="link-arrow" href="{{ site_pages.guides.url }}">{{ s.obj.t.button|default:site_pages.guides.nav_title }} {% icon "arrow" %}</a>{% endif %}</div>
+      <ul class="article-grid">{% for a in s.articles %}{% include "partials/article_card.html" %}{% endfor %}</ul>
+    </div>
+  </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

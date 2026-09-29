@@ -1,0 +1,12 @@
+{% comment %}Блок шагов/преимуществ из сквозного блока: строки «Заголовок | текст». Параметры: block_key, numbered.{% endcomment %}
+{% shared block_key as steps_block %}
+{% if steps_block and steps_block.t.text %}
+<section class="steps{% if numbered %} steps-numbered{% endif %}" aria-label="{{ steps_block.t.title|default:steps_block.name }}">
+  <ol class="steps-list">
+    {% for s in steps_block.t.text|pairs %}
+    <li class="step">{% if numbered %}<span class="step-num" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>{% endif %}
+      <p class="step-title">{{ s.title }}</p>{% if s.text %}<p class="step-text">{{ s.text }}</p>{% endif %}</li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}

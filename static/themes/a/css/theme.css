@@ -54,3 +54,49 @@
   radial-gradient(120% 90% at 0% 0%, rgba(28,73,126,.35), transparent 55%),
   radial-gradient(90% 80% at 100% 100%, rgba(7,54,98,.28), transparent 60%),
   linear-gradient(135deg, #eaf3fa, #dcebf6); }
+
+/* ===== Макет A после аудита ===== */
+.btn { border-radius: 6px; }
+.hero .btn { border-radius: 999px; }
+.page-title, .page-label { text-align: center; }
+.page-head { text-align: center; }
+.page-head .page-intro { margin-left: auto; margin-right: auto; }
+.sold-head, .sold-head .page-title { text-align: left; }
+.contacts-main .page-title, .about-title { text-align: left; }
+.list-title { font-size: 15px; font-weight: 500; color: var(--text); }
+
+/* Карточки: белые, с тонкой рамкой */
+.cat-card-link, .art-card-link { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 8px 14px; transition: box-shadow .2s, border-color .2s; }
+.cat-card-link:hover, .art-card-link:hover { border-color: #b9d0e6; box-shadow: var(--shadow); }
+.cat-card-title, .cat-card-caption { padding: 0 6px; }
+.art-card-media { background: #fff; padding: 0; border-radius: 4px; }
+.art-card-img { box-shadow: none; }
+.art-card-body { padding: 12px 6px 0; }
+.art-card-title { font-weight: 500; font-size: 15px; color: var(--primary-dark); }
+.art-card-meta { font-size: 13px; color: var(--muted); font-weight: 400; }
+.art-card .badge { left: 16px; top: 16px; background: #eaf3fa; color: var(--primary-dark); padding: 6px 22px; }
+.art-card .badge-sold, .artwork-info .badge-sold { background: var(--primary-dark); color: #fff; }
+
+/* Картина */
+.artwork-main { background: #e8f2f9; border-radius: 0; }
+.artwork-img { box-shadow: none; }
+.artwork-info .badge:not(.badge-sold) { background: #eaf3fa; color: var(--primary-dark); padding: 6px 48px; }
+.artwork-order .btn { background: var(--primary); }
+
+/* Карта — светлые контуры на белом, без рамки */
+.geo-section { background: var(--bg); }
+.geo-map { border: 0; }
+
+/* Контакты: форма в светлой карточке */
+.contacts-a .form-card { background: #f3f8fc; border-color: #dcebf6; box-shadow: none; }
+.contact-list dd a { color: var(--primary-dark); }
+
+/* Отзывы */
+.review { background: #fff; border: 1px solid var(--line); }
+.review-quote { color: var(--accent); }
+
+/* Сертификат */
+.cert-visual { background: #123c66; }
+.cert-visual-note { border-top-color: rgba(227, 191, 88, .7); }
+.order-cta-inner { background: #e8f2f9; }
+.order-cta .btn { min-width: 216px; }

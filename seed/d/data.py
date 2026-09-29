@@ -20,9 +20,19 @@ SETTINGS = {
     "copyright_en": "© {year} {brand}",
     "painting_prefix_ru": "картина",
     "painting_prefix_en": "painting",
+    "header_note_ru": "",
+    "header_note_en": "",
+    "map_tiles_url": "",
 }
 
 LABELS = {
+    "status.sold_badge": ("Продано", "Sold"),
+    "painting.status_page_sold": ("Продано", "Sold"),
+    "painting.hint.available": ("Ответим на вопросы перед заказом", "We will answer your questions before you order", ),
+    "painting.hint.custom": ("Размер и срок согласуются индивидуально", "Size and timing are agreed individually"),
+    "painting.hint.sold": ("Новая работа по мотивам", "A new work based on this one"),
+    "catalog.list_title": ("Работы рубрики", "Works in this category"),
+    "catalog.list_hint": ("Откройте карточку, чтобы рассмотреть детали и обсудить заказ", "Open a work to see the details and discuss an order"),
     "catalog.order_cta": ("Картина по вашей идее", "A painting based on your idea"),
     "btn.certificate": ("Сертификат", "Certificate"),
     "painting.sold_note": (
@@ -91,6 +101,18 @@ BLOCKS = [
         "text_en": "Width × height, cm. Size of the work without an outer frame.",
     },
     {
+        "key": "delivery-steps", "name": "Доставка — этапы",
+        "usage": "Страница «Доставка», под картой. Строки «Заголовок | текст»",
+        "text_ru": "Упакуем | Подготовка определяется размером, основой и оформлением работы\nСогласуем отправку | Перевозчик, маршрут и стоимость — до передачи груза\nПередадим вам | Отправление передается выбранной транспортной компании",
+        "text_en": "We pack | Preparation depends on the work’s size, support and framing\nWe agree the shipment | Carrier, route and cost are agreed before handover\nWe hand it over | The parcel goes to the chosen carrier",
+    },
+    {
+        "key": "about-steps", "name": "Как мы работаем — шаги",
+        "usage": "Страница «О нас» под текстом. Строки «Заголовок | текст»",
+        "text_ru": "Знакомимся с вашей идеей | Сюжет, место размещения, ориентиры\nОбсуждаем сюжет и формат | Техника, размер, оформление, стоимость и сроки\nСоздаем и передаем работу | По согласованным условиям, с доставкой",
+        "text_en": "We learn about your idea | Subject, placement, references\nWe discuss subject and format | Technique, size, framing, price and timing\nWe create and hand over the work | On the agreed terms, with delivery",
+    },
+    {
         "key": "footer-order", "name": "Подпись в футере", "usage": "Футер, над кнопками",
         "text_ru": "Давайте создадим вашу картину.",
         "text_en": "Let’s create your painting.",
@@ -152,7 +174,7 @@ PAGES = [
         "seo_description_en": "A catalogue of ready paintings and custom orders. Images, details, work statuses, portfolio and inquiries about a selected work.",
     },
     {
-        "kind": "about", "slug_ru": "о-нас", "slug_en": "about",
+        "kind": "about", "image": "banner.jpg", "image_alt_ru": "Иллюстрация: большая абстрактная картина в светлом помещении", "image_alt_en": "Illustration: a large abstract painting in a bright room", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "о-нас", "slug_en": "about",
         "title_ru": "Выбор и заказ картин", "title_en": "Choosing and ordering paintings",
         "nav_title_ru": "О нас", "nav_title_en": "About",
         "body_ru": (
@@ -171,7 +193,7 @@ PAGES = [
         "seo_description_en": "How we approach choosing and ordering paintings. Ready works, custom execution and how the parameters of a work are agreed.",
     },
     {
-        "kind": "catalog", "slug_ru": "каталог", "slug_en": "catalog",
+        "kind": "catalog", "kicker_ru": "Каталог", "kicker_en": "Catalogue", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Обсудить заказ", "cta_button_en": "Discuss an order", "slug_ru": "каталог", "slug_en": "catalog",
         "title_ru": "Каталог картин", "title_en": "Painting catalogue",
         "nav_title_ru": "Каталог", "nav_title_en": "Catalogue",
         "intro_ru": "Выберите жанр и перейдите к просмотру работ. Статус, описание и заполненные характеристики доступны на странице каждой картины.",
@@ -181,7 +203,7 @@ PAGES = [
         "seo_description_en": "Paintings by genre: landscape, abstract, portrait, flowers and more. Photos, current statuses and parameters of published works.",
     },
     {
-        "kind": "sold", "slug_ru": "проданные-картины", "slug_en": "sold",
+        "kind": "sold", "kicker_ru": "Уже нашли свой дом", "kicker_en": "Already found their home", "cta_text_ru": "Вдохновились работой?", "cta_text_en": "Inspired by a work?", "cta_button_ru": "Расскажите нам", "cta_button_en": "Tell us", "slug_ru": "проданные-картины", "slug_en": "sold",
         "title_ru": "Проданные работы", "title_en": "Sold works",
         "nav_title_ru": "SOLD", "nav_title_en": "SOLD",
         "intro_ru": "В разделе представлены картины, которые уже приобретены и не доступны как находящиеся в наличии оригиналы. Для обсуждения новой работы на основе выбранного примера воспользуйтесь действием «Заказать похожую». Параметры, стоимость и срок исполнения согласуются отдельно.",
@@ -194,7 +216,7 @@ PAGES = [
         "seo_description_en": "Portfolio of sold paintings. The originals shown are not available in stock; you can request a similar new painting.",
     },
     {
-        "kind": "reviews", "slug_ru": "отзывы", "slug_en": "reviews",
+        "kind": "reviews", "kicker_ru": "Картины в новых домах", "kicker_en": "Paintings in new homes", "cta_text_ru": "Вопросы о картинах и условиях заказа", "cta_text_en": "Questions about paintings and order terms", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "отзывы", "slug_en": "reviews",
         "title_ru": "Отзывы", "title_en": "Reviews",
         "intro_ru": "В этом разделе публикуются отзывы покупателей о приобретенных работах и взаимодействии по заказам.",
         "intro_en": "This section publishes buyers’ reviews of purchased works and of working with us on orders.",
@@ -205,7 +227,7 @@ PAGES = [
         "seo_description_en": "Buyers’ reviews of purchased paintings and of working with us on orders. Only provided and confirmed materials are published.",
     },
     {
-        "kind": "delivery", "slug_ru": "доставка", "slug_en": "delivery",
+        "kind": "delivery", "kicker_ru": "Доставка", "kicker_en": "Delivery", "cta_text_ru": "Уточнить доставку в ваш город", "cta_text_en": "Check delivery to your city", "cta_button_ru": "Согласовать доставку", "cta_button_en": "Arrange delivery", "slug_ru": "доставка", "slug_en": "delivery",
         "title_ru": "Доставка картин: способы и условия", "title_en": "Painting delivery: methods and terms",
         "nav_title_ru": "Доставка", "nav_title_en": "Delivery",
         "intro_ru": "Отправляем работы в любой город через СДЭК или другую транспортную компанию по согласованию с Заказчиком. Доставка оплачивается отдельно от стоимости картины.",
@@ -256,7 +278,7 @@ PAGES = [
         "seo_description_en": "Contact us about availability, painting details, custom execution and delivery. Current contacts and an inquiry form.",
     },
     {
-        "kind": "certificate", "slug_ru": "подарочный-сертификат", "slug_en": "gift-certificate",
+        "kind": "certificate", "intro_ru": "Подарок с продолжением", "intro_en": "A gift that continues", "slug_ru": "подарочный-сертификат", "slug_en": "gift-certificate",
         "title_ru": "Сертификат на выбор картины", "title_en": "A certificate to choose a painting",
         "nav_title_ru": "Подарочный сертификат", "nav_title_en": "Gift certificate",
         "body_ru": (
@@ -273,7 +295,7 @@ PAGES = [
         "seo_description_en": "A certificate to choose a painting. Available amounts and formats, request form; validity and terms of use are agreed in advance.",
     },
     {
-        "kind": "custom", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
+        "kind": "custom", "cta_text_ru": "Индивидуальная работа под ваши задачи", "cta_text_en": "A custom work for your needs", "cta_button_ru": "Обсудить индивидуальный заказ", "cta_button_en": "Discuss a custom order", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
         "title_ru": "Индивидуальный заказ картины", "title_en": "Commissioning a painting",
         "nav_title_ru": "Картины на заказ", "nav_title_en": "Paintings to order",
         "body_ru": (
@@ -292,7 +314,7 @@ PAGES = [
         "seo_description_en": "Custom execution of a painting to agreed requirements. Subject, format, technique, framing, price and timing are discussed before work begins.",
     },
     {
-        "kind": "studio", "slug_ru": "студия", "slug_en": "studio",
+        "kind": "studio", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Отправить пожелания", "cta_button_en": "Send your requirements", "slug_ru": "студия", "slug_en": "studio",
         "title_ru": "Мастерская и порядок работы", "title_en": "The studio and how we work",
         "nav_title_ru": "О студии", "nav_title_en": "The studio",
         "body_ru": (
@@ -334,11 +356,11 @@ MENU = ["about", "catalog", "sold", "reviews", "delivery", "contacts"]
 
 HOME_SECTIONS = [
     {
-        "kind": "intro", "title_ru": "Готовая работа или индивидуальный заказ", "title_en": "A ready work or a custom order",
+        "kind": "intro", "title_ru": "Готовая работа или ваша идея.", "title_en": "A ready work or your idea.",
         "text_ru": "Каталог организован по жанрам. На странице каждой работы представлены изображение, статус и заполненные характеристики. Для заказа или уточнения информации отправьте обращение из карточки — выбранная работа будет указана автоматически.",
         "text_en": "The catalogue is organised by genre. Each work’s page shows the image, status and listed details. To order or ask a question, send an inquiry from the work’s page — the selected work will be included automatically.",
     },
-    {"kind": "categories", "title_ru": "Жанры каталога", "title_en": "Catalogue genres", "button_ru": "Весь каталог", "button_en": "Whole catalogue"},
+    {"kind": "categories", "kicker_ru": "Найдите свой сюжет", "kicker_en": "Find your subject", "title_ru": "Что вам откликается?", "title_en": "What speaks to you?", "button_ru": "Весь каталог", "button_en": "Whole catalogue", "limit": 4},
     {
         "kind": "order", "title_ru": "Индивидуальная работа под ваши задачи", "title_en": "A custom work for your needs",
         "text_ru": "Передайте пожелания к сюжету, цвету, размеру и оформлению. Возможность исполнения, стоимость и сроки согласуются до начала работы.",
@@ -360,9 +382,34 @@ HOME_SECTIONS = [
 COVERS = {"абстракция": "cover-abstract.jpg", "море": "cover-sea.jpg", "цветы-и-ботаника": "cover-flowers.jpg", "пейзажи": "cover-landscape.jpg"}
 
 
+CAPTIONS = {
+    "пейзажи": ("Природа и простор", "Nature and space"),
+    "абстракция": ("Цвет, фактура, движение", "Colour, texture, movement"),
+    "животные-и-птицы": ("Характер и движение", "Character and movement"),
+    "море": ("Горизонт и вода", "Horizon and water"),
+    "цветы-и-ботаника": ("Ботаника и букеты", "Botanicals and bouquets"),
+    "портрет-и-фигура": ("Образ и жест", "Image and gesture"),
+    "город-и-архитектура": ("Улицы и архитектура", "Streets and architecture"),
+    "натюрморт": ("Предмет и свет", "Object and light"),
+    "интерьер-и-бытовые-сцены": ("Повседневные сцены", "Everyday scenes"),
+    "прочее": ("Другие направления", "Other themes"),
+    "животные": ("Домашние и дикие", "Domestic and wild"),
+    "птицы": ("Полет и оперение", "Flight and plumage"),
+    "рыбы": ("Подводные сюжеты", "Underwater subjects"),
+    "морские-животные": ("Черепахи и морские обитатели", "Turtles and sea creatures"),
+    "женщины": ("Женский портрет", "Portraits of women"),
+    "пары": ("Портреты пар", "Portraits of couples"),
+    "дети": ("Детский портрет", "Portraits of children"),
+}
+
+
 def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, children=None):
     return {
         "cover": COVERS.get(slug_ru),
+        "caption_ru": CAPTIONS.get(slug_ru, ("", ""))[0], "caption_en": CAPTIONS.get(slug_ru, ("", ""))[1],
+        "cta_text_ru": "Не нашли свой сюжет?", "cta_text_en": "Did not find your subject?",
+        "cta_button_ru": "Заказать пейзаж" if slug_ru == "пейзажи" else "Обсудить заказ",
+        "cta_button_en": "Order a landscape" if slug_ru == "пейзажи" else "Discuss an order",
         "name_ru": name_ru, "slug_ru": slug_ru, "name_en": name_en, "slug_en": slug_en,
         "intro_ru": intro_ru, "intro_en": intro_en,
         "seo_title_ru": seo_title_ru, "seo_description_ru": seo_desc_ru,
@@ -454,4 +501,10 @@ CATEGORIES = [
          "Works in other themes. Ask about parameters or discuss a similar order from the work’s page.",
          "Другие сюжеты картин", "Работы других тематических направлений. Изображения и сведения о картинах; уточнение параметров и обсуждение похожей работы через форму.",
          "Other painting subjects", "Works in other themes. Images and information; clarify parameters and discuss a similar work via the form."),
+]
+
+
+STUDIO_IMAGES = [
+    {"image": "banner.jpg", "alt_ru": "Большая абстрактная картина в светлом помещении", "alt_en": "A large abstract painting in a bright room",
+     "caption_ru": "", "caption_en": "", "is_illustration": True},
 ]

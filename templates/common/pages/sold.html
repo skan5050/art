@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
+{% block head_extra %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
 {% block content %}
 <div class="container">
   {% include "partials/breadcrumbs.html" %}
-  <header class="page-head">
-    <p class="page-kicker">SOLD</p>
-    <h1 class="page-title">{{ page.t.title }}</h1>
+  <header class="page-head sold-head">
+    <div class="sold-head-main">
+      {% if page.t.kicker %}<p class="page-kicker">{{ page.t.kicker }}</p>{% endif %}
+      {% if theme == "d" %}<p class="sold-word" aria-hidden="true">SOLD</p>{% endif %}
+      <h1 class="page-title">{{ page.t.title }}</h1>
+    </div>
     {% if page.t.intro and page_obj.number == 1 %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
   </header>
   {% if paintings %}
@@ -14,5 +19,7 @@
   <div class="empty-state">{{ page.t.empty|rich }}<p><a class="btn btn-outline" href="{% page_url 'catalog' %}">{% t "btn.to_catalog" %}</a></p></div>
   {% endif %}
 </div>
-{% include "partials/order_cta.html" with cta_kind="general" cta_label=page.t.button %}
+{% include "partials/order_cta.html" with cta_kind="general" cta_text=page.t.cta_text cta_label=page.t.cta_button|default:page.t.button %}
+{% include "partials/sales_map.html" with map_id="sm" map_json_id="sm-cities" map_caption=site_pages.delivery.t.note map_empty=site_pages.delivery.t.empty %}
 {% endblock %}
+{% block scripts %}<script src="{% static 'vendor/leaflet/leaflet.js' %}" defer></script><script src="{% static 'js/map.js' %}" defer></script>{% endblock %}

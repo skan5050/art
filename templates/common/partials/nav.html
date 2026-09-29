@@ -11,7 +11,9 @@
       {% endfor %}
     </ul>
     <div class="nav-tools">
-      {% if messengers|length == 1 %}
+      {% if theme == "d" and messengers %}
+        <ul class="messenger-text">{% for m in messengers|slice:":3" %}<li><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a></li>{% endfor %}</ul>
+      {% elif messengers|length == 1 %}
         {% with m=messengers.0 %}<a class="messenger-btn" href="{{ m.url }}" target="_blank" rel="noopener" aria-label="{% t 'nav.messengers' %}: {{ m.name }}" title="{{ m.name }}">{% icon m.icon %}</a>{% endwith %}
       {% elif messengers %}
       <div class="messenger-menu" data-dropdown>

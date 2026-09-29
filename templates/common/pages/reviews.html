@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  {% include "partials/breadcrumbs.html" %}
-  <header class="page-head">
-    <h1 class="page-title">{{ page.t.title }}</h1>
-    {% if reviews and page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
-  </header>
+  {% include "partials/page_head.html" with h1=page.t.title kicker=page.t.kicker head_class="page-head-center" %}
   {% if reviews %}
-  <ul class="review-grid">{% for r in reviews %}{% include "partials/review.html" %}{% endfor %}</ul>
+    {% if page.t.intro %}<div class="page-intro reviews-intro">{{ page.t.intro|rich }}</div>{% endif %}
+    {% with featured=reviews.0 %}{% if featured.featured %}
+    <div class="review-featured">
+      <blockquote class="review-featured-text">{{ featured.t.text|rich }}</blockquote>
+      <p class="review-featured-author">{{ featured.t.author }}{% if featured.t.city %} · {{ featured.t.city }}{% endif %}{% if featured.date %} · {{ featured.date|date:"d.m.Y" }}{% endif %}</p>
+      {% if featured.photo %}<figure class="review-featured-media">{% picture featured.photo widths="480,960" sizes="(min-width: 960px) 35vw, 100vw" alt="" %}</figure>{% endif %}
+    </div>
+    {% endif %}{% endwith %}
+    <ul class="review-grid">{% for r in reviews %}{% if not r.featured or not forloop.first %}{% include "partials/review.html" %}{% endif %}{% endfor %}</ul>
   {% else %}
-  <div class="empty-state">{{ page.t.empty|rich }}
-    <p><a class="btn btn-outline" href="{% page_url 'contacts' %}#order" data-order data-kind="question">{% t "btn.order" %}</a></p></div>
+  <div class="empty-state">{{ page.t.empty|rich }}</div>
   {% endif %}
 </div>
+{% include "partials/order_cta.html" with cta_kind="question" cta_text=page.t.cta_text cta_label=page.t.cta_button %}
 {% endblock %}

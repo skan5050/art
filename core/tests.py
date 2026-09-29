@@ -192,9 +192,31 @@ class SiteTests(TestCase):
 
     # --- Заявки ---
     def lead_post(self, **extra):
-        data = {"name": "Анна", "contact_method": "phone", "contact": "+7 999 000-11-22", "lang": "ru"}
+        data = {"name": "Анна", "contact_method": "phone", "contact": "+7 999 000-11-22", "lang": "ru", "consent": "1"}
         data.update(extra)
+        data = {k: v for k, v in data.items() if v is not None}
         return self.client.post("/lead/", data, HTTP_X_REQUESTED_WITH="fetch")
+
+    def test_audit_content_reports_missing_translation(self):
+        from core.models import Label
+
+        Label.objects.create(key="audit.test", group="Тест", value_ru="Только по-русски", value_en="")
+        out = io.StringIO()
+        call_command("audit_content", stdout=out)
+        self.assertIn("audit.test", out.getvalue())
+        self.assertIn("нет версии EN", out.getvalue())
+        self.assertIn("Проверено страниц:", out.getvalue())
+
+    def test_lead_requires_consent_when_enabled(self):
+        s = SiteSettings.get()
+        s.consent_checkbox = True
+        s.save()
+        r = self.lead_post(consent=None, idempotency_key="c1")
+        self.assertEqual(r.status_code, 400)
+        self.assertIn("consent", r.json()["errors"])
+        r = self.lead_post(idempotency_key="c2")
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(Lead.objects.get().consent_given)
 
     def test_lead_context_from_server_and_size_saved(self):
         p = self.painting(status=Painting.SOLD)

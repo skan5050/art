@@ -1,0 +1,28 @@
+{% shared "footer-order" as footer_cta %}
+<footer class="site-footer site-footer-d">
+  <div class="container footer-d-row">
+    <p class="footer-d-claim">{% if footer_cta and footer_cta.t.text %}{{ footer_cta.t.text|brandify }}{% else %}{{ slogan }}{% endif %}</p>
+    <ul class="footer-d-links">
+      {% for item in footer_menu %}<li><a href="{{ item.href }}">{{ item.label }}</a></li>{% endfor %}
+    </ul>
+    <div class="footer-d-contacts">
+      <p>{% for m in messengers %}<a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a>{% if not forloop.last %} / {% endif %}{% endfor %}{% if site.email %}{% if messengers %} / {% endif %}<a href="mailto:{{ site.email }}">Email</a>{% endif %}{% if site.phone %} / <a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{% t "contacts.phone" %}</a>{% endif %}</p>
+      {% if site.t.geography %}<p class="muted">{{ site.t.geography }}</p>{% endif %}
+      <p class="muted">{{ brand }}</p>
+    </div>
+    <div class="footer-d-actions">
+      <a class="btn btn-accent" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.discuss" %}</a>
+      {% if site_pages.certificate %}<a class="btn btn-ghost" href="{{ site_pages.certificate.url }}">{% t "btn.certificate" %}</a>{% endif %}
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>{{ copyright_text }}</p>
+    <ul class="footer-service">
+      {% if site_pages.guides %}<li><a href="{{ site_pages.guides.url }}">{{ site_pages.guides.nav_title }}</a></li>{% endif %}
+      {% if site_pages.studio %}<li><a href="{{ site_pages.studio.url }}">{{ site_pages.studio.nav_title }}</a></li>{% endif %}
+      {% if site_pages.custom %}<li><a href="{{ site_pages.custom.url }}">{{ site_pages.custom.nav_title }}</a></li>{% endif %}
+      {% for p in service_pages %}<li><a href="{{ p.url }}">{{ p.nav_title }}</a></li>{% endfor %}
+      {% if other_lang_url %}<li><a href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a></li>{% endif %}
+    </ul>
+  </div>
+</footer>

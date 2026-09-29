@@ -1,4 +1,4 @@
-{% if site_pages.certificate and page.kind != "certificate" %}
+{% if site_pages.certificate %}
 <a class="cert-fab" href="{{ site_pages.certificate.url }}" aria-label="{% t 'btn.certificate' %}" title="{% t 'btn.certificate' %}">
   {% icon "gift" %}<span class="cert-fab-label">{% t "btn.certificate" %}</span>
 </a>

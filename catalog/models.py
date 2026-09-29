@@ -34,6 +34,12 @@ class Category(TranslatableMixin, SeoFields, Routable):
     slug_en = models.CharField("ЧПУ (EN)", max_length=120, blank=True, help_text="Латиница, например «landscapes».")
     intro_ru = models.TextField("Вводный текст (RU)", blank=True)
     intro_en = models.TextField("Вводный текст (EN)", blank=True)
+    caption_ru = models.CharField("Подпись под плиткой (RU)", max_length=80, blank=True)
+    caption_en = models.CharField("Подпись под плиткой (EN)", max_length=80, blank=True)
+    cta_text_ru = models.CharField("Блок заказа внизу: текст (RU)", max_length=160, blank=True)
+    cta_text_en = models.CharField("Блок заказа внизу: текст (EN)", max_length=160, blank=True)
+    cta_button_ru = models.CharField("Блок заказа внизу: кнопка (RU)", max_length=80, blank=True)
+    cta_button_en = models.CharField("Блок заказа внизу: кнопка (EN)", max_length=80, blank=True)
     cover = models.ImageField("Обложка", upload_to="categories/", blank=True)
     cover_alt_ru = models.CharField("Alt обложки (RU)", max_length=200, blank=True)
     cover_alt_en = models.CharField("Alt обложки (EN)", max_length=200, blank=True)
@@ -240,6 +246,22 @@ class Painting(TranslatableMixin, SeoFields, Routable):
         if self.width and self.height:
             return f"{fmt_num(self.width)} × {fmt_num(self.height)} см"
         return ""
+
+    @property
+    def params_line(self):
+        """«Холст, масло / 60 × 80 см» — только из заполненных данных."""
+        from core.i18n import tr
+
+        material = ", ".join(x for x in (tr(self, "base"), self.technique.t.name.lower() if self.technique else "") if x)
+        material = material[:1].upper() + material[1:] if material else ""
+        return " / ".join(x for x in (material, self.actual_size) if x)
+
+    @property
+    def alt_default(self):
+        from core.i18n import current_lang, tr
+
+        title = tr(self, "title")
+        return f"Painting “{title}”" if current_lang() == "en" else f"Картина «{title}»"
 
     def main_image(self):
         images = getattr(self, "_prefetched_objects_cache", {}).get("images")

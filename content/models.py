@@ -56,6 +56,12 @@ class Page(TranslatableMixin, SeoFields, Routable):
     empty_en = models.TextField("Текст пустого состояния (EN)", blank=True)
     button_ru = models.CharField("Кнопка (RU)", max_length=80, blank=True)
     button_en = models.CharField("Кнопка (EN)", max_length=80, blank=True)
+    kicker_ru = models.CharField("Надпись над заголовком (RU)", max_length=120, blank=True)
+    kicker_en = models.CharField("Надпись над заголовком (EN)", max_length=120, blank=True)
+    cta_text_ru = models.CharField("Блок заказа внизу: текст (RU)", max_length=160, blank=True)
+    cta_text_en = models.CharField("Блок заказа внизу: текст (EN)", max_length=160, blank=True)
+    cta_button_ru = models.CharField("Блок заказа внизу: кнопка (RU)", max_length=80, blank=True)
+    cta_button_en = models.CharField("Блок заказа внизу: кнопка (EN)", max_length=80, blank=True)
     image = models.ImageField("Изображение страницы", upload_to="pages/", blank=True)
     image_alt_ru = models.CharField("Alt изображения (RU)", max_length=200, blank=True)
     image_alt_en = models.CharField("Alt изображения (EN)", max_length=200, blank=True)
@@ -241,6 +247,8 @@ class HomeSection(TranslatableMixin, models.Model):
         ("guides", "Полезное"),
     ]
     kind = models.CharField("Блок", max_length=20, choices=KINDS, unique=True)
+    kicker_ru = models.CharField("Надпись над заголовком (RU)", max_length=120, blank=True)
+    kicker_en = models.CharField("Надпись над заголовком (EN)", max_length=120, blank=True)
     title_ru = models.CharField("Заголовок (RU)", max_length=200, blank=True)
     title_en = models.CharField("Заголовок (EN)", max_length=200, blank=True)
     text_ru = models.TextField("Текст (RU)", blank=True)
@@ -273,6 +281,8 @@ class Review(TranslatableMixin, models.Model):
     city_ru = models.CharField("Город (RU)", max_length=80, blank=True)
     city_en = models.CharField("Город (EN)", max_length=80, blank=True)
     photo = models.ImageField("Фото", upload_to="reviews/", blank=True)
+    date = models.DateField("Дата отзыва", null=True, blank=True)
+    featured = models.BooleanField("Крупно в начале страницы", default=False)
     painting = models.ForeignKey("catalog.Painting", verbose_name="Картина", null=True, blank=True, on_delete=models.SET_NULL)
     published = models.BooleanField("Опубликован", default=False)
     order = models.PositiveSmallIntegerField("Порядок", default=0)
@@ -325,3 +335,27 @@ class StudioImage(TranslatableMixin, models.Model):
 
     def __str__(self):
         return self.caption_ru or self.image.name
+
+
+class MediaAsset(TranslatableMixin, models.Model):
+    """Медиатека: изображения для вставки в тексты страниц и статей."""
+
+    image = models.ImageField("Изображение", upload_to="library/")
+    title = models.CharField("Название в медиатеке", max_length=160)
+    alt_ru = models.CharField("Alt (RU)", max_length=255, blank=True)
+    alt_en = models.CharField("Alt (EN)", max_length=255, blank=True)
+    caption_ru = models.CharField("Подпись (RU)", max_length=255, blank=True)
+    caption_en = models.CharField("Подпись (EN)", max_length=255, blank=True)
+    uploaded_at = models.DateTimeField("Загружено", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Изображение медиатеки"
+        verbose_name_plural = "Медиатека"
+        ordering = ["-uploaded_at"]
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def snippet(self):
+        return f"![{self.alt_ru or self.title}]({self.image.url})" if self.image else ""

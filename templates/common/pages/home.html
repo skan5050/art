@@ -13,7 +13,10 @@
   {% elif s.kind == "categories" and s.categories %}
   <section class="section section-categories">
     <div class="container">
-      {% if s.obj.t.title %}<h2 class="section-title center">{{ s.obj.t.title|brandify }}</h2>{% endif %}
+      <div class="section-head section-head-center">
+        <div>{% if s.obj.t.kicker %}<p class="section-kicker">{{ s.obj.t.kicker }}</p>{% endif %}
+        {% if s.obj.t.title %}<h2 class="section-title">{{ s.obj.t.title|brandify }}</h2>{% endif %}</div>
+      </div>
       <ul class="cat-grid">{% for cat in s.categories %}{% include "partials/category_card.html" %}{% endfor %}</ul>
       {% if s.obj.t.button %}<p class="center"><a class="btn btn-outline" href="{% page_url 'catalog' %}">{{ s.obj.t.button }}</a></p>{% endif %}
     </div>

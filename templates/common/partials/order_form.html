@@ -1,9 +1,8 @@
 {% comment %}
-Общая форма обращения. Используется в модальном окне и на страницах «Контакты», «Сертификат».
-Параметры: fid — префикс id полей; fkind — тип обращения; fpainting, fcategory — контекст.
+Общая форма обращения (модальное окно, «Контакты», «Сертификат»).
+Параметры: fid — префикс id; fkind — тип обращения; fpainting, fcategory — контекст; form_sizes — список размеров.
 {% endcomment %}
-<form class="order-form" method="post" action="/lead/" enctype="multipart/form-data" novalidate data-order-form
-      data-analytics-goal="lead_sent">
+<form class="order-form" method="post" action="/lead/" enctype="multipart/form-data" novalidate data-order-form>
   {% csrf_token %}
   <input type="hidden" name="kind" value="{{ fkind|default:'general' }}" data-field="kind">
   <input type="hidden" name="painting_id" value="{{ fpainting.pk|default:'' }}" data-field="painting_id">
@@ -13,72 +12,69 @@
   <input type="hidden" name="idempotency_key" value="" data-field="idempotency_key">
   <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
-  <p class="form-context" data-form-context {% if not fpainting and not fcategory %}hidden{% endif %}>
-    {% t "form.context" %}: <strong data-form-context-name>{% if fpainting %}{{ fpainting.t.title }}{% elif fcategory %}{{ fcategory.t.name }}{% endif %}</strong>
-  </p>
+  <div class="form-context" data-form-context {% if not fpainting and not fcategory %}hidden{% endif %}>
+    <img class="form-context-img" src="{% if fpainting and fpainting.main_image %}{% img_url fpainting.main_image.image 360 %}{% endif %}" alt="" data-form-context-img {% if not fpainting or not fpainting.main_image %}hidden{% endif %}>
+    <div class="form-context-text">
+      <p class="form-context-name" data-form-context-name>{% if fpainting %}{{ fpainting.t.title }}{% elif fcategory %}{{ fcategory.t.name }}{% endif %}</p>
+      <p class="form-context-meta" data-form-context-meta>{% if fpainting %}{% status_label fpainting %} · {{ fpainting.category.t.name }}{% endif %}</p>
+    </div>
+    <span class="form-context-badge">{% t "form.selected" %}</span>
+  </div>
   <p class="form-note" data-similar-note {% if not fpainting.is_sold %}hidden{% endif %}>{% t "form.similar_note" %}</p>
 
-  <div class="field">
-    <label for="{{ fid }}-name">{% t "form.name" %} <span class="req" aria-hidden="true">*</span></label>
-    <input id="{{ fid }}-name" name="name" type="text" autocomplete="name" required maxlength="120">
-    <p class="field-error" data-error-for="name" hidden></p>
-  </div>
-
-  <fieldset class="field">
-    <legend>{% t "form.method" %} <span class="req" aria-hidden="true">*</span></legend>
-    <div class="chips">
-      {% for code in contact_methods %}
-      <label class="chip"><input type="radio" name="contact_method" value="{{ code }}" {% if forloop.first %}checked{% endif %}
-        data-placeholder="{% t 'form.contact.'|add:code %}"><span>{% t 'form.method.'|add:code %}</span></label>
-      {% endfor %}
+  <div class="form-grid">
+    <div class="field f-name">
+      <label for="{{ fid }}-name">{% t "form.name" %} <span class="req" aria-hidden="true">*</span></label>
+      <input id="{{ fid }}-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="{% t 'form.name_ph' %}">
+      <p class="field-error" data-error-for="name" hidden></p>
     </div>
-    <p class="field-error" data-error-for="contact_method" hidden></p>
-  </fieldset>
+    <div class="field f-method">
+      <label for="{{ fid }}-method">{% t "form.method" %}</label>
+      <select id="{{ fid }}-method" name="contact_method" data-contact-method>
+        {% for code in contact_methods %}<option value="{{ code }}" data-placeholder="{% t 'form.contact.'|add:code %}">{% t 'form.method.'|add:code %}</option>{% endfor %}
+      </select>
+      <p class="field-error" data-error-for="contact_method" hidden></p>
+    </div>
+    <div class="field f-contact">
+      <label for="{{ fid }}-contact">{% t "form.contact" %} <span class="req" aria-hidden="true">*</span></label>
+      <input id="{{ fid }}-contact" name="contact" type="tel" required maxlength="160" autocomplete="tel" data-contact-input placeholder="{% t 'form.contact.phone' %}">
+      <p class="field-error" data-error-for="contact" hidden></p>
+    </div>
 
-  <div class="field">
-    <label for="{{ fid }}-contact">{% t "form.contact" %} <span class="req" aria-hidden="true">*</span></label>
-    <input id="{{ fid }}-contact" name="contact" type="text" required maxlength="160" autocomplete="tel" data-contact-input
-           placeholder="{% t 'form.contact.phone' %}">
-    <p class="field-error" data-error-for="contact" hidden></p>
-  </div>
-
-  <div class="cert-fields" data-cert-fields {% if fkind != "certificate" %}hidden{% endif %}>
-    <fieldset class="field">
-      <legend>{% t "cert.nominal" %}</legend>
-      {% if certificate_nominals or site.certificate_custom_amount %}
-      <div class="chips">
-        {% for n in certificate_nominals %}
-        <label class="chip"><input type="radio" name="certificate_amount" value="{{ n.amount }}"><span>{{ n.t.label|default:n }} {{ site.currency }}</span></label>
-        {% endfor %}
-        {% if site.certificate_custom_amount %}
-        <label class="chip"><input type="radio" name="certificate_amount" value="custom" data-cert-custom-toggle><span>{% t "cert.custom_amount" %}</span></label>
-        {% endif %}
+    <div class="cert-fields f-cert" data-cert-fields {% if fkind != "certificate" %}hidden{% endif %}>
+      <div class="field">
+        <label for="{{ fid }}-nominal">{% t "cert.nominal" %}</label>
+        <select id="{{ fid }}-nominal" name="certificate_amount" data-cert-amount>
+          <option value="">{% if certificate_nominals %}{% t "cert.choose" %}{% else %}{% t "cert.no_nominals" %}{% endif %}</option>
+          {% for n in certificate_nominals %}<option value="{{ n.amount }}">{{ n.t.label|default:n }} {{ site.currency }}</option>{% endfor %}
+          {% if site.certificate_custom_amount %}<option value="custom">{% t "cert.custom_amount" %}</option>{% endif %}
+        </select>
+        {% if site.certificate_custom_amount %}<input type="text" inputmode="numeric" name="certificate_custom" class="cert-custom" aria-label="{% t 'cert.custom_amount' %}" hidden data-cert-custom>{% endif %}
+        <p class="field-error" data-error-for="certificate_amount" hidden></p>
+        <p class="field-error" data-error-for="certificate_custom" hidden></p>
       </div>
-      {% if site.certificate_custom_amount %}
-      <input type="text" inputmode="numeric" name="certificate_custom" class="cert-custom" aria-label="{% t 'cert.custom_amount' %}" hidden data-cert-custom>
+      <div class="field">
+        <label for="{{ fid }}-recipient">{% t "cert.recipient" %}</label>
+        <input id="{{ fid }}-recipient" name="certificate_recipient" type="text" maxlength="160" placeholder="{% t 'cert.recipient_ph' %}">
+      </div>
+      {% if site.certificate_electronic or site.certificate_print %}
+      <fieldset class="field">
+        <legend>{% t "cert.format" %}</legend>
+        <div class="chips">
+          {% if site.certificate_electronic %}<label class="chip"><input type="radio" name="certificate_format" value="electronic"><span>{% t "cert.electronic" %}</span></label>{% endif %}
+          {% if site.certificate_print %}<label class="chip"><input type="radio" name="certificate_format" value="print"><span>{% t "cert.print" %}</span></label>{% endif %}
+        </div>
+        <p class="field-error" data-error-for="certificate_format" hidden></p>
+      </fieldset>
       {% endif %}
-      {% else %}<p class="muted">{% t "cert.no_nominals" %}</p>{% endif %}
-      <p class="field-error" data-error-for="certificate_amount" hidden></p>
-    </fieldset>
-    {% if site.certificate_electronic or site.certificate_print %}
-    <fieldset class="field">
-      <legend>{% t "cert.format" %}</legend>
-      <div class="chips">
-        {% if site.certificate_electronic %}<label class="chip"><input type="radio" name="certificate_format" value="electronic"><span>{% t "cert.electronic" %}</span></label>{% endif %}
-        {% if site.certificate_print %}<label class="chip"><input type="radio" name="certificate_format" value="print"><span>{% t "cert.print" %}</span></label>{% endif %}
-      </div>
-    </fieldset>
-    {% endif %}
-  </div>
+    </div>
 
-  <details class="form-more" {% if fopen %}open{% endif %}>
-    <summary>{% t "form.more" %} <span class="muted">({% t "form.optional" %})</span></summary>
-
-    <fieldset class="field size-field" data-size-field {% if fkind == "certificate" or fpainting.status == "available" %}hidden{% endif %}>
-      <legend>{% t "size.title" %}</legend>
-      {% shared "size-hint" as size_hint %}
-      {% if size_hint and size_hint.t.text %}<p class="field-hint">{{ size_hint.t.text }}</p>{% endif %}
-      <label class="visually-hidden" for="{{ fid }}-size">{% t "size.title" %}</label>
+    <div class="field f-city" data-optional-field {% if fkind == "certificate" %}hidden{% endif %}>
+      <label for="{{ fid }}-city">{% t "form.city" %}</label>
+      <input id="{{ fid }}-city" name="city" type="text" maxlength="120" autocomplete="address-level2" placeholder="{% t 'form.city_ph' %}">
+    </div>
+    <div class="field f-size size-field" data-size-field {% if fkind == "certificate" or fkind == "delivery" or fpainting.status == "available" %}hidden{% endif %}>
+      <label for="{{ fid }}-size">{% t "size.title" %}</label>
       <select id="{{ fid }}-size" name="size_select" data-size-select>
         <option value="">{% t "size.none" %}</option>
         <optgroup label="{% t 'size.standard_group' %}" data-size-options>
@@ -104,31 +100,32 @@
       <p class="field-error" data-error-for="size_id" hidden></p>
       <p class="field-error" data-error-for="size_orientation" hidden></p>
       <p class="field-error" data-error-for="size_custom" hidden></p>
-    </fieldset>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="{{ fid }}-city">{% t "form.city" %}</label>
-        <input id="{{ fid }}-city" name="city" type="text" maxlength="120" autocomplete="address-level2">
-      </div>
-      <div class="field">
-        <label for="{{ fid }}-deadline">{% t "form.deadline" %}</label>
-        <input id="{{ fid }}-deadline" name="deadline" type="text" maxlength="120">
-      </div>
     </div>
-    <div class="field">
+    <div class="field f-deadline" data-optional-field {% if fkind == "certificate" %}hidden{% endif %}>
+      <label for="{{ fid }}-deadline">{% t "form.deadline" %}</label>
+      <input id="{{ fid }}-deadline" name="deadline" type="text" maxlength="120" placeholder="{% t 'form.deadline_ph' %}">
+    </div>
+    <div class="field f-comment">
       <label for="{{ fid }}-comment">{% t "form.comment" %}</label>
-      <textarea id="{{ fid }}-comment" name="comment" rows="3" maxlength="5000"></textarea>
+      <textarea id="{{ fid }}-comment" name="comment" rows="2" maxlength="5000" placeholder="{% t 'form.comment_ph' %}"></textarea>
     </div>
-    <div class="field">
-      <label for="{{ fid }}-file">{% t "form.file" %}</label>
-      <input id="{{ fid }}-file" name="file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="{{ fid }}-file-hint">
+    <div class="field f-file">
+      <label class="file-btn" for="{{ fid }}-file"><span data-file-label>{% t "form.attach" %}</span> <span aria-hidden="true">+</span></label>
+      <input id="{{ fid }}-file" class="file-input" name="file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="{{ fid }}-file-hint" data-file-input>
       <p class="field-hint" id="{{ fid }}-file-hint">{% t "form.file_hint" %}</p>
       <p class="field-error" data-error-for="file" hidden></p>
     </div>
-  </details>
-
-  <p class="form-consent">{% t "form.consent" %}</p>
-  <p class="form-status" role="alert" data-form-status hidden></p>
-  <button class="btn btn-primary btn-block" type="submit" data-submit data-sending="{% t 'form.sending' %}">{% t "form.submit" %}</button>
+    {% if site.consent_checkbox %}
+    <div class="field f-consent">
+      <label class="check"><input type="checkbox" name="consent" value="1" required> <span>{% t "form.consent" %}{% if site.privacy_page_url %} <a href="{{ site.privacy_page_url }}" target="_blank" rel="noopener">{% t "form.privacy_link" %}</a>{% endif %}</span></label>
+      <p class="field-error" data-error-for="consent" hidden></p>
+    </div>
+    {% endif %}
+    <div class="f-submit">
+      <p class="form-status" role="alert" data-form-status hidden></p>
+      <button class="btn btn-primary btn-block" type="submit" data-submit data-sending="{% t 'form.sending' %}">{% if submit_label %}{{ submit_label }}{% else %}{% t "form.submit" %}{% endif %}</button>
+    </div>
+  </div>
+  {% if not site.consent_checkbox %}<p class="form-consent">{% t "form.consent" %}</p>{% endif %}
+  <p class="form-required-note">{% t "form.required_note" %}</p>
 </form>

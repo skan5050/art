@@ -1,27 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  {% include "partials/breadcrumbs.html" %}
+  <div class="artwork-top">
+    {% include "partials/breadcrumbs.html" %}
+    <span class="badge badge-{{ painting.status }} artwork-top-badge">{% if painting.is_sold %}{% t "painting.status_page_sold" %}{% else %}{% status_label painting %}{% endif %}</span>
+  </div>
   <article class="artwork artwork-{{ painting.status }}">
     <div class="artwork-gallery" data-gallery>
       {% if images %}
       {% with main=images.0 %}
       <figure class="artwork-main">
         <a href="{% img_url main.image 2000 %}" class="artwork-zoom" data-zoom aria-label="{% t 'painting.zoom' %}">
-          {% picture main.image widths="640,1000,1400" sizes="(min-width: 960px) 55vw, 100vw" alt=main.t.alt|default:painting.t.title cls="artwork-img" lazy=False fetchpriority="high" %}
+          {% picture main.image widths="640,1000,1400" sizes="(min-width: 960px) 60vw, 100vw" alt=main.t.alt|default:painting.alt_default cls="artwork-img" lazy=False fetchpriority="high" %}
           <span class="zoom-icon" aria-hidden="true">{% icon "zoom" %}</span>
         </a>
-        {% if painting.is_sold %}<span class="sold-stamp">{% t "status.sold_badge" %}</span>{% endif %}
+        <span class="artwork-counter" aria-hidden="true"><span data-gallery-index>01</span> / {{ images|length|stringformat:"02d" }}</span>
+        <span class="artwork-whole" aria-hidden="true">{% t "painting.whole" %}</span>
       </figure>
       {% endwith %}
       {% if images|length > 1 %}
-      <ul class="artwork-thumbs" aria-label="{% t 'painting.photos' %}">
-        {% for im in images %}
-        <li><button type="button" class="thumb-btn{% if forloop.first %} is-active{% endif %}" data-thumb data-full="{% img_url im.image 2000 %}" data-src="{% img_url im.image 1400 %}" data-alt="{{ im.t.alt|default:painting.t.title }}" aria-label="{{ im.t.caption|default:im.t.alt|default:painting.t.title }}">
-          {% picture im.image widths="160" sizes="80px" alt="" %}
-        </button>{% if im.t.caption %}<span class="thumb-caption">{{ im.t.caption }}</span>{% endif %}</li>
-        {% endfor %}
-      </ul>
+      <div class="artwork-thumbs-row">
+        <ul class="artwork-thumbs" aria-label="{% t 'painting.photos' %}">
+          {% for im in images %}
+          <li><button type="button" class="thumb-btn{% if forloop.first %} is-active{% endif %}" data-thumb data-index="{{ forloop.counter|stringformat:'02d' }}" data-full="{% img_url im.image 2000 %}" data-src="{% img_url im.image 1400 %}" data-alt="{{ im.t.alt|default:painting.alt_default }}" aria-label="{{ im.t.caption|default:im.t.alt|default:painting.t.title }}">
+            {% picture im.image widths="160" sizes="80px" alt="" %}
+          </button></li>
+          {% endfor %}
+        </ul>
+        <p class="thumb-captions">{% for im in images %}{% if im.t.caption %}{{ im.t.caption }}{% if not forloop.last %} • {% endif %}{% endif %}{% endfor %}</p>
+      </div>
       {% endif %}
       {% else %}
       <div class="artwork-main artwork-noimg" aria-hidden="true"></div>
@@ -30,29 +37,29 @@
 
     <div class="artwork-info">
       <div class="artwork-main-info">
-        <span class="badge badge-{{ painting.status }}">{% status_label painting %}</span>
+        <span class="badge badge-{{ painting.status }}">{% if painting.is_sold %}{% t "painting.status_page_sold" %}{% else %}{% status_label painting %}{% endif %}</span>
         <h1 class="artwork-title">{{ painting.t.title }}</h1>
         {% if painting.t.author %}<p class="artwork-author">{{ painting.t.author }}</p>{% endif %}
-        <p class="artwork-params">{% if painting.t.base %}{{ painting.t.base }}{% endif %}{% if painting.technique %}{% if painting.t.base %}, {% endif %}{{ painting.technique.t.name|lower }}{% endif %}{% if painting.actual_size %}{% if painting.t.base or painting.technique %} / {% endif %}{{ painting.actual_size }}{% endif %}</p>
+        {% if painting.params_line %}<p class="artwork-params">{{ painting.params_line }}</p>{% endif %}
         {% if painting.is_sold %}<p class="artwork-note">{% t "painting.sold_note" %}</p>
         {% elif painting.status == "custom" %}<p class="artwork-note">{% t "painting.custom_note" %}</p>{% endif %}
         {% if description %}<div class="artwork-description">{{ description|rich }}</div>{% endif %}
       </div>
       <div class="artwork-specs">
+        <p class="specs-title">{% t "painting.details" %}</p>
         <dl class="specs">
           {% if painting.actual_size %}<div><dt>{% if painting.status == "available" %}{% t "spec.size" %}{% else %}{% t "size.actual" %}{% endif %}</dt><dd>{{ painting.actual_size }}</dd></div>{% endif %}
           {% if painting.technique %}<div><dt>{% t "spec.technique" %}</dt><dd>{{ painting.technique.t.name }}</dd></div>{% endif %}
           {% if painting.t.base %}<div><dt>{% t "spec.base" %}</dt><dd>{{ painting.t.base }}</dd></div>{% endif %}
           {% if painting.t.framing %}<div><dt>{% t "spec.framing" %}</dt><dd>{{ painting.t.framing }}</dd></div>{% endif %}
           {% if painting.year %}<div><dt>{% t "spec.year" %}</dt><dd>{{ painting.year }}</dd></div>{% endif %}
-          <div><dt>{% t "spec.status" %}</dt><dd>{% status_label painting %}</dd></div>
+          <div><dt>{% t "spec.status" %}</dt><dd>{% if painting.is_sold %}{% t "painting.status_page_sold" %}{% else %}{% status_label painting %}{% endif %}</dd></div>
           {% if painting.sku %}<div><dt>{% t "spec.sku" %}</dt><dd>{{ painting.sku }}</dd></div>{% endif %}
         </dl>
       </div>
       <div class="artwork-order">
-        {% if not painting.is_sold %}
-        <p class="artwork-price">{% if painting.price %}{{ painting.price|floatformat:0 }} {{ site.currency }}{% else %}{% t "price.on_request" %}{% endif %}</p>
-        {% endif %}
+        {% if painting.is_sold %}<p class="artwork-price">{% t "painting.sold_heading" %}</p>
+        {% else %}<p class="artwork-price">{% if painting.price %}{{ painting.price|floatformat:0 }} {{ site.currency }}{% else %}{% t "price.on_request" %}{% endif %}</p>{% endif %}
         {% if desired_sizes %}
         <div class="size-picker" data-size-picker>
           <label for="page-size">{% t "size.title" %}</label>
@@ -64,14 +71,16 @@
           </select>
         </div>
         {% endif %}
+        {% with im=images.0 %}
         <a class="btn btn-primary btn-block btn-lg" href="{% page_url 'contacts' %}?order=painting&amp;painting={{ painting.pk }}#order"
            data-order data-kind="painting" data-painting="{{ painting.pk }}" data-status="{{ painting.status }}"
-           data-context-name="{{ painting.t.title }}" data-category="{{ painting.category_id }}"
+           data-context-name="{{ painting.t.title }}" data-context-meta="{% status_label painting %} · {{ painting.category.t.name }}" data-category="{{ painting.category_id }}"
+           {% if im %}data-thumb="{% img_url im.image 360 %}"{% endif %}
            {% if desired_sizes %}data-sizes="{{ desired_sizes|sizes_json }}"{% endif %}>
-          <span>{% if painting.is_sold %}{% t "btn.similar" %}{% elif painting.status == "custom" %}{% t "btn.discuss" %}{% else %}{% t "btn.order_this" %}{% endif %}</span>{% icon "arrow" "icon btn-arrow" %}
+          {% if painting.is_sold %}{% t "btn.similar" %}{% elif painting.status == "custom" %}{% t "btn.discuss" %}{% else %}{% t "btn.order_this" %}{% endif %}
         </a>
-        {% shared "painting-under-button" as under %}
-        {% if under and under.t.text %}<p class="artwork-hint">{{ under.t.text|brandify }}</p>{% endif %}
+        {% endwith %}
+        <p class="artwork-hint">{% t "painting.hint."|add:painting.status %}</p>
         {% shared "delivery-short" as delivery %}
         {% if delivery and delivery.t.text %}<p class="artwork-delivery">{{ delivery.t.text|plain }}{% if site_pages.delivery %} <a href="{{ site_pages.delivery.url }}">{{ site_pages.delivery.nav_title }}</a>{% endif %}</p>{% endif %}
       </div>
@@ -85,8 +94,8 @@
   </section>
   {% endif %}
 </div>
-{% if painting.is_sold %}{% t "btn.similar" as similar_label %}{% endif %}
-{% include "partials/order_cta.html" with cta_kind="painting" cta_painting=painting cta_sizes=desired_sizes cta_label=similar_label %}
+{% if painting.is_sold %}{% t "btn.similar" as cta_btn %}{% else %}{% t "btn.order" as cta_btn %}{% endif %}
+{% include "partials/order_cta.html" with cta_kind="painting" cta_painting=painting cta_sizes=desired_sizes cta_label=cta_btn cta_text=painting.category.t.cta_text %}
 <dialog class="lightbox" data-lightbox aria-label="{% t 'painting.photos' %}">
   <button class="modal-close" type="button" data-lightbox-close aria-label="{% t 'nav.close' %}">{% icon "close" %}</button>
   <img src="" alt="" data-lightbox-img>

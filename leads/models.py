@@ -77,6 +77,8 @@ class Lead(models.Model):
     )
 
     certificate_amount = models.PositiveIntegerField("Номинал сертификата", null=True, blank=True)
+    certificate_recipient = models.CharField("Имя получателя / подпись", max_length=160, blank=True)
+    consent_given = models.BooleanField("Согласие на обработку данных", default=False)
     certificate_format = models.CharField(
         "Формат сертификата", max_length=12, blank=True,
         choices=[("electronic", "Электронный"), ("print", "Печатный")],

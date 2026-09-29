@@ -1,58 +1,75 @@
-/* Карта «География наших продаж»: только подтвержденные города; число в группе — число городов. */
+/* Карта «География наших продаж»: векторные контуры стран + подтвержденные города.
+   Внешние тайлы не нужны; если в настройках указан адрес тайлов, он подключается как подложка. */
 (function () {
   "use strict";
-  var el = document.querySelector("[data-sales-map]");
-  var dataEl = document.getElementById("sales-cities");
-  if (!el || !dataEl || !window.L) return;
-  var cities = JSON.parse(dataEl.textContent);
-  var countLabel = el.getAttribute("data-count-label") || "";
-  var map = L.map(el, { scrollWheelZoom: false, worldCopyJump: true });
-  map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
-  L.tileLayer(el.getAttribute("data-tiles"), { maxZoom: 12, attribution: el.getAttribute("data-attribution") }).addTo(map);
-  var group = L.markerClusterGroup ? L.markerClusterGroup({
-    showCoverageOnHover: false,
-    iconCreateFunction: function (cluster) {
-      var n = cluster.getChildCount();
-      return L.divIcon({ html: '<div><span>' + n + '</span></div>', className: "marker-cluster marker-cluster-small",
-        iconSize: L.point(40, 40) });
+  if (!window.L) return;
+  document.querySelectorAll("[data-sales-map]").forEach(function (el) {
+    var dataEl = document.getElementById(el.getAttribute("data-cities"));
+    var cities = dataEl ? JSON.parse(dataEl.textContent) : [];
+    var css = getComputedStyle(el);
+    var v = function (name, fallback) { return (css.getPropertyValue(name) || "").trim() || fallback; };
+    var map = L.map(el, { scrollWheelZoom: false, worldCopyJump: false, zoomSnap: 0.25, attributionControl: true });
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+    var tiles = el.getAttribute("data-tiles");
+    if (tiles) {
+      L.tileLayer(tiles, { maxZoom: 12, attribution: el.getAttribute("data-attribution") }).addTo(map);
+    } else {
+      map.attributionControl.addAttribution("Natural Earth");
     }
-  }) : L.featureGroup();
-  var markers = {};
-  cities.forEach(function (c) {
-    var m = L.marker([c.lat, c.lng], { title: c.name, alt: c.name });
-    var popup = document.createElement("div");
-    var strong = document.createElement("strong"); strong.textContent = c.name; popup.appendChild(strong);
-    if (c.caption) { var p = document.createElement("div"); p.textContent = c.caption; popup.appendChild(p); }
-    m.bindPopup(popup);
-    group.addLayer(m);
-    markers[c.lat + "," + c.lng] = m;
-  });
-  map.addLayer(group);
-  if (cities.length) {
-    map.fitBounds(group.getBounds(), { padding: [30, 30], maxZoom: 6 });
-  } else {
-    map.setView([56, 70], 3);
-  }
-  document.querySelectorAll("[data-geo-focus]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var li = btn.closest("[data-geo-city]");
-      var key = li.getAttribute("data-lat") + "," + li.getAttribute("data-lng");
-      var m = markers[key];
-      if (!m) return;
-      if (group.zoomToShowLayer) { group.zoomToShowLayer(m, function () { m.openPopup(); }); } else { map.setView(m.getLatLng(), 7); m.openPopup(); }
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-  });
-  var search = document.querySelector("[data-geo-search]");
-  if (search) {
-    search.addEventListener("input", function () {
-      var q = search.value.trim().toLowerCase();
-      document.querySelectorAll("[data-geo-city]").forEach(function (li) {
-        li.hidden = q && li.getAttribute("data-name").indexOf(q) === -1;
+    var markers = {};
+    var panelCity = el.parentNode.querySelector("[data-geo-selected]");
+    var panelCaption = el.parentNode.querySelector("[data-geo-selected-caption]");
+    var select = function (c) {
+      if (panelCity) panelCity.textContent = c.name;
+      if (panelCaption) panelCaption.textContent = c.caption || "";
+    };
+    var drawCities = function () {
+      cities.forEach(function (c) {
+        var m = L.circleMarker([c.lat, c.lng], {
+          radius: 6, weight: 2, color: v("--map-marker-ring", "#ffffff"), fillColor: v("--map-marker", "#1c497e"), fillOpacity: 1,
+        }).addTo(map);
+        m.bindTooltip(c.name, { permanent: true, direction: "right", offset: [8, 0], className: "geo-label" });
+        m.on("click", function () { select(c); });
+        markers[c.lat + "," + c.lng] = { marker: m, city: c };
       });
-      document.querySelectorAll(".geo-country").forEach(function (g) {
-        g.hidden = !g.querySelector("[data-geo-city]:not([hidden])");
+    };
+    fetch(el.getAttribute("data-geo")).then(function (r) { return r.json(); }).then(function (geo) {
+      var land = L.geoJSON(geo, {
+        style: { color: v("--map-stroke", "#9fbfdc"), weight: 1, fillColor: v("--map-land", "#dcebf6"), fillOpacity: 1 },
+        interactive: false,
+      }).addTo(map);
+      var bounds = land.getBounds();
+      map.fitBounds(bounds, { padding: [12, 12] });
+      map.setMaxBounds(bounds.pad(0.4));
+      drawCities();
+    }).catch(function () {
+      map.setView([58, 80], 2.5);
+      drawCities();
+    });
+
+    var root = el.closest(".geo-section") || document;
+    root.querySelectorAll("[data-geo-focus]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var li = btn.closest("[data-geo-city]");
+        var item = markers[li.getAttribute("data-lat") + "," + li.getAttribute("data-lng")];
+        if (!item) return;
+        map.setView(item.marker.getLatLng(), Math.max(map.getZoom(), 4));
+        select(item.city);
       });
     });
-  }
+    var search = root.querySelector("[data-geo-search]");
+    var country = root.querySelector("[data-geo-country]");
+    var filter = function () {
+      var q = search ? search.value.trim().toLowerCase() : "";
+      var cc = country ? country.value : "";
+      root.querySelectorAll("[data-geo-city]").forEach(function (li) {
+        var show = (!q || li.getAttribute("data-name").indexOf(q) !== -1) && (!cc || li.getAttribute("data-country") === cc);
+        li.hidden = !show;
+        var item = markers[li.getAttribute("data-lat") + "," + li.getAttribute("data-lng")];
+        if (item) item.marker.setStyle({ opacity: show ? 1 : 0.25, fillOpacity: show ? 1 : 0.25 });
+      });
+    };
+    if (search) search.addEventListener("input", filter);
+    if (country) country.addEventListener("change", filter);
+  });
 })();

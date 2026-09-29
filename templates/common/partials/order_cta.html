@@ -1,10 +1,10 @@
-{% comment %}Заметная кнопка заказа внизу списков и страниц. Параметры: cta_kind, cta_painting, cta_category, cta_label.{% endcomment %}
+{% comment %}Заметная кнопка заказа внизу страниц. Параметры: cta_kind, cta_painting, cta_category, cta_text, cta_label, cta_sizes.{% endcomment %}
 <section class="order-cta">
   <div class="container order-cta-inner">
-    <p class="order-cta-text">{% if cta_text %}{{ cta_text }}{% else %}{% t "catalog.order_cta" %}{% endif %}</p>
+    <p class="order-cta-text">{% if cta_text %}{{ cta_text|brandify }}{% else %}{% t "catalog.order_cta" %}{% endif %}</p>
     <a class="btn btn-primary" href="{% page_url 'contacts' %}?order={{ cta_kind|default:'general' }}{% if cta_painting %}&amp;painting={{ cta_painting.pk }}{% endif %}{% if cta_category %}&amp;category={{ cta_category.pk }}{% endif %}#order"
        data-order data-kind="{{ cta_kind|default:'general' }}"
-       {% if cta_painting %}data-painting="{{ cta_painting.pk }}" data-context-name="{{ cta_painting.t.title }}" data-status="{{ cta_painting.status }}"{% endif %}
+       {% if cta_painting %}data-painting="{{ cta_painting.pk }}" data-context-name="{{ cta_painting.t.title }}" data-status="{{ cta_painting.status }}" data-context-meta="{% status_label cta_painting %} · {{ cta_painting.category.t.name }}"{% with im=cta_painting.main_image %}{% if im %} data-thumb="{% img_url im.image 360 %}"{% endif %}{% endwith %}{% endif %}
        {% if cta_category %}data-category="{{ cta_category.pk }}" data-context-name="{{ cta_category.t.name }}"{% endif %}
        {% if cta_sizes %}data-sizes="{{ cta_sizes|sizes_json }}"{% endif %}>{% if cta_label %}{{ cta_label }}{% else %}{% t "btn.order" %}{% endif %}</a>
   </div>

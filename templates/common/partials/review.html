@@ -1,5 +1,6 @@
 <li class="review">
+  <span class="review-quote" aria-hidden="true">“</span>
   {% if r.photo %}{% picture r.photo widths="160,320" sizes="80px" alt="" cls="review-photo" %}{% endif %}
   <blockquote class="review-text">{{ r.t.text|rich }}</blockquote>
-  <p class="review-author">{{ r.t.author }}{% if r.t.city %}, {{ r.t.city }}{% endif %}</p>
+  <p class="review-author">{{ r.t.author }}{% if r.t.city %} • {{ r.t.city }}{% endif %}{% if r.date %} • {{ r.date|date:"d.m.Y" }}{% endif %}</p>
 </li>

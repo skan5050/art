@@ -29,6 +29,7 @@ def render_brand(text, brand):
     return (text or "").replace("{brand}", brand or "")
 
 
+_IMAGE_LINE = re.compile(r"^!\[([^\]]*)\]\((/media/[^\s)]+)\)$")
 _INLINE_BOLD = re.compile(r"\*\*(.+?)\*\*")
 _INLINE_LINK = re.compile(r"\[([^\]]+)\]\(((?:/|https?://)[^\s)]+)\)")
 
@@ -54,6 +55,11 @@ def rich_text(source, brand=""):
     for block in re.split(r"\n\s*\n", source):
         lines = [line.rstrip() for line in block.strip().split("\n") if line.strip()]
         if not lines:
+            continue
+        image = _IMAGE_LINE.match(lines[0]) if len(lines) <= 2 else None
+        if image:
+            caption = f"<figcaption>{_inline(lines[1])}</figcaption>" if len(lines) == 2 else ""
+            html.append(f'<figure class="prose-figure"><img src="{escape(image.group(2))}" alt="{escape(image.group(1))}" loading="lazy">{caption}</figure>')
             continue
         if len(lines) == 1 and lines[0].startswith("### "):
             html.append(f"<h3>{_inline(lines[0][4:].strip())}</h3>")

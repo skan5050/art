@@ -43,7 +43,7 @@ def _home_sections():
             if not data["paintings"]:
                 continue
         elif section.kind == "categories":
-            data["categories"] = _public_categories()
+            data["categories"] = _public_categories()[: section.limit or None]
         elif section.kind == "reviews":
             data["reviews"] = [r for r in Review.objects.filter(published=True)[: section.limit] if tr(r, "text")]
             if not data["reviews"]:
@@ -69,6 +69,7 @@ def page_view(request, page):
     elif page.kind == "catalog":
         context["categories"] = _public_categories()
     elif page.kind == "sold":
+        context["cities"] = _map_cities(lang)
         qs = Painting.objects.filter(published=True, status=Painting.SOLD)
         paged = paginate_paintings(request, qs, page)
         if not isinstance(paged, dict):

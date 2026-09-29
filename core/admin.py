@@ -53,7 +53,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Бренд", {"fields": (
             ("brand_name_ru", "brand_name_en"), ("slogan_ru", "slogan_en"), "logo", "logo_on_dark",
-            ("logo_alt_ru", "logo_alt_en"), "logo_contains_slogan", "favicon",
+            ("logo_alt_ru", "logo_alt_en"), "logo_contains_slogan", "favicon", ("header_note_ru", "header_note_en"),
         )}),
         ("Адрес сайта", {"fields": ("base_url",)}),
         ("Контакты", {"fields": (
@@ -65,6 +65,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             "certificate_image", "certificate_custom_amount", "certificate_electronic", "certificate_print",
         ), "description": "Номиналы — в разделе «Номиналы сертификата»."}),
         ("Карта продаж", {"fields": ("map_tiles_url", "map_attribution"), "classes": ("collapse",)}),
+        ("Формы", {"fields": ("consent_checkbox", "privacy_page_url")}),
         ("Уведомления о заявках", {"fields": ("notify_emails",)}),
         ("SEO: robots.txt и sitemap.xml", {"fields": (
             "robots_txt", "restore_robots", "robots_disallow_all_confirmed", "robots_preview", "sitemap_info",
@@ -171,7 +172,7 @@ class RedirectAdmin(admin.ModelAdmin):
 SEO_FIELDSET = ("SEO", {
     "classes": ("collapse",),
     "fields": (
-        ("seo_title_ru", "seo_title_en"), ("seo_description_ru", "seo_description_en"), "indexable",
+        ("seo_title_ru", "seo_title_en"), ("seo_description_ru", "seo_description_en"), "indexable", "canonical_override",
         ("og_title_ru", "og_title_en"), ("og_description_ru", "og_description_en"), "og_image",
     ),
     "description": "Title собирается как «Бренд | SEO Title». Пустые поля заполняются по шаблону типа страницы.",

@@ -1,25 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  {% include "partials/breadcrumbs.html" %}
-  <div class="contacts-layout">
-    <div>
-      <h1 class="page-title">{{ page.t.title }}</h1>
+  {% if theme == "a" %}<p class="page-label">{{ page.nav_title }}</p>{% endif %}
+  <div class="contacts-layout contacts-{{ theme }}">
+    <div class="contacts-main">
+      <h1 class="page-title{% if theme == 'd' %} page-title-poster{% endif %}">{{ page.t.title }}</h1>
       {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
-      <div class="prose">{{ page.t.body|rich }}</div>
-      <ul class="contact-list">
-        {% if site.phone %}<li>{% icon "phone" %}<a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></li>{% endif %}
-        {% if site.email %}<li>{% icon "email" %}<a href="mailto:{{ site.email }}">{{ site.email }}</a></li>{% endif %}
-        {% for m in messengers %}<li>{% icon m.icon %}<a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a></li>{% endfor %}
-        {% if site.t.address %}<li>{{ site.t.address }}</li>{% endif %}
-        {% if site.t.hours %}<li class="muted">{{ site.t.hours }}</li>{% endif %}
-        {% if site.t.geography %}<li class="muted">{{ site.t.geography }}</li>{% endif %}
-      </ul>
+      {% if theme == "a" %}
+      <dl class="contact-list">
+        {% if site.phone %}<div><dt>{% t "contacts.phone" %}</dt><dd><a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></dd></div>{% endif %}
+        {% if site.email %}<div><dt>{% t "contacts.email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
+        {% for m in messengers %}<div><dt>{{ m.name }}</dt><dd><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.url|cut:"https://"|cut:"mailto:"|cut:"tel:" }}</a></dd></div>{% endfor %}
+        {% if site.t.address %}<div><dt>&nbsp;</dt><dd>{{ site.t.address }}</dd></div>{% endif %}
+        {% if site.t.hours %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.hours }}</dd></div>{% endif %}
+        {% if site.t.geography %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.geography }}</dd></div>{% endif %}
+      </dl>
+      {% if messengers %}<a class="btn btn-outline btn-block" href="{{ messengers.0.url }}" target="_blank" rel="noopener">{% t "contacts.open_messenger" %}</a>{% endif %}
+      {% else %}
+      {% if messengers %}<div class="contact-buttons">{% for m in messengers|slice:":2" %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-primary{% endif %}" href="{{ m.url }}" target="_blank" rel="noopener">{% t "contacts.write_to" %} {{ m.name }}</a>{% endfor %}</div>{% endif %}
+      {% if site.t.geography %}<p class="muted contacts-geo">{{ site.t.geography }}</p>{% endif %}
+      {% endif %}
     </div>
+    {% if theme == "a" %}
     <section class="form-card" id="order" aria-labelledby="inline-form-title">
       <h2 class="form-card-title" id="inline-form-title">{{ inline_title }}</h2>
-      {% include "partials/order_form.html" with fid="c" fkind=inline_kind fpainting=inline_painting fcategory=inline_category form_sizes=inline_sizes fopen=False %}
+      {% include "partials/order_form.html" with fid="c" fkind=inline_kind fpainting=inline_painting fcategory=inline_category form_sizes=inline_sizes %}
     </section>
+    {% else %}
+    <aside class="contacts-other">
+      <h2 class="contacts-other-title">{% t "contacts.other" %}</h2>
+      <dl class="contact-list">
+        {% if site.phone %}<div><dt>{% t "contacts.phone" %}</dt><dd><a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></dd></div>{% endif %}
+        {% if site.email %}<div><dt>{% t "contacts.email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
+        {% for m in messengers|slice:"2:" %}<div><dt>{{ m.name }}</dt><dd><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a></dd></div>{% endfor %}
+        <div><dt>{% t "contacts.message" %}</dt><dd><a href="#order" data-order data-kind="{{ inline_kind }}">{% t "contacts.open_form" %}</a></dd></div>
+      </dl>
+    </aside>
+    {% endif %}
   </div>
+  {% if theme == "d" %}
+  <section class="form-card form-card-d" id="order" aria-labelledby="inline-form-title">
+    <h2 class="form-card-title" id="inline-form-title">{{ inline_title }}</h2>
+    {% include "partials/order_form.html" with fid="c" fkind=inline_kind fpainting=inline_painting fcategory=inline_category form_sizes=inline_sizes %}
+  </section>
+  {% endif %}
 </div>
 {% endblock %}
