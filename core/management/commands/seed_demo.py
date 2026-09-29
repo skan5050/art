@@ -3,8 +3,6 @@
     python manage.py seed_demo           — создать демо-работы (артикул DEMO-…)
     python manage.py seed_demo --remove  — удалить их
 
-Также включает демо-отметки на карте продаж (подпись «Демо-отметка»); --remove их выключает.
-
 Не используйте на рабочем сайте: демо-работы не являются реальным ассортиментом.
 """
 from pathlib import Path
@@ -24,7 +22,6 @@ DEMO = [
     ("цветы-и-ботаника", "Демо: тюльпаны", "Demo: tulips", "custom", "cover-flowers.jpg", None),
     ("женщины", "Демо: летний образ", "Demo: summer look", "sold", "cover-women.jpg", (30, 40)),
 ]
-DEMO_CITIES = ["Москва", "Санкт-Петербург", "Екатеринбург", "Новосибирск", "Владивосток"]
 DEMO_CAPTION = "Демо-отметка"
 
 
@@ -36,12 +33,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **opts):
         Painting.objects.filter(sku__startswith="DEMO-").delete()
-        City.objects.filter(caption_ru=DEMO_CAPTION).update(sale_confirmed=False, visible=False, caption_ru="", caption_en="")
+        # Отметки прежних версий команды: подпись «Демо-отметка» убираем, флаги не трогаем.
+        City.objects.filter(caption_ru=DEMO_CAPTION).update(caption_ru="", caption_en="")
         if opts["remove"]:
-            self.stdout.write("Демо-работы и демо-отметки на карте удалены.")
+            self.stdout.write("Демо-работы удалены.")
             return
-        City.objects.filter(country_code="RU", name_ru__in=DEMO_CITIES, sale_confirmed=False).update(
-            sale_confirmed=True, visible=True, caption_ru=DEMO_CAPTION, caption_en="Demo mark")
         media = Path(settings.BASE_DIR) / "seed" / settings.SITE_THEME / "media"
         tech = Technique.objects.first()
         for i, (cat_slug, ru, en, status, image, size) in enumerate(DEMO, 1):
@@ -60,4 +56,4 @@ class Command(BaseCommand):
                 with path.open("rb") as fh:
                     im = PaintingImage(painting=p, alt_ru=ru, alt_en=en)
                     im.image.save(f"demo-{i}.jpg", File(fh), save=True)
-        self.stdout.write(self.style.WARNING("Созданы демо-работы (артикул DEMO-…) и демо-отметки на карте. Удалите их: seed_demo --remove"))
+        self.stdout.write(self.style.WARNING("Созданы демо-работы (артикул DEMO-…). Удалите их: seed_demo --remove"))

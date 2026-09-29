@@ -25,6 +25,7 @@ from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
+from geo.management.commands.map_major_cities import apply_major_cities
 from geo.models import City
 
 COUNTRIES = {
@@ -83,6 +84,7 @@ class Command(BaseCommand):
 
         now = timezone.now()
         created = updated = skipped = 0
+        new_ids = []
         for row in rows:
             city = City.objects.filter(source="GeoNames", source_id=row["source_id"]).first()
             if city and city.manually_edited:
@@ -92,6 +94,7 @@ class Command(BaseCommand):
             values["loaded_at"] = now
             if city is None:
                 City.objects.create(source="GeoNames", source_id=row["source_id"], **values)
+                new_ids.append(row["source_id"])
                 created += 1
             else:
                 for key, value in values.items():
@@ -99,6 +102,10 @@ class Command(BaseCommand):
                 city.save()  # отметки продаж, видимость и подписи не трогаем
                 updated += 1
         self.stdout.write(self.style.SUCCESS(f"Добавлено: {created}, обновлено: {updated}, пропущено (ручные правки): {skipped}."))
+        # Новые центры регионов и крупные города сразу появляются на карте; у существующих отметки не меняем.
+        marked = apply_major_cities(City.objects.filter(source_id__in=new_ids))
+        if marked:
+            self.stdout.write(f"На карте включены города по умолчанию: {marked} (центры регионов и крупные города, см. geo/major_cities.py).")
 
     def base_row(self, code, geonameid, name, lat, lon, population, region, capital, admin_center, name_ru, verified, stat_date=""):
         return {

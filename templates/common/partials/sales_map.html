@@ -18,7 +18,8 @@
       <aside class="geo-panel">
         <p class="geo-panel-kicker">{% t "map.your_city" %}</p>
         <p class="geo-panel-city" data-geo-selected>{% if cities %}{{ cities.0.name }}{% else %}—{% endif %}</p>
-        <p class="geo-panel-caption" data-geo-selected-caption>{% if cities %}{{ cities.0.caption }}{% else %}{{ map_empty|default:"" }}{% endif %}</p>
+        {% if cities %}<p class="geo-panel-count">{% t "map.list" %}: {{ cities|length }}</p>{% endif %}
+        <p class="geo-panel-caption" data-geo-selected-caption data-default="{% t 'map.city_note' %}">{% if cities %}{{ cities.0.caption|default_if_none:"" }}{% if not cities.0.caption %}{% t "map.city_note" %}{% endif %}{% else %}{{ map_empty|default:"" }}{% endif %}</p>
         {% if cities %}
         <div class="geo-controls">
           <label class="visually-hidden" for="{{ map_id|default:'m' }}-search">{% t "map.search" %}</label>
@@ -30,7 +31,7 @@
           </select>
         </div>
         <ul class="geo-list" data-geo-list aria-label="{% t 'map.list' %}">
-          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-lat="{{ c.lat }}" data-lng="{{ c.lng }}" data-caption="{{ c.caption }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
+          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-rank="{{ c.rank }}" data-lat="{{ c.lat }}" data-lng="{{ c.lng }}" data-caption="{{ c.caption }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
         </ul>
         {% endif %}
         {% if cta_button %}<a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery">{{ cta_button }}</a>{% endif %}

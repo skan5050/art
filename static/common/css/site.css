@@ -517,3 +517,7 @@ body.modal-open .cert-fab, body.form-focus .cert-fab { opacity: 0; pointer-event
 .messenger-text { display: flex; gap: 14px; list-style: none; margin: 0 8px 0 0; padding: 0; }
 .messenger-text a { font-weight: 700; font-size: 13px; text-decoration: none; color: var(--text); text-transform: uppercase; }
 .btn-ghost { background: transparent; color: inherit; border: 1.5px solid currentColor; }
+.geo-panel-count { margin: 0; font-size: 13px; color: var(--muted); }
+.leaflet-tooltip.geo-label.is-active { font-weight: 800; z-index: 1000; }
+.geo-panel { max-height: none; }
+.geo-list { flex: 1 1 auto; min-height: 150px; max-height: 240px; }

@@ -8,6 +8,7 @@ from core.i18n import current_lang, tr
 from core.labels_runtime import label
 from core.seo import article_jsonld, build_meta, organization_jsonld
 from core.sitemap import is_empty_listing
+from geo.major_cities import PRIORITY
 from geo.models import City
 
 from .models import Article, CertificateNominal, HomeSection, Page, Review, StudioImage
@@ -121,8 +122,10 @@ def _map_cities(lang):
             "lat": float(city.latitude),
             "lng": float(city.longitude),
             "caption": tr(city, "caption", lang),
+            "code": city.country_code,
+            "rank": PRIORITY.get(city.source_id, 1000 - min(city.population or 0, 10**8) / 10**5),
         })
-    cities.sort(key=lambda c: (c["country"], c["name"]))
+    cities.sort(key=lambda c: (c["code"] != "RU", c["country"], c["rank"]))
     return cities
 
 

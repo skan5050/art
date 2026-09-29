@@ -21,8 +21,45 @@
     var panelCaption = el.parentNode.querySelector("[data-geo-selected-caption]");
     var select = function (c) {
       if (panelCity) panelCity.textContent = c.name;
-      if (panelCaption) panelCaption.textContent = c.caption || "";
+      if (panelCaption) panelCaption.textContent = c.caption || panelCaption.getAttribute("data-default") || "";
+      Object.keys(markers).forEach(function (k) {
+        var on = markers[k].city === c;
+        markers[k].marker.setRadius(on ? 8 : 6);
+        var tip = markers[k].marker.getTooltip();
+        if (tip && tip.getElement()) tip.getElement().classList.toggle("is-active", on);
+      });
+      declutter();
     };
+    /* Подписи не должны наезжать друг на друга: крупные города в приоритете,
+       остальные подписи скрываются до приближения (точки остаются). */
+    var declutter = function () {
+      var placed = [];
+      Object.keys(markers).map(function (k) { return markers[k]; })
+        .sort(function (a, b) {
+          var aa = a.marker.getTooltip().getElement(), bb = b.marker.getTooltip().getElement();
+          var act = (bb && bb.classList.contains("is-active") ? 1 : 0) - (aa && aa.classList.contains("is-active") ? 1 : 0);
+          return act || (a.city.rank - b.city.rank);
+        })
+        .forEach(function (item) {
+          var el = item.marker.getTooltip().getElement();
+          if (!el) return;
+          if (item.hidden) { el.style.visibility = "hidden"; return; }
+          el.style.visibility = "";
+          var box = el.closest(".leaflet-container").getBoundingClientRect();
+          var hits = function (r) {
+            if (r.left < box.left + 2 || r.right > box.right - 2 || r.top < box.top || r.bottom > box.bottom) return true;
+            return placed.some(function (p) { return !(r.right + 2 < p.left || r.left - 2 > p.right || r.bottom + 1 < p.top || r.top - 1 > p.bottom); });
+          };
+          el.style.marginLeft = "";
+          var r = el.getBoundingClientRect();
+          if (hits(r)) {  // справа тесно — пробуем слева от точки
+            el.style.marginLeft = -(r.width + 18) + "px";
+            r = el.getBoundingClientRect();
+          }
+          if (hits(r)) { el.style.marginLeft = ""; el.style.visibility = "hidden"; } else placed.push(r);
+        });
+    };
+    map.on("zoomend moveend", function () { window.requestAnimationFrame(declutter); });
     var drawCities = function () {
       cities.forEach(function (c) {
         var m = L.circleMarker([c.lat, c.lng], {
@@ -32,6 +69,7 @@
         m.on("click", function () { select(c); });
         markers[c.lat + "," + c.lng] = { marker: m, city: c };
       });
+      window.requestAnimationFrame(declutter);
     };
     fetch(el.getAttribute("data-geo")).then(function (r) { return r.json(); }).then(function (geo) {
       var land = L.geoJSON(geo, {
@@ -66,8 +104,9 @@
         var show = (!q || li.getAttribute("data-name").indexOf(q) !== -1) && (!cc || li.getAttribute("data-country") === cc);
         li.hidden = !show;
         var item = markers[li.getAttribute("data-lat") + "," + li.getAttribute("data-lng")];
-        if (item) item.marker.setStyle({ opacity: show ? 1 : 0.25, fillOpacity: show ? 1 : 0.25 });
+        if (item) { item.hidden = !show; item.marker.setStyle({ opacity: show ? 1 : 0.25, fillOpacity: show ? 1 : 0.25 }); }
       });
+      declutter();
     };
     if (search) search.addEventListener("input", filter);
     if (country) country.addEventListener("change", filter);

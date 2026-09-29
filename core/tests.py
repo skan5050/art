@@ -197,6 +197,30 @@ class SiteTests(TestCase):
         data = {k: v for k, v in data.items() if v is not None}
         return self.client.post("/lead/", data, HTTP_X_REQUESTED_WITH="fetch")
 
+    def test_import_cities_enables_regional_centers_and_major_cities(self):
+        from geo.major_cities import MAJOR_CITIES, THRESHOLD
+        from geo.models import City
+
+        call_command("import_cities", stdout=io.StringIO())
+        shown = City.objects.filter(sale_confirmed=True, visible=True)
+        abroad = shown.exclude(country_code="RU")
+        self.assertEqual(abroad.count(), 10)
+        self.assertTrue(all(c.population > THRESHOLD for c in abroad))
+        # все центры субъектов РФ из справочника, включая добавленные вручную
+        self.assertEqual(shown.filter(country_code="RU").count(), City.objects.filter(country_code="RU", is_admin_center=True).count())
+        self.assertTrue(shown.filter(name_ru="Гатчина").exists() and shown.filter(name_ru="Анадырь").exists())
+        self.assertTrue(set(MAJOR_CITIES) <= set(shown.values_list("source_id", flat=True)))
+        krasnodar = shown.get(name_ru="Краснодар")
+        self.assertIn("Росстат", krasnodar.population_date)
+        # Ручная правка владельца не перезаписывается
+        krasnodar.visible, krasnodar.manually_edited = False, True
+        krasnodar.save()
+        call_command("map_major_cities", stdout=io.StringIO())
+        self.assertFalse(City.objects.get(pk=krasnodar.pk).visible)
+        r = self.client.get(Page.objects.get(kind="delivery").url("ru"))
+        self.assertContains(r, "Тюмень")
+        self.assertContains(r, "Ташкент")
+
     def test_audit_content_reports_missing_translation(self):
         from core.models import Label
 

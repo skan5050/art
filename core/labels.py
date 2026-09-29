@@ -84,6 +84,7 @@ DEFAULT_LABELS = {
     "map.your_city": ("Карта", "Ваш город", "Your city", "Надпись над выбранным городом"),
     "map.empty_marker_note": ("Карта", "Отметки появятся после добавления подтвержденных продаж.", "Markers will appear once confirmed sales are added.", "Подпись к пустой карте"),
     "map.country": ("Карта", "Страна", "Country", "Фильтр страны"),
+    "map.city_note": ("Карта", "Сюда уже отправлялись наши картины.", "Our paintings have already travelled here.", "Подпись в панели, если у города нет своей подписи"),
     "reviews.next": ("Разное", "Следующие истории", "More stories", "Заголовок списка отзывов"),
     "painting.more_in_category": ("Картина", "Еще в рубрике", "More in this category", "Блок внизу страницы картины"),
 

@@ -23,6 +23,7 @@ import math
 import re
 import sys
 from datetime import date
+from pathlib import Path
 
 COUNTRIES = {
     "RU": ("Россия", "Russia"), "BY": ("Беларусь", "Belarus"), "KZ": ("Казахстан", "Kazakhstan"),
@@ -98,6 +99,15 @@ TRANSLIT = {"а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "�
             "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"}
 
 
+# Центры субъектов РФ, которых нет в выборке GeoNames как PPLA (добавляются вручную).
+MANUAL_ROWS = [
+    {"source_id": "561887", "country_code": "RU", "region": "Ленинградская обл", "name_ru": "Гатчина", "name_en": "Gatchina",
+     "latitude": "59.57639", "longitude": "30.12833", "note": "административный центр Ленинградской области с 2021 г."},
+    {"source_id": "542374", "country_code": "RU", "region": "Московская обл", "name_ru": "Красногорск", "name_en": "Krasnogorsk",
+     "latitude": "55.82036", "longitude": "37.33017", "note": "место размещения правительства Московской области"},
+]
+
+
 def translit(text):
     return re.sub(r"[^a-z]", "", "".join(TRANSLIT.get(ch, ch) for ch in text.lower()))
 
@@ -160,7 +170,24 @@ def main(atc_path, hflabs_path, out_path):
     missing_caps = [h["city"] or h["area"] or h["region"] for h in hflabs if h["capital_marker"] in ("2", "3") and h["fias_id"] not in matched_caps]
     for name in missing_caps:
         problems.append(f"центр региона России не найден в GeoNames-выборке: {name}")
-    rows.sort(key=lambda r: (list(COUNTRIES).index(r["country_code"]), -r["population"]))
+    known = {str(r["source_id"]) for r in rows}
+    for m in MANUAL_ROWS:
+        if m["source_id"] in known:
+            continue
+        rows.append({
+            "source_id": m["source_id"], "country_code": m["country_code"], "country_ru": COUNTRIES[m["country_code"]][0],
+            "country_en": COUNTRIES[m["country_code"]][1], "region": m["region"], "name_ru": m["name_ru"], "name_en": m["name_en"],
+            "name_source": m["name_en"], "name_ru_verified": 1, "name_ru_source": f"вручную: {m['note']}",
+            "latitude": m["latitude"], "longitude": m["longitude"], "population": 0, "population_date": "",
+            "is_capital": 0, "is_admin_center": 1, "feature_code": "PPLA",
+        })
+    # Актуальная численность крупных городов (geo/major_cities.py) вместо устаревшей из GeoNames
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from geo.major_cities import MAJOR_CITIES
+    for r in rows:
+        if str(r["source_id"]) in MAJOR_CITIES:
+            r["population"], r["population_date"] = MAJOR_CITIES[str(r["source_id"])]
+    rows.sort(key=lambda r: (list(COUNTRIES).index(r["country_code"]), -int(r["population"] or 0)))
     with open(out_path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=list(rows[0]))
         writer.writeheader()
