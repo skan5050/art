@@ -346,3 +346,13 @@ a:hover { color: var(--terracotta); }
 .geo-popup .leaflet-popup-content-wrapper { border-radius: 0; }
 .geo-pop-city { color: var(--text); }
 .geo-list li.is-hot { background: rgba(255,255,255,.45); }
+.address-map { border-radius: 0; border-color: var(--text); }
+.address-map-info { background: var(--accent); }
+.address-map-addr { color: var(--text); font-size: 20px; }
+.address-map-links a { color: var(--text); }
+.city-card { border-radius: 0; border-color: var(--line); }
+.city-card:hover { border-color: var(--text); box-shadow: none; }
+.city-card-name, .city-box-title { color: var(--text); font-weight: 800; }
+.city-card-more { color: var(--text); }
+.city-box { border-radius: 0; }
+.city-box:first-child { background: var(--accent); }

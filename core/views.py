@@ -25,6 +25,11 @@ def is_public(obj):
 
         guides = Page.objects.filter(kind="guides").first()
         return obj.published and guides is not None and guides.published
+    if name == "CityLanding":
+        from content.models import Page
+
+        parent = Page.objects.filter(kind="cities").first()
+        return obj.published and parent is not None and parent.published
     return False
 
 
@@ -62,6 +67,10 @@ def dispatch(request, path=""):
         from content.views import article_view
 
         return article_view(request, obj)
+    if name == "CityLanding":
+        from content.views import city_view
+
+        return city_view(request, obj)
     if name == "Category":
         from catalog.views import category_view
 

@@ -32,6 +32,7 @@ class Page(TranslatableMixin, SeoFields, Routable):
         ("certificate", "Подарочный сертификат"),
         ("custom", "Картины на заказ"),
         ("guides", "Полезное (список статей)"),
+        ("cities", "Города (список городских страниц)"),
         ("text", "Текстовая страница"),
     ]
     SINGLE_KINDS = {k for k, _ in KINDS} - {"text"}
@@ -130,6 +131,8 @@ class Page(TranslatableMixin, SeoFields, Routable):
             return list(Category.objects.filter(parent__isnull=True))
         if self.kind == "guides":
             return list(Article.objects.all())
+        if self.kind == "cities":
+            return list(CityLanding.objects.all())
         return []
 
     def seo_kind(self):
@@ -191,6 +194,91 @@ class Article(TranslatableMixin, SeoFields, Routable):
 
     def seo_kind(self):
         return "article"
+
+
+class CityLanding(TranslatableMixin, SeoFields, Routable):
+    """Городская страница: ведется вручную, со своим текстом, адресом и картой.
+
+    ТЗ (12.6, SEO-дополнение п. 8): из справочника городов не генерируются однотипные страницы-клоны
+    и вымышленные адреса. Поэтому страницы создаются только администратором, текст у каждой свой,
+    адрес и координаты заполняются по реальным данным (без адреса карта не показывается).
+    """
+
+    city = models.ForeignKey("geo.City", verbose_name="Город из справочника", null=True, blank=True, on_delete=models.SET_NULL,
+                             help_text="Связь с картой продаж: в подсказке карты появится ссылка на эту страницу.")
+    name_ru = models.CharField("Город (RU)", max_length=80)
+    name_en = models.CharField("Город (EN)", max_length=80, blank=True)
+    name_in_ru = models.CharField("«в городе» (RU)", max_length=100, blank=True, help_text="Например: «в Москве», «в Казани».")
+    title_ru = models.CharField("Заголовок H1 (RU)", max_length=255)
+    title_en = models.CharField("Заголовок H1 (EN)", max_length=255, blank=True)
+    slug_ru = models.CharField("ЧПУ (RU)", max_length=120, blank=True)
+    slug_en = models.CharField("ЧПУ (EN)", max_length=120, blank=True)
+    intro_ru = models.TextField("Вступление (RU)", blank=True)
+    intro_en = models.TextField("Вступление (EN)", blank=True)
+    body_ru = models.TextField("Текст страницы (RU)", blank=True,
+                               help_text="Свой текст для этого города. «## Подзаголовок», «- пункт», **жирный**, [ссылка](/адрес/).")
+    body_en = models.TextField("Текст страницы (EN)", blank=True)
+    delivery_ru = models.TextField("Доставка и получение в городе (RU)", blank=True,
+                                   help_text="Как получить картину в этом городе. Только реальные условия.")
+    delivery_en = models.TextField("Доставка и получение в городе (EN)", blank=True)
+    address_ru = models.CharField("Адрес (RU)", max_length=255, blank=True, help_text="Реальный адрес. Пусто — блок адреса и карта не выводятся.")
+    address_en = models.CharField("Адрес (EN)", max_length=255, blank=True)
+    address_lat = models.DecimalField("Широта", max_digits=9, decimal_places=6, null=True, blank=True)
+    address_lng = models.DecimalField("Долгота", max_digits=9, decimal_places=6, null=True, blank=True)
+    hours_ru = models.CharField("Режим работы (RU)", max_length=160, blank=True)
+    hours_en = models.CharField("Режим работы (EN)", max_length=160, blank=True)
+    phone = models.CharField("Телефон в городе", max_length=40, blank=True, help_text="Пусто — используется общий телефон сайта.")
+    cover = models.ImageField("Изображение", upload_to="cities/", blank=True)
+    cover_alt_ru = models.CharField("Alt изображения (RU)", max_length=200, blank=True)
+    cover_alt_en = models.CharField("Alt изображения (EN)", max_length=200, blank=True)
+    button_ru = models.CharField("Кнопка (RU)", max_length=80, blank=True)
+    button_en = models.CharField("Кнопка (EN)", max_length=80, blank=True)
+    published = models.BooleanField("Опубликовано", default=False)
+    order = models.PositiveSmallIntegerField("Порядок", default=0)
+    updated_at = models.DateTimeField("Изменено", auto_now=True)
+
+    class Meta:
+        verbose_name = "Городская страница"
+        verbose_name_plural = "Города — страницы"
+        ordering = ["order", "name_ru"]
+
+    def __str__(self):
+        return self.name_ru
+
+    def clean(self):
+        _check_slugs(self)
+        if not self.slug_ru:
+            self.slug_ru = make_slug(self.name_ru, "ru")
+        if self.name_en and not self.slug_en:
+            self.slug_en = make_slug(self.name_en, "en")
+        for lang in LANGS:
+            slug = getattr(self, f"slug_{lang}")
+            if slug and CityLanding.objects.filter(**{f"slug_{lang}": slug}).exclude(pk=self.pk).exists():
+                raise ValidationError({f"slug_{lang}": "Городская страница с таким адресом уже есть."})
+        if (self.address_lat is None) != (self.address_lng is None):
+            raise ValidationError({"address_lng": "Укажите обе координаты или оставьте обе пустыми."})
+
+    def save(self, *args, **kwargs):
+        if not self.slug_ru:
+            self.slug_ru = make_slug(self.name_ru, "ru")
+        if self.name_en and not self.slug_en:
+            self.slug_en = make_slug(self.name_en, "en")
+        super().save(*args, **kwargs)
+
+    def build_path(self, lang):
+        if lang == "en" and not (self.title_en and self.slug_en):
+            return ""
+        parent = Page.objects.filter(kind="cities").first()
+        base = parent.build_path(lang) if parent else ""
+        slug = getattr(self, f"slug_{lang}")
+        return f"{base}{slug}/" if base and slug else ""
+
+    def seo_kind(self):
+        return "page"
+
+    @property
+    def has_map(self):
+        return bool(self.address_ru and self.address_lat is not None and self.address_lng is not None)
 
 
 class MenuItem(TranslatableMixin, models.Model):

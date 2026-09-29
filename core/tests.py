@@ -241,6 +241,44 @@ class SiteTests(TestCase):
         r = self.client.get(f"/admin/core/sitesettings/{settings_obj.pk}/change/")
         self.assertEqual(r.status_code, 200)
 
+    def test_city_landing_pages_and_address_map(self):
+        from content.models import CityLanding
+        from geo.models import City
+
+        call_command("import_cities", stdout=io.StringIO())
+        Page.objects.get_or_create(kind="cities", defaults={"title_ru": "Города", "title_en": "Cities", "slug_ru": "города",
+                                                           "slug_en": "cities", "published": True})
+        kazan = City.objects.get(name_ru="Казань")
+        landing = CityLanding.objects.create(city=kazan, name_ru="Казань", name_en="Kazan", name_in_ru="в Казани",
+                                             title_ru="Картины в Казани", title_en="Paintings in Kazan",
+                                             body_ru="Свой текст о Казани.", delivery_ru="Отправляем в Казань через СДЭК.",
+                                             published=True)
+        self.assertEqual(landing.url("ru"), "/города/казань/")
+        r = self.client.get(quote(landing.url("ru")))
+        self.assertContains(r, "Картины в Казани")
+        self.assertContains(r, "СДЭК")
+        self.assertNotContains(r, "yandex.ru/map-widget")  # без адреса карты нет
+        self.assertEqual(self.client.get(landing.url("en")).status_code, 200)
+        self.assertIn(quote(landing.url("ru")), self.client.get("/sitemap.xml").content.decode())
+        # адрес и координаты → карта с точкой (координаты через точку, не по локали)
+        landing.address_ru, landing.address_lat, landing.address_lng = "ул. Баумана, 1", Decimal("55.790000"), Decimal("49.120000")
+        landing.save()
+        r = self.client.get(quote(landing.url("ru")))
+        self.assertContains(r, "yandex.ru/map-widget")
+        self.assertContains(r, "49.120000%2C55.790000")
+        # ссылка на страницу города в данных карты продаж
+        r = self.client.get(quote(Page.objects.get(kind="delivery").url("ru")))
+        self.assertContains(r, "\\u0433\\u043e\\u0440\\u043e\\u0434\\u0430")  # «города» в JSON-ссылке
+        # черновик недоступен посетителю
+        landing.published = False
+        landing.save()
+        self.assertEqual(self.client.get(quote(landing.url("ru"))).status_code, 404)
+        # карта с адресом на странице контактов
+        s = SiteSettings.get()
+        s.address_ru, s.address_lat, s.address_lng = "Москва, ул. Пример, 1", Decimal("55.75"), Decimal("37.61")
+        s.save()
+        self.assertContains(self.client.get(quote(Page.objects.get(kind="contacts").url("ru"))), "yandex.ru/map-widget")
+
     def test_audit_content_reports_missing_translation(self):
         from core.models import Label
 

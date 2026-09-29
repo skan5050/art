@@ -2,7 +2,7 @@
 from django.apps import apps
 from django.core.exceptions import ValidationError
 
-ROUTABLE = ("content.Page", "catalog.Category", "catalog.Painting", "content.Article")
+ROUTABLE = ("content.Page", "catalog.Category", "catalog.Painting", "content.Article", "content.CityLanding")
 
 
 def routable_models():

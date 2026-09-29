@@ -17,6 +17,10 @@ def is_empty_listing(obj):
             from catalog.models import Painting
 
             return not Painting.objects.filter(published=True, status=Painting.SOLD).exists()
+        if obj.kind == "cities":
+            from content.models import CityLanding
+
+            return not CityLanding.objects.filter(published=True).exists()
         if obj.kind == "guides":
             from content.models import Article
 

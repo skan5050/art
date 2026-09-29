@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+{% shared "delivery-short" as delivery_short %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <header class="page-head city-head">
+    {% if cities_page %}<p class="page-kicker">{{ cities_page.nav_title }}</p>{% endif %}
+    <h1 class="page-title">{{ landing.t.title }}</h1>
+    {% if landing.t.intro %}<div class="page-intro">{{ landing.t.intro|rich }}</div>{% endif %}
+  </header>
+
+  <div class="city-layout">
+    <div class="city-main">
+      {% if landing.cover %}<figure class="city-cover">{% picture landing.cover widths="720,1200" sizes="(min-width: 900px) 60vw, 100vw" alt=landing.t.cover_alt lazy=False %}</figure>{% endif %}
+      {% if landing.t.body %}<div class="prose">{{ landing.t.body|rich }}</div>{% endif %}
+    </div>
+    <aside class="city-side">
+      <section class="city-box">
+        <p class="city-box-title">{% t "cities.delivery_title" %} {% if lang == "en" %}in {{ landing.t.name }}{% else %}{{ landing.name_in_ru|default:landing.t.name }}{% endif %}</p>
+        {% if landing.t.delivery %}<div class="city-box-text">{{ landing.t.delivery|rich }}</div>
+        {% elif delivery_short %}<div class="city-box-text">{{ delivery_short.t.text|rich }}</div>{% endif %}
+        <ul class="geo-hint-links">
+          {% if site.cdek_offices_url %}<li><a href="{{ site.cdek_offices_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_offices" %} ↗</a></li>{% endif %}
+          {% if site.cdek_calc_url %}<li><a href="{{ site.cdek_calc_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_calc" %} ↗</a></li>{% endif %}
+          {% if site_pages.delivery %}<li><a href="{{ site_pages.delivery.url }}">{{ site_pages.delivery.nav_title }} →</a></li>{% endif %}
+        </ul>
+      </section>
+      <section class="city-box city-contacts">
+        <p class="city-box-title">{% t "cities.contacts_title" %}</p>
+        <dl class="contact-list">
+          {% if landing.phone or site.phone %}{% with ph=landing.phone|default:site.phone %}<div><dt>{% t "contacts.phone" %}</dt><dd><a href="tel:{{ ph|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ ph }}</a></dd></div>{% endwith %}{% endif %}
+          {% if site.email %}<div><dt>{% t "contacts.email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
+          {% for m in messengers|slice:":3" %}<div><dt>{{ m.name }}</dt><dd><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a></dd></div>{% endfor %}
+          {% if landing.t.hours %}<div><dt>{% t "cities.hours" %}</dt><dd>{{ landing.t.hours }}</dd></div>{% endif %}
+        </dl>
+        <a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=general#order" data-order data-kind="general" data-city="{{ landing.name_ru }}">{% if landing.t.button %}{{ landing.t.button }}{% else %}{% t "btn.order" %}{% endif %}</a>
+      </section>
+    </aside>
+  </div>
+
+  {% include "partials/address_map.html" with addr=landing.t.address lat=landing.address_lat lng=landing.address_lng hours=landing.t.hours map_title=landing.t.name %}
+
+  {% if works %}
+  <section class="block">
+    <div class="section-head"><h2 class="block-title">{% t "cities.works_title" %}</h2>{% if site_pages.catalog %}<a class="link-arrow" href="{{ site_pages.catalog.url }}">{{ site_pages.catalog.nav_title }} {% icon "arrow" %}</a>{% endif %}</div>
+    <ul class="art-grid">{% for p in works %}{% include "catalog/_painting_card.html" %}{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if city_reviews %}
+  <section class="block">
+    <h2 class="block-title">{% t "cities.reviews_title" %}</h2>
+    <ul class="review-grid">{% for r in city_reviews %}{% include "partials/review.html" %}{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if other_landings %}
+  <nav class="block city-others" aria-label="{% t 'cities.other' %}">
+    <h2 class="block-title">{% t "cities.other" %}</h2>
+    <p class="article-links">{% for c in other_landings %}<a class="tag" href="{{ c.url }}">{{ c.t.name }}</a>{% endfor %}</p>
+  </nav>
+  {% endif %}
+</div>
+{% include "partials/order_cta.html" with cta_kind="general" cta_city=landing.name_ru %}
+{% endblock %}

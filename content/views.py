@@ -11,7 +11,7 @@ from core.sitemap import is_empty_listing
 from geo.major_cities import PRIORITY
 from geo.models import City
 
-from .models import Article, CertificateNominal, HomeSection, Page, Review, StudioImage
+from .models import Article, CertificateNominal, CityLanding, HomeSection, Page, Review, StudioImage
 
 
 def crumbs_for_page(page):
@@ -89,6 +89,8 @@ def page_view(request, page):
         context["nominals"] = list(CertificateNominal.objects.filter(visible=True))
     elif page.kind == "guides":
         context["articles"] = [a for a in Article.objects.filter(published=True) if a.url(lang)]
+    elif page.kind == "cities":
+        context["landings"] = [c for c in CityLanding.objects.filter(published=True) if c.url(lang)]
     elif page.kind in ("about", "studio"):
         context["studio_images"] = list(StudioImage.objects.filter(visible=True))
         studio = Page.objects.filter(kind="studio", published=True).first()
@@ -160,6 +162,32 @@ def article_view(request, article):
         noindex=getattr(request, "is_preview", False), jsonld_extra=[article_jsonld(request, article)],
     )
     return render(request, "pages/article.html", context)
+
+
+def city_view(request, landing):
+    """Городская страница: свой текст, работы, отзывы из города, адрес с картой, доставка и заявка."""
+    lang = current_lang()
+    parent = Page.objects.filter(kind="cities").first()
+    crumbs = crumbs_for_page(parent) if parent else []
+    crumbs.append({"label": landing.t.name, "href": landing.url(lang)})
+    works = [p for p in Painting.objects.filter(published=True).exclude(status=Painting.SOLD)
+             .select_related("category").order_by("-id")[:8] if p.url(lang)]
+    reviews = [r for r in Review.objects.filter(published=True, city_ru__iexact=landing.name_ru) if tr(r, "text")]
+    others = [c for c in CityLanding.objects.filter(published=True).exclude(pk=landing.pk) if c.url(lang)]
+    context = {
+        "landing": landing,
+        "cities_page": parent,
+        "crumbs": crumbs,
+        "works": works,
+        "city_reviews": reviews,
+        "other_landings": others,
+    }
+    context["meta"] = build_meta(
+        request, landing, h1=landing.t.title, fallback_description=landing.t.intro or landing.t.body,
+        og_image_url=landing.cover.url if landing.cover else "", breadcrumbs=crumbs,
+        noindex=getattr(request, "is_preview", False),
+    )
+    return render(request, "pages/city.html", context)
 
 
 def _inline_form_context(request):

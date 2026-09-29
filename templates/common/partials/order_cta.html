@@ -6,6 +6,7 @@
        data-order data-kind="{{ cta_kind|default:'general' }}"
        {% if cta_painting %}data-painting="{{ cta_painting.pk }}" data-context-name="{{ cta_painting.t.title }}" data-status="{{ cta_painting.status }}" data-context-meta="{% status_label cta_painting %} · {{ cta_painting.category.t.name }}"{% with im=cta_painting.main_image %}{% if im %} data-thumb="{% img_url im.image 360 %}"{% endif %}{% endwith %}{% endif %}
        {% if cta_category %}data-category="{{ cta_category.pk }}" data-context-name="{{ cta_category.t.name }}"{% endif %}
+       {% if cta_city %}data-city="{{ cta_city }}"{% endif %}
        {% if cta_sizes %}data-sizes="{{ cta_sizes|sizes_json }}"{% endif %}>{% if cta_label %}{{ cta_label }}{% else %}{% t "btn.order" %}{% endif %}</a>
   </div>
 </section>

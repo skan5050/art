@@ -1,0 +1,21 @@
+{% comment %}
+Карта с адресом (контакты и городские страницы). Параметры: addr — адрес, lat/lng — координаты, map_title — подпись.
+Показывается только при заполненных адресе и координатах; подложка — виджет Яндекс Карт (без ключа API).
+{% endcomment %}
+{% if addr and lat and lng %}
+<section class="address-map" aria-label="{% t 'contacts.map_title' %}">
+  <div class="address-map-frame">
+    <iframe src="https://yandex.ru/map-widget/v1/?ll={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}&amp;z=16&amp;pt={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}%2Cpm2rdm&amp;lang={% if lang == 'en' %}en_US{% else %}ru_RU{% endif %}"
+            title="{{ map_title|default:addr }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+  </div>
+  <div class="address-map-info">
+    <p class="address-map-label">{% t "contacts.address" %}</p>
+    <p class="address-map-addr">{{ addr }}</p>
+    {% if hours %}<p class="muted">{{ hours }}</p>{% endif %}
+    <p class="address-map-links">
+      <a href="https://yandex.ru/maps/?pt={{ lng|stringformat:'s' }},{{ lat|stringformat:'s' }}&amp;z=16&amp;l=map" target="_blank" rel="noopener">{% t "contacts.open_map" %} ↗</a>
+      <a href="https://yandex.ru/maps/?rtext=~{{ lat|stringformat:'s' }},{{ lng|stringformat:'s' }}" target="_blank" rel="noopener">{% t "contacts.route" %} ↗</a>
+    </p>
+  </div>
+</section>
+{% endif %}

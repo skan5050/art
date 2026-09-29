@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  {% include "partials/page_head.html" with h1=page.t.title kicker=page.t.kicker intro=page.t.intro head_class="page-head-center" %}
+  {% if landings %}
+  <ul class="city-grid">
+    {% for c in landings %}
+    <li><a class="city-card" href="{{ c.url }}">
+      <span class="city-card-name">{{ c.t.name }}</span>
+      {% if c.t.intro %}<span class="city-card-text">{{ c.t.intro|plain|truncatewords:22 }}</span>{% endif %}
+      {% if c.t.address %}<span class="city-card-addr">{{ c.t.address }}</span>{% endif %}
+      <span class="city-card-more">{% t "cities.open" %} →</span>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% else %}<div class="empty-state">{{ page.t.empty|rich }}</div>{% endif %}
+  {% if page.t.body %}<div class="prose cities-body">{{ page.t.body|rich }}</div>{% endif %}
+</div>
+{% include "partials/order_cta.html" with cta_kind="general" cta_text=page.t.cta_text cta_label=page.t.cta_button %}
+{% endblock %}

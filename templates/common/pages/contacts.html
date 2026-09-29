@@ -11,7 +11,7 @@
         {% if site.phone %}<div><dt>{% t "contacts.phone" %}</dt><dd><a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></dd></div>{% endif %}
         {% if site.email %}<div><dt>{% t "contacts.email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
         {% for m in messengers %}<div><dt>{{ m.name }}</dt><dd><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.url|cut:"https://"|cut:"mailto:"|cut:"tel:" }}</a></dd></div>{% endfor %}
-        {% if site.t.address %}<div><dt>&nbsp;</dt><dd>{{ site.t.address }}</dd></div>{% endif %}
+        {% if site.t.address %}<div><dt>{% t "contacts.address" %}</dt><dd>{{ site.t.address }}</dd></div>{% endif %}
         {% if site.t.hours %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.hours }}</dd></div>{% endif %}
         {% if site.t.geography %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.geography }}</dd></div>{% endif %}
       </dl>
@@ -38,6 +38,7 @@
     </aside>
     {% endif %}
   </div>
+  {% include "partials/address_map.html" with addr=site.t.address lat=site.address_lat lng=site.address_lng hours=site.t.hours %}
   {% if theme == "d" %}
   <section class="form-card form-card-d" id="order" aria-labelledby="inline-form-title">
     <h2 class="form-card-title" id="inline-form-title">{{ inline_title }}</h2>

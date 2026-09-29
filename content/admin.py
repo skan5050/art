@@ -3,7 +3,7 @@ from unfold.admin import ModelAdmin
 
 from core.admin import SEO_FIELDSET, site_link, thumb
 
-from .models import Article, CertificateNominal, HomeSection, MediaAsset, MenuItem, Page, Review, StudioImage
+from .models import Article, CertificateNominal, CityLanding, HomeSection, MediaAsset, MenuItem, Page, Review, StudioImage
 
 
 @admin.register(Page)
@@ -142,3 +142,32 @@ class MediaAssetAdmin(ModelAdmin):
         if not obj.image:
             return "—"
         return format_html('<code style="user-select:all">{}</code><br><small>Скопируйте строку в текст страницы или статьи отдельным абзацем; на следующей строке можно добавить подпись.</small>', obj.snippet)
+
+
+@admin.register(CityLanding)
+class CityLandingAdmin(ModelAdmin):
+    list_display = ("name_ru", "title_ru", "address_filled", "published", "order", "link")
+    list_editable = ("published", "order")
+    list_filter = ("published",)
+    search_fields = ("name_ru", "title_ru", "address_ru")
+    autocomplete_fields = ("city",)
+    readonly_fields = ("path_ru", "path_en")
+    fieldsets = (
+        ("Город", {"fields": ("city", ("name_ru", "name_en"), "name_in_ru", "published", "order"),
+                   "description": "Каждая городская страница пишется отдельно: свой текст, реальный адрес. Однотипные клоны не создаются (ТЗ 12.6)."}),
+        ("Текст", {"fields": (("title_ru", "title_en"), ("intro_ru", "intro_en"), ("body_ru", "body_en"),
+                              ("delivery_ru", "delivery_en"), ("button_ru", "button_en"), "cover", ("cover_alt_ru", "cover_alt_en"))}),
+        ("Адрес и карта", {"fields": (("address_ru", "address_en"), ("address_lat", "address_lng"), ("hours_ru", "hours_en"), "phone"),
+                           "description": "Без адреса и координат карта на странице не показывается."}),
+        ("Адрес страницы", {"fields": (("slug_ru", "slug_en"), ("path_ru", "path_en"))}),
+        SEO_FIELDSET,
+    )
+
+    @admin.display(description="Адрес", boolean=True)
+    def address_filled(self, obj):
+        return obj.has_map
+
+    @admin.display(description="На сайте")
+    def link(self, obj):
+        return site_link(obj)
+

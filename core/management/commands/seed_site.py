@@ -15,7 +15,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from catalog.models import Category, Technique
-from content.models import Article, HomeSection, MenuItem, Page, StudioImage
+from content.models import Article, CityLanding, HomeSection, MenuItem, Page, StudioImage
+from geo.models import City
 from core.labels import DEFAULT_LABELS
 from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize
 
@@ -52,6 +53,7 @@ class Command(BaseCommand):
             self.home_sections(data.HOME_SECTIONS)
             self.articles(articles.ARTICLES)
             self.studio(getattr(data, "STUDIO_IMAGES", []))
+            self.city_pages(site)
         self.stdout.write(self.style.SUCCESS(f"Наполнение сайта «{data.SETTINGS['brand_name_ru']}» загружено."))
 
     # --- помощники ---
@@ -185,3 +187,26 @@ class Command(BaseCommand):
             self.attach(obj, "image", filename)
             if obj.image:
                 obj.save()
+
+    def city_pages(self, site):
+        """Городские страницы: у каждой свой текст; адрес и координаты владелец вносит сам."""
+        try:
+            data = importlib.import_module(f"seed.{site}.cities")
+        except ImportError:
+            return
+        page = dict(data.PAGE)
+        kind = page.pop("kind")
+        page.setdefault("order", 95)
+        self.upsert(Page, {"kind": kind}, page)
+        for i, item in enumerate(data.CITIES):
+            item = dict(item)
+            source_id, to = item.pop("source_id"), item.pop("to")
+            item["delivery_ru"] = data.DELIVERY_RU.format(to=to)
+            item["delivery_en"] = data.DELIVERY_EN.format(name=item["name_en"])
+            item.setdefault("seo_description_en", f"Paintings in stock and made to order with delivery to {item['name_en']}. "
+                                                   "Delivery via CDEK or another carrier by agreement; paid separately.")
+            item["city"] = City.objects.filter(source="GeoNames", source_id=source_id).first()
+            item.setdefault("order", i * 10)
+            item.setdefault("published", True)
+            self.upsert(CityLanding, {"name_ru": item["name_ru"]}, item)
+

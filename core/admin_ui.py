@@ -68,6 +68,7 @@ SIDEBAR = {
             item("Страницы", "description", "content.page"),
             item("Главная: блоки", "home", "content.homesection"),
             item("Статьи «Полезное»", "article", "content.article"),
+            item("Городские страницы", "location_city", "content.citylanding"),
             item("Отзывы", "reviews", "content.review"),
             item("Меню", "menu", "content.menuitem"),
             item("Сертификаты: номиналы", "card_giftcard", "content.certificatenominal"),
