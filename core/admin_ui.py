@@ -115,8 +115,8 @@ def site_checks():
 
     settings_link = _safe_reverse("admin:core_sitesettings_changelist")
     has_contacts = bool(s.phone or s.email or Messenger.objects.filter(visible=True).exists())
-    add(has_contacts, "Контакты заполнены", "Телефон, email или мессенджер — без них блоки контактов не выводятся.", settings_link)
-    add(bool(s.notify_emails), "Почта для заявок", "Куда отправлять уведомления о новых заявках.", settings_link)
+    add(has_contacts, "Контакты заполнены" if has_contacts else "Контакты не заполнены", "Телефон, email или мессенджер — без них блоки контактов не выводятся.", settings_link)
+    add(bool(s.notify_emails), "Почта для заявок указана" if s.notify_emails else "Не указана почта для заявок", "Куда отправлять уведомления о новых заявках.", settings_link)
     demo = Painting.objects.filter(sku__startswith="DEMO-").count()
     add(demo == 0, "Демо-работы удалены" if demo == 0 else f"Демо-работ на сайте: {demo}",
         "Удалите перед запуском: python manage.py seed_demo --remove", _safe_reverse("admin:catalog_painting_changelist") + "?q=DEMO-")
