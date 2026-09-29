@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container narrow empty-state error-page">
+  <h1 class="page-title">{% t "error404.title" %}</h1>
+  <p>{% t "error404.text" %}</p>
+  <p><a class="btn btn-primary" href="{% page_url 'catalog' %}">{% t "btn.to_catalog" %}</a> <a class="btn btn-outline" href="{{ home_url }}">{% t "nav.home" %}</a></p>
+</div>
+{% endblock %}

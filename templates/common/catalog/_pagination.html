@@ -1,0 +1,10 @@
+{% if paginator.num_pages > 1 %}
+<div class="list-more">
+  {% if next_url %}<a class="btn btn-outline" href="{{ next_url }}" data-load-more data-target="#art-grid">{% t "btn.more" %}</a>{% endif %}
+  <nav class="pagination" aria-label="{% t 'catalog.pagination' %}">
+    {% if prev_url %}<a href="{{ prev_url }}" rel="prev">← {% t "catalog.prev" %}</a>{% endif %}
+    {% for link in page_links %}{% if link.number == page_obj.number %}<span aria-current="page">{{ link.number }}</span>{% else %}<a href="{{ link.href }}">{{ link.number }}</a>{% endif %}{% endfor %}
+    {% if next_url %}<a href="{{ next_url }}" rel="next">{% t "catalog.next" %} →</a>{% endif %}
+  </nav>
+</div>
+{% endif %}

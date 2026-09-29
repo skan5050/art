@@ -1,0 +1,35 @@
+{% load static %}{% if is_home %}
+{% with p=page %}
+<header class="hero" role="banner">
+  {% if p.banner_image %}
+  <picture class="hero-media">
+    {% if p.banner_image_mobile %}<source media="(max-width: 720px)" srcset="{% img_url p.banner_image_mobile 1080 %}">{% endif %}
+    <img src="{% img_url p.banner_image 2400 %}" alt="" style="object-position: {{ p.banner_focus_x }}% {{ p.banner_focus_y }}%" fetchpriority="high" decoding="async">
+  </picture>
+  {% endif %}
+  <div class="hero-inner container">
+    <a class="hero-brand" href="{{ home_url }}" aria-label="{{ brand }}">
+      {% if site.logo %}<img class="hero-logo" src="{{ site.logo.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}
+    </a>
+    {% if p.t.banner_kicker %}<p class="hero-kicker">{{ p.t.banner_kicker|brandify }}</p>{% endif %}
+    <h1 class="hero-title">{{ p.t.banner_title|default:p.t.title|brandify }}</h1>
+    {% if p.t.banner_text %}<p class="hero-text">{{ p.t.banner_text|brandify }}</p>{% endif %}
+    <div class="hero-actions">
+      {% if p.t.banner_button1 %}<a class="btn btn-primary" href="{% if p.banner_button1_link == 'catalog' or not p.banner_button1_link %}{% page_url 'catalog' %}{% else %}{{ p.banner_button1_link }}{% endif %}">{{ p.t.banner_button1 }}</a>{% endif %}
+      {% if p.t.banner_button2 %}<a class="btn btn-outline" href="{% page_url 'contacts' %}#order" data-order data-kind="custom">{{ p.t.banner_button2 }}</a>{% endif %}
+    </div>
+  </div>
+</header>
+{% endwith %}
+{% else %}
+<header class="topbar" role="banner">
+  <div class="container topbar-row">
+    <a class="brand" href="{{ home_url }}">
+      {% if site.logo %}<img class="brand-logo" src="{{ site.logo.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}
+    </a>
+    {% if slogan and not site.logo_contains_slogan %}<p class="topbar-slogan">{{ slogan }}</p>{% endif %}
+    {% if other_lang_url %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}
+  </div>
+</header>
+{% endif %}
+{% include "partials/nav.html" %}

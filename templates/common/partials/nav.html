@@ -1,0 +1,30 @@
+<nav class="site-nav" data-nav aria-label="{% t 'nav.menu' %}">
+  <div class="container nav-row">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-nav-toggle>
+      <span class="nav-toggle-open">{% icon "menu" %}</span><span class="nav-toggle-close">{% icon "close" %}</span>
+      <span class="nav-toggle-label">{% t "nav.menu" %}</span>
+    </button>
+    <ul class="menu" id="site-menu" data-menu>
+      {% for item in menu_items %}
+      <li><a href="{{ item.href }}"{% if item.href == request.path %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+      {% endfor %}
+    </ul>
+    <div class="nav-tools">
+      {% if messengers|length == 1 %}
+        {% with m=messengers.0 %}<a class="messenger-btn" href="{{ m.url }}" target="_blank" rel="noopener" aria-label="{% t 'nav.messengers' %}: {{ m.name }}" title="{{ m.name }}">{% icon m.icon %}</a>{% endwith %}
+      {% elif messengers %}
+      <div class="messenger-menu" data-dropdown>
+        <button class="messenger-btn" type="button" aria-expanded="false" aria-haspopup="true" data-dropdown-toggle title="{% t 'nav.messengers' %}">
+          {% icon "mail" %}<span class="visually-hidden">{% t "nav.messengers" %}</span>
+        </button>
+        <ul class="messenger-list" hidden data-dropdown-panel>
+          {% for m in messengers %}<li><a href="{{ m.url }}" target="_blank" rel="noopener">{% icon m.icon %}<span>{{ m.name }}</span></a></li>{% endfor %}
+        </ul>
+      </div>
+      {% else %}
+        <a class="messenger-btn" href="{% page_url 'contacts' %}" title="{% t 'nav.messengers' %}">{% icon "mail" %}<span class="visually-hidden">{% t "nav.messengers" %}</span></a>
+      {% endif %}
+      {% if page.kind == "home" and other_lang_url %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}
+    </div>
+  </div>
+</nav>

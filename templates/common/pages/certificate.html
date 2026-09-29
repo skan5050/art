@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <div class="cert-layout">
+    <div>
+      <h1 class="page-title">{{ page.t.title }}</h1>
+      {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+      <div class="prose">{{ page.t.body|rich }}</div>
+      {% if site.certificate_image %}<figure class="cert-image">{% picture site.certificate_image widths="480,960" sizes="(min-width: 960px) 40vw, 100vw" alt=page.t.image_alt %}</figure>{% endif %}
+    </div>
+    <section class="form-card" id="order" aria-labelledby="cert-form-title">
+      <h2 class="form-card-title" id="cert-form-title">{{ page.t.button|default:"" }}{% if not page.t.button %}{% t "form.title.certificate" %}{% endif %}</h2>
+      {% include "partials/order_form.html" with fid="cert" fkind="certificate" fpainting=None fcategory=None form_sizes=None %}
+    </section>
+  </div>
+</div>
+{% endblock %}

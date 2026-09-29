@@ -1,0 +1,13 @@
+<li class="art-card{% if p.is_sold %} is-sold{% endif %}">
+  <a href="{{ p.url }}" class="art-card-link">
+    <span class="art-card-media">
+      {% with img=p.main_image %}{% if img %}{% picture img.image widths="360,720" sizes="(min-width: 1200px) 25vw, (min-width: 640px) 50vw, 100vw" alt=img.t.alt|default:p.t.title cls="art-card-img" %}{% else %}<span class="art-card-noimg" aria-hidden="true"></span>{% endif %}{% endwith %}
+      <span class="badge badge-{{ p.status }}">{% if p.is_sold %}{% t "status.sold_badge" %}{% else %}{% status_label p %}{% endif %}</span>
+    </span>
+    <span class="art-card-body">
+      <span class="art-card-title">{{ p.t.title }}</span>
+      {% if p.t.short %}<span class="art-card-text">{{ p.t.short }}</span>{% endif %}
+      <span class="art-card-meta">{% if p.actual_size %}{{ p.actual_size }} · {% endif %}{% if p.price and not p.is_sold %}{{ p.price|floatformat:0 }} {{ site.currency }}{% elif not p.is_sold %}{% t "price.on_request" %}{% else %}{% status_label p %}{% endif %}</span>
+    </span>
+  </a>
+</li>

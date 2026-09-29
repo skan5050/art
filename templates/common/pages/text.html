@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <article class="text-page{% if page.image %} has-aside{% endif %}">
+    <div class="text-main">
+      <h1 class="page-title">{{ page.t.title }}</h1>
+      {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+      <div class="prose">{{ page.t.body|rich }}</div>
+      {% if page.t.note %}<aside class="note-box">{{ page.t.note|rich }}</aside>{% endif %}
+      {% block after_text %}{% endblock %}
+      {% if page.t.button %}<p><a class="btn btn-primary" href="{% page_url 'contacts' %}#order" data-order data-kind="{% if page.kind == 'custom' %}custom{% else %}general{% endif %}">{{ page.t.button }}</a></p>{% endif %}
+    </div>
+    {% if page.image %}<figure class="text-aside">{% picture page.image widths="480,960" sizes="(min-width: 960px) 40vw, 100vw" alt=page.t.image_alt %}</figure>{% endif %}
+  </article>
+  {% block extra %}{% endblock %}
+</div>
+{% endblock %}

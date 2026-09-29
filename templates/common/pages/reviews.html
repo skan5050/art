@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <header class="page-head">
+    <h1 class="page-title">{{ page.t.title }}</h1>
+    {% if reviews and page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+  </header>
+  {% if reviews %}
+  <ul class="review-grid">{% for r in reviews %}{% include "partials/review.html" %}{% endfor %}</ul>
+  {% else %}
+  <div class="empty-state">{{ page.t.empty|rich }}
+    <p><a class="btn btn-outline" href="{% page_url 'contacts' %}#order" data-order data-kind="question">{% t "btn.order" %}</a></p></div>
+  {% endif %}
+</div>
+{% endblock %}

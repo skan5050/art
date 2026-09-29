@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <article class="article">
+    <header class="article-head">
+      <h1 class="page-title">{{ article.t.title }}</h1>
+      {% if article.t.excerpt %}<div class="page-intro">{{ article.t.excerpt|rich }}</div>{% endif %}
+    </header>
+    {% if article.cover %}<figure class="article-cover">{% picture article.cover widths="720,1200" sizes="(min-width: 900px) 800px, 100vw" alt=article.t.cover_alt lazy=False %}</figure>{% endif %}
+    <div class="prose">{{ article.t.body|rich }}</div>
+    {% if related_categories or related_paintings %}
+    <aside class="article-links">
+      {% for c in related_categories %}<a class="tag" href="{{ c.url }}">{{ c.t.name }}</a>{% endfor %}
+      {% for p in related_paintings %}<a class="tag" href="{{ p.url }}">{{ p.t.title }}</a>{% endfor %}
+    </aside>
+    {% endif %}
+    {% if article.t.button %}<p><a class="btn btn-primary" href="{% page_url 'contacts' %}#order" data-order data-kind="question">{{ article.t.button }}</a></p>{% endif %}
+  </article>
+  {% if related_articles %}
+  <section class="block">
+    <h2 class="block-title">{% t "guides.related" %}</h2>
+    <ul class="article-grid">{% for a in related_articles %}{% include "partials/article_card.html" %}{% endfor %}</ul>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

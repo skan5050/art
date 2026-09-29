@@ -1,0 +1,20 @@
+{% shared "form-intro" as form_intro %}
+<dialog class="modal" id="order-modal" aria-labelledby="order-modal-title" data-order-modal
+  data-title-general="{% t 'form.title.general' %}" data-title-category="{% t 'form.title.category' %}"
+  data-title-painting="{% t 'form.title.painting' %}" data-title-similar="{% t 'form.title.similar' %}"
+  data-title-custom="{% t 'form.title.general' %}" data-title-certificate="{% t 'form.title.certificate' %}"
+  data-title-delivery="{% t 'form.title.delivery' %}" data-title-question="{% t 'form.title.general' %}">
+  <div class="modal-box">
+    <button class="modal-close" type="button" data-modal-close aria-label="{% t 'nav.close' %}">{% icon "close" %}</button>
+    <h2 class="modal-title" id="order-modal-title" data-modal-title>{% t "form.title.general" %}</h2>
+    {% if form_intro and form_intro.t.text %}<p class="modal-intro">{{ form_intro.t.text|brandify }}</p>{% endif %}
+    <div data-modal-body>
+      {% include "partials/order_form.html" with fid="m" fkind="general" fpainting=None fcategory=None form_sizes=None %}
+    </div>
+    <div class="modal-success" data-modal-success hidden tabindex="-1">
+      <p class="modal-success-title">{% t "form.ok_title" %}</p>
+      <p data-modal-success-text></p>
+      <button class="btn btn-outline" type="button" data-modal-close>{% t "nav.close" %}</button>
+    </div>
+  </div>
+</dialog>

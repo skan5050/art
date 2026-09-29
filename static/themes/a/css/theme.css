@@ -1,0 +1,56 @@
+/* Тема A «Голубая акварель» — МираМе.
+   Палитра: темно-синий #073662, синий #1C497E, светло-голубой #DCEBF6, золотой #E3BF58. */
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/montserrat-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/montserrat-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/montserrat-cyrillic-500-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/montserrat-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/montserrat-cyrillic-600-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/montserrat-latin-600-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/montserrat-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/montserrat-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: "Marck Script"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/marck-script-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Marck Script"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/marck-script-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+
+:root {
+  --bg: #ffffff;
+  --surface: #f3f8fc;
+  --surface-2: #dcebf6;
+  --text: #13253a;
+  --muted: #55667a;
+  --line: #d9e5f0;
+  --primary: #1c497e;
+  --primary-dark: #073662;
+  --accent: #e3bf58;
+  --accent-ink: #2a2105;
+  --footer-bg: #073662;
+  --footer-ink: #e6f0f9;
+  --font: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-script: "Marck Script", "Segoe Script", cursive;
+  --radius: 8px;
+}
+
+.hero { min-height: clamp(420px, 44vw, 620px); display: flex; align-items: center; }
+.hero-inner { color: #0a2f55; }
+.hero-title { font-family: var(--font-script); font-weight: 400; font-size: clamp(42px, 7vw, 86px); line-height: 1.05; color: #0b2a4f; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
+.hero-text { font-weight: 500; color: #183a60; }
+.hero-kicker { color: #1c497e; }
+.hero .btn-outline { background: rgba(255,255,255,.75); }
+.hero-logo { filter: drop-shadow(0 1px 1px rgba(255,255,255,.6)); }
+
+.section-title, .page-title { color: var(--primary-dark); }
+.section-categories .section-title { font-weight: 700; }
+.cat-card-title { text-align: center; font-weight: 600; }
+.cat-card-media { border-radius: 4px; }
+.order-banner { background: linear-gradient(100deg, #dcebf6 0%, #eef5fb 70%); position: relative; overflow: hidden; }
+.order-banner .section-title { font-size: clamp(22px, 2.6vw, 30px); }
+.order-cta-inner { background: linear-gradient(100deg, #dcebf6 0%, #eef5fb 80%); }
+.site-footer { background: linear-gradient(160deg, #0a3a6a 0%, #073662 55%, #062c52 100%); }
+.btn-primary { background: var(--primary-dark); }
+.btn-primary:hover { background: var(--primary); }
+.badge-sold { background: #073662; }
+.page-kicker { color: var(--primary); }
+.note-conditions { border-left: 4px solid var(--accent); }
+.cat-card-placeholder { background:
+  radial-gradient(120% 90% at 0% 0%, rgba(28,73,126,.35), transparent 55%),
+  radial-gradient(90% 80% at 100% 100%, rgba(7,54,98,.28), transparent 60%),
+  linear-gradient(135deg, #eaf3fa, #dcebf6); }

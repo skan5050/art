@@ -1,0 +1,42 @@
+{% shared "footer-order" as footer_cta %}
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="brand brand-footer" href="{{ home_url }}">
+        {% if site.logo_on_dark %}<img class="brand-logo" src="{{ site.logo_on_dark.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}
+      </a>
+      {% if slogan %}<p class="footer-slogan">{{ slogan }}</p>{% endif %}
+    </div>
+    <div class="footer-col">
+      <p class="footer-title">{% t "footer.sections" %}</p>
+      <ul class="footer-links">
+        {% for item in footer_menu %}<li><a href="{{ item.href }}">{{ item.label }}</a></li>{% endfor %}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <p class="footer-title">{% t "footer.contacts" %}</p>
+      <ul class="footer-links footer-contacts">
+        {% if site.phone %}<li><a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></li>{% endif %}
+        {% if site.email %}<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>{% endif %}
+        {% for m in messengers %}<li><a href="{{ m.url }}" target="_blank" rel="noopener">{% icon m.icon %}<span>{{ m.name }}</span></a></li>{% endfor %}
+        {% if site.t.hours %}<li class="muted">{{ site.t.hours }}</li>{% endif %}
+        {% if site.t.geography %}<li class="muted">{{ site.t.geography }}</li>{% endif %}
+      </ul>
+    </div>
+    <div class="footer-col footer-actions">
+      {% if footer_cta and footer_cta.t.text %}<p class="footer-cta-text">{{ footer_cta.t.text|brandify }}</p>{% endif %}
+      <a class="btn btn-light" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.order" %}</a>
+      {% if site_pages.certificate %}<a class="btn btn-gold" href="{{ site_pages.certificate.url }}">{% icon "gift" %}<span>{% t "btn.certificate" %}</span></a>{% endif %}
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>{{ copyright_text }}</p>
+    <ul class="footer-service">
+      {% if site_pages.guides %}<li><a href="{{ site_pages.guides.url }}">{{ site_pages.guides.nav_title }}</a></li>{% endif %}
+      {% if site_pages.studio %}<li><a href="{{ site_pages.studio.url }}">{{ site_pages.studio.nav_title }}</a></li>{% endif %}
+      {% if site_pages.custom %}<li><a href="{{ site_pages.custom.url }}">{{ site_pages.custom.nav_title }}</a></li>{% endif %}
+      {% for p in service_pages %}<li><a href="{{ p.url }}">{{ p.nav_title }}</a></li>{% endfor %}
+      {% if other_lang_url %}<li><a href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a></li>{% endif %}
+    </ul>
+  </div>
+</footer>

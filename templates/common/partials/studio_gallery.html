@@ -1,0 +1,7 @@
+<ul class="studio-grid">
+  {% for im in studio_images %}
+  <li><figure>{% picture im.image widths="480,960" sizes="(min-width: 900px) 33vw, 100vw" alt=im.t.alt %}
+    {% if im.t.caption or im.is_illustration %}<figcaption>{{ im.t.caption }}{% if im.is_illustration %}{% if im.t.caption %} · {% endif %}<span class="muted">{% t "studio.illustration" %}</span>{% endif %}</figcaption>{% endif %}
+  </figure></li>
+  {% endfor %}
+</ul>

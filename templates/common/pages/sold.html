@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <header class="page-head">
+    <p class="page-kicker">SOLD</p>
+    <h1 class="page-title">{{ page.t.title }}</h1>
+    {% if page.t.intro and page_obj.number == 1 %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+  </header>
+  {% if paintings %}
+  <ul class="art-grid" id="art-grid">{% include "catalog/_cards.html" %}</ul>
+  {% include "catalog/_pagination.html" %}
+  {% else %}
+  <div class="empty-state">{{ page.t.empty|rich }}<p><a class="btn btn-outline" href="{% page_url 'catalog' %}">{% t "btn.to_catalog" %}</a></p></div>
+  {% endif %}
+</div>
+{% include "partials/order_cta.html" with cta_kind="general" cta_label=page.t.button %}
+{% endblock %}

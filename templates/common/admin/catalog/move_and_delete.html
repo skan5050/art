@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div id="content-main">
+  <p>В рубрике «{{ category.name_ru }}» есть содержимое: картин — {{ paintings_count }}, подрубрик — {{ children|length }}.
+  Перед удалением выберите, куда его перенести. Адреса перенесенных подрубрик изменятся, со старых будет настроено перенаправление.</p>
+  {% if children %}<p>Подрубрики: {% for c in children %}«{{ c.name_ru }}»{% if not forloop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
+  <form method="post">{% csrf_token %}
+    <p><label for="target"><strong>Перенести в рубрику:</strong></label><br>
+      <select name="target" id="target" required>
+        <option value="">— выберите —</option>
+        {% if not paintings_count %}<option value="root">Верхний уровень (только подрубрики)</option>{% endif %}
+        {% for pk, name in targets %}<option value="{{ pk }}">{{ name }}</option>{% endfor %}
+      </select></p>
+    <input type="submit" value="Перенести и удалить" class="default" style="background:#ba2121">
+    <a href="../" class="button">Отмена</a>
+  </form>
+</div>
+{% endblock %}

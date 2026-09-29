@@ -1,0 +1,45 @@
+{% load static %}<!doctype html>
+<html lang="{{ lang }}" class="theme-{{ theme }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ meta.title }}</title>
+{% if meta.description %}<meta name="description" content="{{ meta.description }}">{% endif %}
+<meta name="robots" content="{{ meta.robots|default:'index, follow' }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
+{% for alt in meta.alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}">
+{% endfor %}
+<meta property="og:site_name" content="{{ brand }}">
+<meta property="og:locale" content="{% if lang == 'en' %}en_US{% else %}ru_RU{% endif %}">
+<meta property="og:type" content="{{ meta.og.type|default:'website' }}">
+<meta property="og:title" content="{{ meta.og.title|default:meta.title }}">
+{% if meta.og.description %}<meta property="og:description" content="{{ meta.og.description }}">{% endif %}
+{% if meta.og.url %}<meta property="og:url" content="{{ meta.og.url }}">{% endif %}
+{% if meta.og.image %}<meta property="og:image" content="{{ meta.og.image }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+{% if site.yandex_verification %}<meta name="yandex-verification" content="{{ site.yandex_verification }}">{% endif %}
+{% if site.google_verification %}<meta name="google-site-verification" content="{{ site.google_verification }}">{% endif %}
+{% if site.favicon %}<link rel="icon" type="image/png" href="{{ site.favicon.url }}"><link rel="apple-touch-icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">{% endif %}
+<link rel="preload" href="{% static 'fonts/'|add:theme_font_preload %}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
+<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+{% block head_extra %}{% endblock %}
+{% for block in meta.jsonld %}<script type="application/ld+json">{{ block }}</script>
+{% endfor %}
+</head>
+<body class="{% block body_class %}page-inner{% endblock %}">
+<a class="skip-link" href="#main">{% t "nav.skip" %}</a>
+{% block header %}{% include "partials/header.html" with is_home=False %}{% endblock %}
+<main id="main" tabindex="-1">
+{% if messages %}<div class="container flash-list" role="status">{% for m in messages %}<p class="flash flash-{{ m.tags }}">{{ m }}</p>{% endfor %}</div>{% endif %}
+{% if request.is_preview %}<div class="container"><p class="flash flash-warning">Предпросмотр: материал не опубликован и виден только администратору.</p></div>{% endif %}
+{% block content %}{% endblock %}
+</main>
+{% include "partials/footer.html" %}
+{% include "partials/cert_button.html" %}
+{% include "partials/order_modal.html" %}
+<script src="{% static 'js/site.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+{% include "partials/analytics.html" %}
+</body>
+</html>

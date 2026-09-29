@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <header class="page-head">
+    {% if parent %}<a class="back-link" href="{{ parent.url }}">← {{ parent.t.name }}</a>{% endif %}
+    <h1 class="page-title">{{ category.t.name }}</h1>
+    {% if category.t.intro and page_obj.number == 1 %}<div class="page-intro">{{ category.t.intro|rich }}</div>{% endif %}
+  </header>
+
+  {% if subcategories and page_obj.number == 1 %}
+  <section class="block" aria-labelledby="subcats-title">
+    <h2 class="block-title visually-hidden" id="subcats-title">{% t "catalog.subcategories" %}</h2>
+    <ul class="cat-grid">{% for cat in subcategories %}{% include "partials/category_card.html" %}{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if paintings %}
+  <section class="block" aria-labelledby="works-title">
+    {% if subcategories %}<h2 class="block-title" id="works-title">{% t "catalog.works" %}</h2>{% else %}<h2 class="visually-hidden" id="works-title">{% t "catalog.works" %}</h2>{% endif %}
+    <ul class="art-grid" id="art-grid">{% include "catalog/_cards.html" %}</ul>
+    {% include "catalog/_pagination.html" %}
+  </section>
+  {% elif not subcategories %}
+  {% shared "empty-category" as empty %}
+  <div class="empty-state">{% if empty %}{{ empty.t.text|rich }}{% endif %}
+    <p><a class="btn btn-outline" href="{% page_url 'catalog' %}">{% t "btn.to_catalog" %}</a></p>
+  </div>
+  {% endif %}
+</div>
+{% include "partials/order_cta.html" with cta_kind="category" cta_category=category %}
+{% endblock %}

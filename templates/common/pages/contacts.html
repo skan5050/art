@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <div class="contacts-layout">
+    <div>
+      <h1 class="page-title">{{ page.t.title }}</h1>
+      {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+      <div class="prose">{{ page.t.body|rich }}</div>
+      <ul class="contact-list">
+        {% if site.phone %}<li>{% icon "phone" %}<a href="tel:{{ site.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ site.phone }}</a></li>{% endif %}
+        {% if site.email %}<li>{% icon "email" %}<a href="mailto:{{ site.email }}">{{ site.email }}</a></li>{% endif %}
+        {% for m in messengers %}<li>{% icon m.icon %}<a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a></li>{% endfor %}
+        {% if site.t.address %}<li>{{ site.t.address }}</li>{% endif %}
+        {% if site.t.hours %}<li class="muted">{{ site.t.hours }}</li>{% endif %}
+        {% if site.t.geography %}<li class="muted">{{ site.t.geography }}</li>{% endif %}
+      </ul>
+    </div>
+    <section class="form-card" id="order" aria-labelledby="inline-form-title">
+      <h2 class="form-card-title" id="inline-form-title">{{ inline_title }}</h2>
+      {% include "partials/order_form.html" with fid="c" fkind=inline_kind fpainting=inline_painting fcategory=inline_category form_sizes=inline_sizes fopen=False %}
+    </section>
+  </div>
+</div>
+{% endblock %}

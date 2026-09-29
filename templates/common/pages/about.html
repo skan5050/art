@@ -1,0 +1,5 @@
+{% extends "pages/text.html" %}
+{% block extra %}
+{% if studio_images %}{% include "partials/studio_gallery.html" %}{% endif %}
+{% if studio_page %}<p class="center"><a class="link-arrow" href="{{ studio_page.url }}">{{ studio_page.nav_title }} {% icon "arrow" %}</a></p>{% endif %}
+{% endblock %}

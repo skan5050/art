@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <header class="page-head center">
+    <h1 class="page-title">{{ page.t.title }}</h1>
+    {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+  </header>
+  <ul class="cat-grid">{% for cat in categories %}{% include "partials/category_card.html" %}{% endfor %}</ul>
+</div>
+{% include "partials/order_cta.html" with cta_kind="general" %}
+{% endblock %}

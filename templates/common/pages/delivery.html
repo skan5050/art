@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_extra %}{% if cities %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}"><link rel="stylesheet" href="{% static 'vendor/leaflet/MarkerCluster.css' %}"><link rel="stylesheet" href="{% static 'vendor/leaflet/MarkerCluster.Default.css' %}">{% endif %}{% endblock %}
+{% block content %}
+{% shared "delivery-short" as delivery_short %}
+{% shared "sales-map" as geo %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  <article class="text-page">
+    <div class="text-main">
+      <h1 class="page-title">{{ page.t.title }}</h1>
+      {% if page.t.intro %}<div class="page-intro">{{ page.t.intro|rich }}</div>{% endif %}
+      <div class="prose">{{ page.t.body|rich }}</div>
+      {% if delivery_short %}<aside class="note-box note-conditions">{% if delivery_short.t.title %}<p class="note-title">{{ delivery_short.t.title }}</p>{% endif %}{{ delivery_short.t.text|rich }}</aside>{% endif %}
+      {% if page.t.button %}<p><a class="btn btn-primary" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery">{{ page.t.button }}</a></p>{% endif %}
+    </div>
+  </article>
+</div>
+{% if geo %}
+<section class="section geo-section" id="geography-sales" aria-labelledby="geo-title">
+  <div class="container">
+    <h2 class="section-title" id="geo-title">{{ geo.t.title }}</h2>
+    {% if geo.t.text %}<div class="section-text">{{ geo.t.text|rich }}</div>{% endif %}
+    {% if cities %}
+    <div class="geo-layout">
+      <div class="geo-map" id="sales-map" data-sales-map data-tiles="{{ site.map_tiles_url }}" data-attribution="{{ site.map_attribution }}" data-count-label="{% t 'map.cities_count' %}" role="region" aria-label="{{ geo.t.title }}"></div>
+      <div class="geo-list">
+        <label class="visually-hidden" for="geo-search">{% t "map.search" %}</label>
+        <input id="geo-search" type="search" placeholder="{% t 'map.search' %}" data-geo-search>
+        <h3 class="geo-list-title">{% t "map.list" %}</h3>
+        <ul data-geo-list>
+          {% regroup cities by country as by_country %}
+          {% for group in by_country %}
+          <li class="geo-country"><span>{{ group.grouper }}</span>
+            <ul>{% for c in group.list %}<li data-geo-city data-name="{{ c.name|lower }}" data-lat="{{ c.lat }}" data-lng="{{ c.lng }}"><button type="button" data-geo-focus>{{ c.name }}</button>{% if c.caption %} <span class="muted">— {{ c.caption }}</span>{% endif %}</li>{% endfor %}</ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {{ cities|json_script:"sales-cities" }}
+    {% else %}
+    <p class="empty-state">{{ page.t.empty|default:"" }}</p>
+    {% endif %}
+    {% if page.t.note %}<p class="geo-caption">{{ page.t.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+{% block scripts %}{% if cities %}<script src="{% static 'vendor/leaflet/leaflet.js' %}" defer></script><script src="{% static 'vendor/leaflet/leaflet.markercluster.js' %}" defer></script><script src="{% static 'js/map.js' %}" defer></script>{% endif %}{% endblock %}

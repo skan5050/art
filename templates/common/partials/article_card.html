@@ -1,0 +1,8 @@
+<li class="article-card">
+  <a href="{{ a.url }}" class="article-card-link">
+    {% if a.cover %}<span class="article-card-media">{% picture a.cover widths="480,960" sizes="(min-width: 900px) 33vw, 100vw" alt=a.t.cover_alt %}</span>{% endif %}
+    <span class="article-card-title">{{ a.t.title }}</span>
+    {% if a.t.excerpt %}<span class="article-card-text">{{ a.t.excerpt|plain:180 }}</span>{% endif %}
+    <span class="link-arrow">{% t "btn.read" %} {% icon "arrow" %}</span>
+  </a>
+</li>

@@ -1,0 +1,179 @@
+"""Надписи интерфейса по умолчанию (RU/EN).
+
+При первом наполнении они заносятся в «Надписи интерфейса», после чего
+редактируются из админки. Здесь — только стартовые значения.
+Формат: ключ: (группа, RU, EN, где используется).
+"""
+
+DEFAULT_LABELS = {
+    # Навигация и общее
+    "nav.menu": ("Навигация", "Меню", "Menu", "Кнопка компактного меню"),
+    "nav.close": ("Навигация", "Закрыть", "Close", "Закрытие меню и окон"),
+    "nav.home": ("Навигация", "Главная", "Home", "Хлебные крошки"),
+    "nav.breadcrumbs": ("Навигация", "Навигационная цепочка", "Breadcrumbs", "Подпись для экранных дикторов"),
+    "nav.lang_switch": ("Навигация", "English", "Русский", "Переключатель языка"),
+    "nav.skip": ("Навигация", "Перейти к содержимому", "Skip to content", "Ссылка для клавиатуры"),
+    "nav.messengers": ("Навигация", "Написать нам", "Message us", "Иконка мессенджеров в шапке"),
+    "nav.guides": ("Навигация", "Полезное", "Guides", "Ссылка в футере на раздел статей"),
+    "nav.studio": ("Навигация", "О студии", "The studio", "Ссылка в футере"),
+    "nav.back_to": ("Навигация", "Назад в раздел", "Back to", "Ссылка на родительскую рубрику"),
+
+    # Кнопки действий
+    "btn.order": ("Кнопки", "Заказать картину", "Order a painting", "Основная кнопка заказа"),
+    "btn.order_this": ("Кнопки", "Заказать картину", "Order this painting", "Картина в наличии"),
+    "btn.discuss": ("Кнопки", "Обсудить заказ", "Discuss an order", "Картина под заказ"),
+    "btn.similar": ("Кнопки", "Заказать похожую", "Order a similar one", "Проданная картина"),
+    "btn.certificate": ("Кнопки", "Подарочный сертификат", "Gift certificate", "Плавающая кнопка и футер"),
+    "btn.more": ("Кнопки", "Показать еще", "Show more", "Дозагрузка картин"),
+    "btn.all_works": ("Кнопки", "Все работы", "All works", "Блоки главной"),
+    "btn.read": ("Кнопки", "Читать", "Read", "Список статей"),
+    "btn.to_catalog": ("Кнопки", "Перейти в каталог", "Go to catalogue", "Пустые состояния"),
+    "btn.view": ("Кнопки", "Смотреть", "View", "Карточка картины в списке"),
+
+    # Статусы
+    "status.available": ("Статусы", "В наличии", "Available", "Отметка картины"),
+    "status.custom": ("Статусы", "Под заказ", "Made to order", "Отметка картины"),
+    "status.sold": ("Статусы", "Продана", "Sold", "Отметка картины"),
+    "status.sold_badge": ("Статусы", "SOLD", "SOLD", "Короткая отметка проданной работы"),
+    "price.on_request": ("Статусы", "Стоимость по запросу", "Price on request", "Если цена не указана"),
+
+    # Характеристики
+    "spec.size": ("Характеристики", "Размер", "Size", "Страница картины"),
+    "spec.technique": ("Характеристики", "Техника", "Technique", "Страница картины"),
+    "spec.base": ("Характеристики", "Основа", "Support", "Страница картины"),
+    "spec.framing": ("Характеристики", "Оформление", "Framing", "Страница картины"),
+    "spec.year": ("Характеристики", "Год", "Year", "Страница картины"),
+    "spec.status": ("Характеристики", "Статус", "Status", "Страница картины"),
+    "spec.sku": ("Характеристики", "Артикул", "Ref. no.", "Страница картины"),
+    "spec.author": ("Характеристики", "Автор", "Artist", "Страница картины"),
+    "spec.price": ("Характеристики", "Стоимость", "Price", "Страница картины"),
+    "painting.photos": ("Картина", "Фотографии работы", "Photos of the work", "Галерея"),
+    "painting.zoom": ("Картина", "Увеличить изображение", "Enlarge image", "Галерея"),
+    "painting.sold_note": (
+        "Картина",
+        "Эта работа уже продана. Можно заказать новую картину по ее мотивам.",
+        "This work has been sold. You can order a new painting inspired by it.",
+        "Под статусом проданной картины",
+    ),
+    "painting.custom_note": (
+        "Картина",
+        "Работа представлена как пример. Новую картину обсудим по вашим пожеланиям.",
+        "This work is shown as an example. We will discuss a new painting to your wishes.",
+        "Под статусом «Под заказ»",
+    ),
+    "painting.more_in_category": ("Картина", "Еще в рубрике", "More in this category", "Блок внизу страницы картины"),
+
+    # Каталог
+    "catalog.subcategories": ("Каталог", "Подрубрики", "Subcategories", "Заголовок блока подрубрик"),
+    "catalog.works": ("Каталог", "Работы", "Works", "Заголовок блока картин"),
+    "catalog.page": ("Каталог", "Страница", "Page", "Пагинация"),
+    "catalog.next": ("Каталог", "Следующая", "Next", "Пагинация"),
+    "catalog.prev": ("Каталог", "Предыдущая", "Previous", "Пагинация"),
+    "catalog.pagination": ("Каталог", "Страницы списка", "List pages", "Подпись пагинации"),
+    "catalog.order_cta": ("Каталог", "Любой сюжет можно обсудить", "Any subject can be discussed", "Блок заказа внизу списков"),
+
+    # Форма заказа
+    "form.title.general": ("Форма", "Заказать картину", "Order a painting", "Заголовок окна — общий заказ"),
+    "form.title.category": ("Форма", "Заказ картины в рубрике", "Order in this category", "Заголовок окна — рубрика"),
+    "form.title.painting": ("Форма", "Заявка на картину", "Request for this painting", "Заголовок окна — картина"),
+    "form.title.similar": ("Форма", "Заказать похожую картину", "Order a similar painting", "Заголовок окна — похожая"),
+    "form.title.certificate": ("Форма", "Заявка на сертификат", "Certificate request", "Заголовок окна — сертификат"),
+    "form.title.delivery": ("Форма", "Вопрос о доставке", "Delivery question", "Заголовок окна — доставка"),
+    "form.similar_note": (
+        "Форма",
+        "Обсуждается новая работа по мотивам выбранной — не сам проданный оригинал.",
+        "This is about a new work inspired by the selected one, not the sold original.",
+        "Пояснение в форме «Заказать похожую»",
+    ),
+    "form.context": ("Форма", "Вы спрашиваете о", "You are asking about", "Строка контекста в форме"),
+    "form.name": ("Форма", "Имя", "Name", "Поле"),
+    "form.method": ("Форма", "Как с вами связаться", "How should we contact you", "Поле"),
+    "form.contact": ("Форма", "Контакт", "Contact", "Поле"),
+    "form.contact.phone": ("Форма", "Номер телефона", "Phone number", "Подсказка поля контакта"),
+    "form.contact.telegram": ("Форма", "Имя пользователя или телефон в Telegram", "Telegram username or phone", "Подсказка поля контакта"),
+    "form.contact.whatsapp": ("Форма", "Номер в WhatsApp", "WhatsApp number", "Подсказка поля контакта"),
+    "form.contact.max": ("Форма", "Номер или ссылка в MAX", "MAX number or link", "Подсказка поля контакта"),
+    "form.contact.email": ("Форма", "Адрес электронной почты", "Email address", "Подсказка поля контакта"),
+    "form.method.phone": ("Форма", "Телефон", "Phone", "Способ связи"),
+    "form.method.telegram": ("Форма", "Telegram", "Telegram", "Способ связи"),
+    "form.method.whatsapp": ("Форма", "WhatsApp", "WhatsApp", "Способ связи"),
+    "form.method.max": ("Форма", "MAX", "MAX", "Способ связи"),
+    "form.method.email": ("Форма", "Email", "Email", "Способ связи"),
+    "form.more": ("Форма", "Добавить подробности", "Add details", "Раскрытие необязательных полей"),
+    "form.city": ("Форма", "Город", "City", "Поле"),
+    "form.deadline": ("Форма", "Желаемый срок", "Preferred date", "Поле"),
+    "form.comment": ("Форма", "Комментарий", "Comment", "Поле"),
+    "form.file": ("Форма", "Файл-пример", "Example image", "Поле"),
+    "form.file_hint": ("Форма", "JPG, PNG или WEBP, до 10 МБ", "JPG, PNG or WEBP, up to 10 MB", "Подсказка поля файла"),
+    "form.optional": ("Форма", "необязательно", "optional", "Отметка необязательных полей"),
+    "form.required": ("Форма", "обязательно", "required", "Отметка обязательных полей"),
+    "form.submit": ("Форма", "Отправить заявку", "Send request", "Кнопка отправки"),
+    "form.sending": ("Форма", "Отправляем…", "Sending…", "Во время отправки"),
+    "form.consent": (
+        "Форма",
+        "Отправляя форму, вы соглашаетесь на обработку указанных данных для ответа на обращение.",
+        "By sending the form you agree to the processing of the data provided in order to reply.",
+        "Текст согласия (утверждается владельцем)",
+    ),
+    "form.error.required": ("Форма", "Заполните это поле", "Please fill in this field", "Ошибка"),
+    "form.error.email": ("Форма", "Проверьте адрес почты", "Please check the email address", "Ошибка"),
+    "form.error.phone": ("Форма", "Проверьте номер телефона", "Please check the phone number", "Ошибка"),
+    "form.error.file_type": ("Форма", "Подойдут файлы JPG, PNG или WEBP", "Please use JPG, PNG or WEBP", "Ошибка"),
+    "form.error.file_size": ("Форма", "Файл больше 10 МБ", "The file is larger than 10 MB", "Ошибка"),
+    "form.error.size": ("Форма", "Проверьте размер: положительные числа в сантиметрах", "Please check the size: positive numbers in cm", "Ошибка"),
+    "form.error.generic": ("Форма", "Проверьте отмеченные поля", "Please check the highlighted fields", "Ошибка"),
+    "form.ok_title": ("Форма", "Заявка отправлена", "Request sent", "Заголовок подтверждения"),
+
+    # Размер новой картины
+    "size.title": ("Размер", "Желаемый размер новой картины", "Preferred size of the new painting", "Поле размера"),
+    "size.none": ("Размер", "Не выбран", "Not selected", "Вариант поля размера"),
+    "size.custom": ("Размер", "Свой размер", "Custom size", "Вариант поля размера"),
+    "size.undecided": ("Размер", "Пока не определился", "Not decided yet", "Вариант поля размера"),
+    "size.width": ("Размер", "Ширина, см", "Width, cm", "Поле своего размера"),
+    "size.height": ("Размер", "Высота, см", "Height, cm", "Поле своего размера"),
+    "size.orientation": ("Размер", "Расположение", "Orientation", "Выбор расположения"),
+    "size.horizontal": ("Размер", "Горизонтально", "Landscape", "Расположение"),
+    "size.vertical": ("Размер", "Вертикально", "Portrait", "Расположение"),
+    "size.standard_group": ("Размер", "Стандартные форматы", "Standard formats", "Группа вариантов"),
+    "size.actual": ("Размер", "Размер оригинала", "Size of the original", "Фактический размер"),
+
+    # Сертификат
+    "cert.nominal": ("Сертификат", "Номинал", "Amount", "Поле"),
+    "cert.custom_amount": ("Сертификат", "Своя сумма", "Other amount", "Поле"),
+    "cert.format": ("Сертификат", "Формат", "Format", "Поле"),
+    "cert.electronic": ("Сертификат", "Электронный", "Electronic", "Формат"),
+    "cert.print": ("Сертификат", "Печатный", "Printed", "Формат"),
+    "cert.no_nominals": (
+        "Сертификат",
+        "Номиналы уточним при обсуждении.",
+        "We will agree the amount when we talk.",
+        "Если номиналы не заданы",
+    ),
+
+    # Карта
+    "map.list": ("Карта", "Города на карте", "Cities on the map", "Текстовый список под картой"),
+    "map.search": ("Карта", "Найти город", "Find a city", "Поиск по опубликованным городам"),
+    "map.all_countries": ("Карта", "Все страны", "All countries", "Фильтр страны"),
+    "map.cities_count": ("Карта", "городов", "cities", "Подпись группы на карте"),
+
+    # Разное
+    "reviews.city": ("Разное", "Город", "City", "Подпись отзыва"),
+    "studio.illustration": (
+        "Разное",
+        "Иллюстрация",
+        "Illustration",
+        "Пометка к изображениям студии, созданным не фотосъемкой",
+    ),
+    "guides.title": ("Разное", "Полезное", "Guides", "Заголовок списка статей"),
+    "guides.related": ("Разное", "Читайте также", "Read also", "Блок в конце статьи"),
+    "footer.sections": ("Футер", "Разделы", "Sections", "Заголовок колонки"),
+    "footer.contacts": ("Футер", "Связаться с нами", "Contact us", "Заголовок колонки"),
+    "footer.service": ("Футер", "Информация", "Information", "Заголовок колонки"),
+    "error404.title": ("Ошибки", "Страница не найдена", "Page not found", "Страница 404"),
+    "error404.text": (
+        "Ошибки",
+        "Такой страницы нет или она переехала. Загляните в каталог или вернитесь на главную.",
+        "This page does not exist or has moved. Try the catalogue or go back to the home page.",
+        "Страница 404",
+    ),
+}
