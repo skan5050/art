@@ -541,3 +541,30 @@ html { scroll-padding-top: 64px; }
 .artwork-sample-text { font-size: 15px; }
 .artwork-sample-text p:last-child { margin: 0; }
 .art-card-sample { font-size: 12px; font-weight: 600; color: var(--primary); }
+
+/* Карта: подсветка и подсказка по доставке */
+.geo-map { --map-marker-hot: #e3bf58; --map-land-hot: #c6ddf0; }
+.leaflet-tooltip.geo-label.is-hot, .leaflet-tooltip.geo-label.is-active { visibility: visible !important; font-weight: 800; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.geo-list li { transition: background .15s; padding-left: 6px; padding-right: 6px; margin: 0 -6px; border-radius: 4px; }
+.geo-list li.is-hot { background: rgba(255,255,255,.7); }
+.geo-list li.is-active button { text-decoration: underline; }
+.geo-hint { border-top: 1px solid var(--line); padding-top: 10px; }
+.geo-hint-title { margin: 0 0 4px; font-weight: 700; font-size: 14px; }
+.geo-hint-text { margin: 0 0 6px; font-size: 14px; }
+.geo-hint-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.geo-hint-links a { font-weight: 600; }
+.geo-popup .leaflet-popup-content-wrapper { border-radius: 10px; }
+.geo-popup .leaflet-popup-content { margin: 14px 16px; font: 14px/1.45 var(--font); }
+.geo-pop p { margin: 0 0 6px; }
+.geo-pop-city { font-size: 18px; font-weight: 800; color: var(--primary-dark); }
+.geo-pop-city span { display: block; font-size: 12px; font-weight: 500; color: var(--muted); }
+.geo-pop-title { font-weight: 700; margin-top: 8px !important; }
+.geo-pop-links { display: grid; gap: 3px; }
+.geo-pop-links a { font-weight: 600; }
+.geo-pop-note { font-size: 12px; color: var(--muted); }
+.geo-pop-btn { margin-top: 6px; min-height: 40px; font-size: 14px; color: var(--primary-ink) !important; }
+.delivery-cdek { margin: 20px 0; }
+.delivery-cdek ul { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.delivery-cdek a { font-weight: 600; }
+/* Карта растягивается на высоту панели, без пустоты под ней */
+@media (min-width: 960px) { .geo-layout { align-items: stretch; } .geo-layout .geo-map { height: auto; min-height: 520px; } }

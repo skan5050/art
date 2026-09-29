@@ -97,7 +97,7 @@ class SiteSettingsAdmin(ModelAdmin):
         )}),
         ("Адрес сайта", {"fields": ("base_url",)}),
         ("Контакты", {"fields": (
-            "phone", "email", ("address_ru", "address_en"), ("hours_ru", "hours_en"), ("geography_ru", "geography_en"),
+            "phone", "email", ("address_ru", "address_en"), ("address_lat", "address_lng"), ("hours_ru", "hours_en"), ("geography_ru", "geography_en"),
         ), "description": "Мессенджеры настраиваются в разделе «Мессенджеры и каналы связи»."}),
         ("Футер", {"fields": (("copyright_ru", "copyright_en"),)}),
         ("Каталог", {"fields": ("show_sold_in_catalog", ("painting_prefix_ru", "painting_prefix_en"), "per_page", "currency")}),
@@ -105,6 +105,8 @@ class SiteSettingsAdmin(ModelAdmin):
             "certificate_image", "certificate_custom_amount", "certificate_electronic", "certificate_print",
         ), "description": "Номиналы — в разделе «Номиналы сертификата»."}),
         ("Карта продаж", {"fields": ("map_tiles_url", "map_attribution"), "classes": ("collapse",)}),
+        ("Доставка: ссылки СДЭК", {"fields": ("cdek_offices_url", "cdek_calc_url", "cdek_tracking_url"),
+                                   "description": "Внешние ссылки в подсказках карты и статье доставки. Пустое поле — ссылка не показывается."}),
         ("Формы", {"fields": ("consent_checkbox", "privacy_page_url")}),
         ("Уведомления о заявках", {"fields": ("notify_emails",)}),
         ("SEO: robots.txt и sitemap.xml", {"fields": (

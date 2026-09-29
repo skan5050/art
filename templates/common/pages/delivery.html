@@ -14,6 +14,17 @@
     <div class="text-main">
       <div class="prose">{{ page.t.body|rich }}</div>
       {% if delivery_short %}<aside class="note-box note-conditions">{% if delivery_short.t.title %}<p class="note-title">{{ delivery_short.t.title }}</p>{% endif %}{{ delivery_short.t.text|rich }}</aside>{% endif %}
+      {% if site.cdek_offices_url or site.cdek_calc_url or site.cdek_tracking_url %}
+      <aside class="delivery-cdek">
+        <p class="note-title">{% t "delivery.cdek_title" %}</p>
+        <ul>
+          {% if site.cdek_offices_url %}<li><a href="{{ site.cdek_offices_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_offices" %} ↗</a></li>{% endif %}
+          {% if site.cdek_calc_url %}<li><a href="{{ site.cdek_calc_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_calc" %} ↗</a></li>{% endif %}
+          {% if site.cdek_tracking_url %}<li><a href="{{ site.cdek_tracking_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_track" %} ↗</a></li>{% endif %}
+        </ul>
+        {% if site.cdek_calc_url %}<p class="field-hint">{% t "map.cdek_note" %}</p>{% endif %}
+      </aside>
+      {% endif %}
     </div>
   </article>
 </div>

@@ -26,6 +26,9 @@ SETTINGS = {
 }
 
 LABELS = {
+    "map.delivery_hint": ("Отправка через СДЭК или другую транспортную компанию по согласованию с Заказчиком. Доставка оплачивается отдельно; маршрут, упаковка и срок согласуются до отправки.", "Shipping via CDEK or another carrier agreed with the customer. Delivery is paid separately; the route, packing and timing are agreed before shipping."),
+    "map.cdek_note": ("Расчет на сайте СДЭК носит ориентировочный характер; итоговая стоимость согласуется отдельно.", "The CDEK estimate is indicative; the final cost is agreed separately."),
+    "map.city_note": ("Город с подтвержденными продажами.", "A city with confirmed sales."),
     "form.sample_note": ("Выбранная работа может служить образцом: новая картина выполняется индивидуально и не является копией.", "The selected work can serve as a sample: the new painting is made individually and is not a copy."),
     "catalog.sample_badge": ("Образец для заказа", "Sample for commission"),
     "status.sold_badge": ("Продано", "Sold"),

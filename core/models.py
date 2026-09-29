@@ -46,9 +46,12 @@ class SiteSettings(TranslatableMixin, models.Model):
     email = models.EmailField("Email", blank=True)
     address_ru = models.CharField(
         "Адрес (RU)", max_length=255, blank=True,
-        help_text="Заполняйте только при реальной точке приема клиентов. Личного приема нет — оставьте пустым.",
+        help_text="Адрес для страницы «Контакты» и разметки. Если заполнены координаты, на странице контактов показывается карта с отметкой.",
     )
     address_en = models.CharField("Адрес (EN)", max_length=255, blank=True)
+    address_lat = models.DecimalField("Широта адреса", max_digits=9, decimal_places=6, null=True, blank=True,
+                                      help_text="Например, 55.751244. Можно взять в Яндекс Картах: правый клик по точке → координаты.")
+    address_lng = models.DecimalField("Долгота адреса", max_digits=9, decimal_places=6, null=True, blank=True)
     hours_ru = models.CharField("Режим ответа (RU)", max_length=160, blank=True)
     hours_en = models.CharField("Режим ответа (EN)", max_length=160, blank=True)
     geography_ru = models.CharField("География работы (RU)", max_length=255, blank=True)
@@ -82,6 +85,11 @@ class SiteSettings(TranslatableMixin, models.Model):
         "Подпись источника карты", max_length=255,
         default='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     )
+
+    # Доставка: ссылки на сайт СДЭК (внешние; калькулятор и API перевозчика не интегрируются — ТЗ, раздел 8)
+    cdek_offices_url = models.URLField("СДЭК: пункты выдачи", blank=True, default="https://www.cdek.ru/ru/offices/")
+    cdek_calc_url = models.URLField("СДЭК: калькулятор стоимости", blank=True, default="https://www.cdek.ru/ru/calculate/")
+    cdek_tracking_url = models.URLField("СДЭК: отслеживание отправления", blank=True, default="https://www.cdek.ru/ru/tracking/")
 
     # Формы
     consent_checkbox = models.BooleanField(

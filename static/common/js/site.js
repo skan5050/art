@@ -252,6 +252,8 @@
       var thumb = $("[data-form-context-img]", form), thumbSrc = trigger.getAttribute("data-thumb");
       if (thumb) { thumb.hidden = !thumbSrc; if (thumbSrc) thumb.src = thumbSrc; }
       $("[data-similar-note]", form).hidden = kind !== "similar";
+      var cityFromTrigger = trigger.getAttribute("data-city");
+      if (cityFromTrigger && form.elements.city) form.elements.city.value = cityFromTrigger;
       var sampleNote = $("[data-sample-note]", form);
       if (sampleNote) sampleNote.hidden = kind !== "painting";
       $("[data-cert-fields]", form).hidden = kind !== "certificate";

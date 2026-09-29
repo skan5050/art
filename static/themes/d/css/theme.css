@@ -340,3 +340,9 @@ a:hover { color: var(--terracotta); }
 .artwork-sample-title { color: var(--text); font-weight: 800; }
 .artwork-sample-text { font-family: var(--font-serif); font-size: 16px; }
 .art-card-sample { color: var(--terracotta); }
+.geo-map { --map-marker-hot: #ffffff; --map-land-hot: #e7f36a; }
+.geo-hint { border-top-color: rgba(23,26,23,.25); }
+.geo-hint-links a, .geo-pop-links a { color: var(--text); }
+.geo-popup .leaflet-popup-content-wrapper { border-radius: 0; }
+.geo-pop-city { color: var(--text); }
+.geo-list li.is-hot { background: rgba(255,255,255,.45); }

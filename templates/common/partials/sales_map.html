@@ -1,6 +1,6 @@
 {% load static %}{% comment %}
 Сквозной компонент «География наших продаж» (раздел 8 ТЗ): один источник данных, подключается на «Доставке» и в SOLD.
-Показывает только подтвержденные продажи. Подложка — векторные контуры стран, без внешних сервисов.
+Подложка — векторные контуры стран, без внешних сервисов. Клик по городу — подсказка по доставке и ссылки СДЭК.
 {% endcomment %}{% shared "sales-map" as geo %}
 {% if geo %}
 <section class="section geo-section" id="geography-sales" aria-labelledby="geo-title-{{ map_id|default:'m' }}">
@@ -12,14 +12,28 @@
     <div class="geo-layout">
       <div class="geo-map" data-sales-map data-geo="{% static 'geo/countries.json' %}" data-tiles="{{ site.map_tiles_url }}"
            data-attribution="{{ site.map_attribution }}" role="region" aria-label="{{ geo.t.title }}"
-           data-cities="{{ map_id|default:'m' }}-cities">
+           data-cities="{{ map_id|default:'m' }}-cities"
+           data-t-hint-title="{% t 'map.delivery_title' %}" data-t-hint="{% t 'map.delivery_hint' %}"
+           data-t-offices="{% t 'map.cdek_offices' %}" data-t-calc="{% t 'map.cdek_calc' %}" data-t-note="{% t 'map.cdek_note' %}"
+           data-t-discuss="{% t 'map.discuss_city' %}" data-t-city-page="{% t 'map.city_page' %}" data-t-city-note="{% t 'map.city_note' %}"
+           data-offices-url="{{ site.cdek_offices_url }}" data-calc-url="{{ site.cdek_calc_url }}"
+           data-order-url="{% page_url 'contacts' %}?order=delivery#order">
         <noscript><p class="geo-noscript">{% t "map.list" %}: {% for c in cities %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</p></noscript>
       </div>
-      <aside class="geo-panel">
+      <aside class="geo-panel" data-geo-panel>
         <p class="geo-panel-kicker">{% t "map.your_city" %}</p>
         <p class="geo-panel-city" data-geo-selected>{% if cities %}{{ cities.0.name }}{% else %}—{% endif %}</p>
         {% if cities %}<p class="geo-panel-count">{% t "map.list" %}: {{ cities|length }}</p>{% endif %}
-        <p class="geo-panel-caption" data-geo-selected-caption data-default="{% t 'map.city_note' %}">{% if cities %}{{ cities.0.caption|default_if_none:"" }}{% if not cities.0.caption %}{% t "map.city_note" %}{% endif %}{% else %}{{ map_empty|default:"" }}{% endif %}</p>
+        <p class="geo-panel-caption" data-geo-selected-caption data-default="{% t 'map.city_note' %}">{% if cities %}{% if cities.0.caption %}{{ cities.0.caption }}{% else %}{% t "map.city_note" %}{% endif %}{% else %}{{ map_empty|default:"" }}{% endif %}</p>
+        <div class="geo-hint">
+          <p class="geo-hint-title">{% t "map.delivery_title" %}</p>
+          <p class="geo-hint-text">{% t "map.delivery_hint" %}</p>
+          <ul class="geo-hint-links">
+            {% if site.cdek_offices_url %}<li><a href="{{ site.cdek_offices_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_offices" %} ↗</a></li>{% endif %}
+            {% if site.cdek_calc_url %}<li><a href="{{ site.cdek_calc_url }}" target="_blank" rel="noopener nofollow">{% t "map.cdek_calc" %} ↗</a></li>{% endif %}
+            <li data-geo-landing {% if not cities.0.landing %}hidden{% endif %}><a href="{{ cities.0.landing|default:'#' }}" data-geo-landing-link>{% t "map.city_page" %} →</a></li>
+          </ul>
+        </div>
         {% if cities %}
         <div class="geo-controls">
           <label class="visually-hidden" for="{{ map_id|default:'m' }}-search">{% t "map.search" %}</label>
@@ -31,10 +45,11 @@
           </select>
         </div>
         <ul class="geo-list" data-geo-list aria-label="{% t 'map.list' %}">
-          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-rank="{{ c.rank }}" data-lat="{{ c.lat }}" data-lng="{{ c.lng }}" data-caption="{{ c.caption }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
+          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-lat="{{ c.lat|stringformat:"s" }}" data-lng="{{ c.lng|stringformat:"s" }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
         </ul>
         {% endif %}
-        {% if cta_button %}<a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery">{{ cta_button }}</a>{% endif %}
+        <a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery" data-geo-discuss
+           {% if cities %}data-city="{{ cities.0.name }}"{% endif %}>{% if cta_button %}{{ cta_button }}{% else %}{% t "map.discuss_city" %}{% endif %}</a>
       </aside>
     </div>
     <p class="geo-caption">{{ map_caption|default:"" }}</p>

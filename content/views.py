@@ -114,6 +114,7 @@ def page_view(request, page):
 
 
 def _map_cities(lang):
+    landing_urls = _landing_urls(lang)
     cities = []
     for city in City.objects.filter(sale_confirmed=True, visible=True):
         cities.append({
@@ -123,10 +124,20 @@ def _map_cities(lang):
             "lng": float(city.longitude),
             "caption": tr(city, "caption", lang),
             "code": city.country_code,
+            "landing": landing_urls.get(city.pk, ""),
             "rank": PRIORITY.get(city.source_id, 1000 - min(city.population or 0, 10**8) / 10**5),
         })
     cities.sort(key=lambda c: (c["code"] != "RU", c["country"], c["rank"]))
     return cities
+
+
+def _landing_urls(lang):
+    """Ссылки на опубликованные городские страницы для подсказок карты (город → URL)."""
+    try:
+        from content.models import CityLanding
+    except ImportError:
+        return {}
+    return {l.city_id: l.url(lang) for l in CityLanding.objects.filter(published=True, city__isnull=False) if l.url(lang)}
 
 
 def article_view(request, article):
