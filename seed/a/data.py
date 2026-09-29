@@ -492,3 +492,15 @@ CATEGORIES = [
          "Другие сюжеты картин", "Для историй, которым пока тесно в одной рубрике. Посмотрите другие сюжеты — ваша картина может ждать знакомства именно здесь.",
          "Other painting subjects", "For stories that feel cramped in a single category. Browse other subjects — your painting may be waiting to meet you here."),
 ]
+
+# Иллюстрации мастерской (tools/studio_illustrations.py). Замените фотографиями в админке.
+STUDIO_IMAGES = [
+    {"image": "studio-window.jpg", "alt_ru": "Мастерская у окна: мольберт с картиной", "alt_en": "Studio by the window: an easel with a painting",
+     "caption_ru": "Мастерская у окна", "caption_en": "The studio by the window", "is_illustration": True},
+    {"image": "studio-table.jpg", "alt_ru": "Рабочий стол художника: палитра, кисти и эскизы", "alt_en": "The artist’s desk: palette, brushes and sketches",
+     "caption_ru": "Рабочий стол", "caption_en": "The work desk", "is_illustration": True},
+    {"image": "studio-wall.jpg", "alt_ru": "Стена с работами под светом софитов", "alt_en": "A wall of works under spotlights",
+     "caption_ru": "Работы на стене", "caption_en": "Works on the wall", "is_illustration": True},
+    {"image": "studio-shelf.jpg", "alt_ru": "Стеллаж с материалами: кисти, краски и подрамники", "alt_en": "Shelves with materials: brushes, paints and stretchers",
+     "caption_ru": "Материалы", "caption_en": "Materials", "is_illustration": True},
+]
