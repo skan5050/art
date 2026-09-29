@@ -221,6 +221,26 @@ class SiteTests(TestCase):
         self.assertContains(r, "Тюмень")
         self.assertContains(r, "Ташкент")
 
+    def test_admin_dashboard_and_robots_validation(self):
+        from django.contrib.auth.models import User
+
+        from core.admin import robots_problems
+        from core.models import ROBOTS_DEFAULT
+
+        user = User.objects.create_superuser("boss", "boss@example.com", "x")
+        self.client.force_login(user)
+        self.lead_post(idempotency_key="dash")
+        r = self.client.get("/admin/")
+        self.assertContains(r, "Сегодня в мастерской")
+        self.assertContains(r, "Анна")  # последняя заявка на рабочем экране
+        self.assertContains(r, "Готовность сайта")
+        self.assertEqual(robots_problems(ROBOTS_DEFAULT), [])
+        problems = robots_problems("Disallow: /x\nUser-agent *\nFoo: bar")
+        self.assertEqual(len(problems), 4)  # до User-agent, без двоеточия, неизвестная директива, нет User-agent
+        settings_obj = SiteSettings.get()
+        r = self.client.get(f"/admin/core/sitesettings/{settings_obj.pk}/change/")
+        self.assertEqual(r.status_code, 200)
+
     def test_audit_content_reports_missing_translation(self):
         from core.models import Label
 

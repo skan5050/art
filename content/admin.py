@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from core.admin import SEO_FIELDSET, site_link, thumb
 
@@ -6,7 +7,7 @@ from .models import Article, CertificateNominal, HomeSection, MediaAsset, MenuIt
 
 
 @admin.register(Page)
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(ModelAdmin):
     list_display = ("title_ru", "kind", "link_ru", "link_en", "published", "order")
     list_editable = ("published", "order")
     list_filter = ("kind", "published")
@@ -43,7 +44,7 @@ class PageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin(ModelAdmin):
     list_display = ("title_ru", "link_ru", "link_en", "published", "order", "published_at")
     list_editable = ("published", "order")
     list_filter = ("published",)
@@ -68,14 +69,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 @admin.register(MenuItem)
-class MenuItemAdmin(admin.ModelAdmin):
+class MenuItemAdmin(ModelAdmin):
     list_display = ("__str__", "page", "url", "order", "visible", "in_footer")
     list_editable = ("order", "visible", "in_footer")
     fields = (("label_ru", "label_en"), "page", "url", "order", "visible", "in_footer")
 
 
 @admin.register(HomeSection)
-class HomeSectionAdmin(admin.ModelAdmin):
+class HomeSectionAdmin(ModelAdmin):
     list_display = ("kind", "title_ru", "order", "visible")
     list_editable = ("order", "visible")
     filter_horizontal = ("paintings",)
@@ -87,7 +88,7 @@ class HomeSectionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
+class ReviewAdmin(ModelAdmin):
     list_display = ("author_ru", "short_text", "photo_thumb", "published", "order")
     list_editable = ("published", "order")
     fields = (("text_ru", "text_en"), ("author_ru", "author_en"), ("city_ru", "city_en"), "date", "photo", "painting", "featured", "published", "order")
@@ -103,13 +104,13 @@ class ReviewAdmin(admin.ModelAdmin):
 
 
 @admin.register(CertificateNominal)
-class CertificateNominalAdmin(admin.ModelAdmin):
+class CertificateNominalAdmin(ModelAdmin):
     list_display = ("__str__", "label_ru", "order", "visible")
     list_editable = ("order", "visible")
 
 
 @admin.register(StudioImage)
-class StudioImageAdmin(admin.ModelAdmin):
+class StudioImageAdmin(ModelAdmin):
     list_display = ("preview", "caption_ru", "is_illustration", "order", "visible")
     list_editable = ("order", "visible")
     fields = ("image", ("alt_ru", "alt_en"), ("caption_ru", "caption_en"), "is_illustration", "order", "visible")
@@ -120,7 +121,7 @@ class StudioImageAdmin(admin.ModelAdmin):
 
 
 @admin.register(MediaAsset)
-class MediaAssetAdmin(admin.ModelAdmin):
+class MediaAssetAdmin(ModelAdmin):
     list_display = ("preview", "title", "snippet_text", "uploaded_at")
     search_fields = ("title", "alt_ru", "alt_en")
     fields = ("image", "preview_large", "title", ("alt_ru", "alt_en"), ("caption_ru", "caption_en"), "snippet_text")

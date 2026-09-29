@@ -9,7 +9,7 @@ from leads import views as lead_views
 
 admin.site.site_header = "Управление сайтом"
 admin.site.site_title = "Админка"
-admin.site.index_title = "Разделы"
+admin.site.index_title = "Сегодня в мастерской"
 
 urlpatterns = [
     path(settings.ADMIN_PATH + "private/<path:path>", core_views.private_file, name="private-file"),

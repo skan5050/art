@@ -1,10 +1,11 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from .models import City
 
 
 @admin.register(City)
-class CityAdmin(admin.ModelAdmin):
+class CityAdmin(ModelAdmin):
     list_display = ("name_ru", "country_ru", "region", "population", "sale_confirmed", "visible", "caption_ru")
     list_editable = ("sale_confirmed", "visible")
     list_filter = ("sale_confirmed", "visible", "country_ru", "is_capital", "is_admin_center", "name_ru_verified")

@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
+from unfold.admin import ModelAdmin
 
 from .models import ROBOTS_DEFAULT, Label, Messenger, Redirect, SeoTemplate, SharedBlock, SiteSettings, StandardSize
 
@@ -26,6 +27,38 @@ def site_link(obj, lang="ru"):
     return format_html('<a href="{}" target="_blank" rel="noopener">{}</a>', url, url)
 
 
+ROBOTS_DIRECTIVES = {"user-agent", "disallow", "allow", "sitemap", "clean-param", "crawl-delay", "host"}
+
+
+def robots_problems(text):
+    """Синтаксическая проверка robots.txt: известные директивы, двоеточие, правила внутри группы User-agent."""
+    problems, has_agent = [], False
+    for number, raw in enumerate(text.splitlines(), 1):
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        if ":" not in line:
+            problems.append(f"строка {number}: нет двоеточия после директивы")
+            continue
+        name, value = (part.strip() for part in line.split(":", 1))
+        key = name.lower()
+        if key not in ROBOTS_DIRECTIVES:
+            problems.append(f"строка {number}: неизвестная директива «{name}»")
+        elif key == "user-agent":
+            has_agent = True
+            if not value:
+                problems.append(f"строка {number}: пустой User-agent")
+        elif key in ("disallow", "allow", "clean-param", "crawl-delay") and not has_agent:
+            problems.append(f"строка {number}: «{name}» до первой строки User-agent")
+        elif key == "sitemap" and not (value.startswith("http") or value.startswith("{site_url}")):
+            problems.append(f"строка {number}: Sitemap должен быть полным адресом")
+        elif key in ("disallow", "allow") and value and not (value.startswith("/") or value.startswith("*") or value.startswith("{")):
+            problems.append(f"строка {number}: путь в «{name}» должен начинаться с /")
+    if text.strip() and not has_agent:
+        problems.append("нет ни одной строки User-agent")
+    return problems[:5]
+
+
 class SiteSettingsForm(forms.ModelForm):
     restore_robots = forms.BooleanField(
         label="Восстановить базовую версию robots.txt", required=False,
@@ -37,6 +70,13 @@ class SiteSettingsForm(forms.ModelForm):
         fields = "__all__"
         widgets = {"robots_txt": forms.Textarea(attrs={"rows": 10, "style": "font-family:monospace;width:100%"})}
 
+    def clean_robots_txt(self):
+        text = self.cleaned_data.get("robots_txt") or ""
+        problems = robots_problems(text)
+        if problems:
+            raise forms.ValidationError("Проверьте robots.txt: " + "; ".join(problems))
+        return text
+
     def clean(self):
         data = super().clean()
         if data.get("restore_robots"):
@@ -47,7 +87,7 @@ class SiteSettingsForm(forms.ModelForm):
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(ModelAdmin):
     form = SiteSettingsForm
     readonly_fields = ("robots_preview", "sitemap_info")
     fieldsets = (
@@ -102,7 +142,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 
 @admin.register(Label)
-class LabelAdmin(admin.ModelAdmin):
+class LabelAdmin(ModelAdmin):
     list_display = ("key", "value_ru", "value_en", "hint")
     list_editable = ("value_ru", "value_en")
     list_filter = ("group",)
@@ -126,7 +166,7 @@ class LabelAdmin(admin.ModelAdmin):
 
 
 @admin.register(SharedBlock)
-class SharedBlockAdmin(admin.ModelAdmin):
+class SharedBlockAdmin(ModelAdmin):
     list_display = ("name", "key", "usage", "visible")
     list_editable = ("visible",)
     search_fields = ("name", "key", "text_ru", "text_en")
@@ -138,20 +178,20 @@ class SharedBlockAdmin(admin.ModelAdmin):
 
 
 @admin.register(Messenger)
-class MessengerAdmin(admin.ModelAdmin):
+class MessengerAdmin(ModelAdmin):
     list_display = ("name", "icon", "url", "order", "visible")
     list_editable = ("order", "visible")
 
 
 @admin.register(StandardSize)
-class StandardSizeAdmin(admin.ModelAdmin):
+class StandardSizeAdmin(ModelAdmin):
     list_display = ("__str__", "group", "order", "visible")
     list_editable = ("order", "visible")
     list_filter = ("group", "visible")
 
 
 @admin.register(SeoTemplate)
-class SeoTemplateAdmin(admin.ModelAdmin):
+class SeoTemplateAdmin(ModelAdmin):
     list_display = ("kind", "title_ru", "title_en")
     fields = ("kind", ("title_ru", "title_en"), ("description_ru", "description_en"))
     readonly_fields = ("kind",)
@@ -164,7 +204,7 @@ class SeoTemplateAdmin(admin.ModelAdmin):
 
 
 @admin.register(Redirect)
-class RedirectAdmin(admin.ModelAdmin):
+class RedirectAdmin(ModelAdmin):
     list_display = ("old_path", "new_path", "created_at")
     search_fields = ("old_path", "new_path")
 
@@ -177,3 +217,26 @@ SEO_FIELDSET = ("SEO", {
     ),
     "description": "Title собирается как «Бренд | SEO Title». Пустые поля заполняются по шаблону типа страницы.",
 })
+
+
+# Пользователи и группы — в оформлении админки
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin  # noqa: E402
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin  # noqa: E402
+from django.contrib.auth.models import Group, User  # noqa: E402
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm  # noqa: E402
+
+admin.site.unregister(User)
+admin.site.unregister(Group)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass
+

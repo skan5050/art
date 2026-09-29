@@ -3,3 +3,4 @@ Pillow>=11
 gunicorn>=23
 # Для PostgreSQL (необязательно): psycopg[binary]>=3.2
 # Для импорта справочника городов: geonamescache>=2.0
+django-unfold>=0.91,<1

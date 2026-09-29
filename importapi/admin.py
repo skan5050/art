@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin, messages
 from django.utils.html import format_html
+from unfold.admin import ModelAdmin
 
 from .models import ApiKey, ImportLog, ImportRecord
 from .services import assign_record_to_painting, create_card_from_record
@@ -13,7 +14,7 @@ class ApiKeyForm(forms.ModelForm):
 
 
 @admin.register(ApiKey)
-class ApiKeyAdmin(admin.ModelAdmin):
+class ApiKeyAdmin(ModelAdmin):
     form = ApiKeyForm
     list_display = ("name", "prefix", "permissions", "created_at", "last_used_at", "state")
     readonly_fields = ("prefix", "created_at", "last_used_at", "revoked_at")
@@ -87,7 +88,7 @@ class ImportRecordForm(forms.ModelForm):
 
 
 @admin.register(ImportRecord)
-class ImportRecordAdmin(admin.ModelAdmin):
+class ImportRecordAdmin(ModelAdmin):
     form = ImportRecordForm
     list_display = ("preview", "external_id", "category", "purpose", "state", "painting", "created_at")
     list_filter = ("state", "purpose", "category")
@@ -130,7 +131,7 @@ class ImportRecordAdmin(admin.ModelAdmin):
 
 
 @admin.register(ImportLog)
-class ImportLogAdmin(admin.ModelAdmin):
+class ImportLogAdmin(ModelAdmin):
     list_display = ("created_at", "key_prefix", "action", "external_id", "category_id_value", "file_name", "result", "message")
     list_filter = ("result", "action", "key_prefix")
     search_fields = ("external_id", "file_name", "message")

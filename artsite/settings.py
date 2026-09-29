@@ -58,6 +58,7 @@ CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS", "")
 ADMIN_PATH = env("ADMIN_PATH", "admin").strip("/") + "/"
 
 INSTALLED_APPS = [
+    "unfold",  # современная тема админки (до django.contrib.admin)
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -136,6 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "ru"
+LOCALE_PATHS = [BASE_DIR / "locale"]
 LANGUAGES = [("ru", "Русский"), ("en", "English")]
 TIME_ZONE = env("TIME_ZONE", "Asia/Novosibirsk")
 USE_I18N = True
@@ -192,6 +194,34 @@ if env_bool("HTTPS", not DEBUG):
 
 # Перенаправлять запросы с другого хоста на основной адрес из «Общих настроек».
 ENFORCE_CANONICAL_HOST = env_bool("ENFORCE_CANONICAL_HOST", False)
+
+# Админка: тема Unfold. Логика меню и рабочего экрана — core/admin_ui.py.
+
+from core import admin_ui  # noqa: E402
+
+_ADMIN_PRIMARY = {
+    "a": {"50": "#eef5fb", "100": "#dcebf6", "200": "#b9d4ec", "300": "#8db6de", "400": "#5b90c8", "500": "#3470ad",
+          "600": "#1c497e", "700": "#163c69", "800": "#103055", "900": "#073662", "950": "#041f3a"},
+    "d": {"50": "#f7f5ee", "100": "#ebe8dd", "200": "#d6d2c3", "300": "#b9b4a2", "400": "#8f8b7c", "500": "#6a675b",
+          "600": "#4a4841", "700": "#33342f", "800": "#24261f", "900": "#171a17", "950": "#0b0c0b"},
+}[SITE_THEME]
+
+UNFOLD = {
+    "SITE_TITLE": "Управление сайтом",
+    "SITE_HEADER": admin_ui.site_title,
+    "SITE_SUBHEADER": "Управление сайтом",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "palette",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "SHOW_BACK_BUTTON": True,
+    "ENVIRONMENT": "core.admin_ui.environment_callback",
+    "DASHBOARD_CALLBACK": "core.admin_ui.dashboard_callback",
+    "STYLES": [admin_ui.admin_styles],
+    "SCRIPTS": [admin_ui.admin_scripts],
+    "COLORS": {"primary": _ADMIN_PRIMARY},
+    "SIDEBAR": admin_ui.SIDEBAR,
+}
 
 LOGGING = {
     "version": 1,

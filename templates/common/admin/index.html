@@ -1,0 +1,79 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% block breadcrumbs %}{% endblock %}
+{% block title %}Сегодня в мастерской | {{ site_title|default:"Управление сайтом" }}{% endblock %}
+{% block content %}
+<div class="dash">
+  <header class="dash-head">
+    <div>
+      <p class="dash-kicker">{{ today|date:"l, j E Y"|capfirst }}</p>
+      <h1 class="dash-title">Сегодня в мастерской</h1>
+    </div>
+    {% if dash_add_painting %}<a class="dash-btn" href="{{ dash_add_painting }}"><span class="material-symbols-outlined">add</span>Добавить картину</a>{% endif %}
+  </header>
+
+  <section class="dash-stats" aria-label="Коротко">
+    {% for s in dash_stats %}
+    <a class="dash-stat{% if s.accent and s.value %} is-accent{% endif %}" href="{{ s.url }}">
+      <span class="dash-stat-value">{{ s.value }}</span>
+      <span class="dash-stat-label">{{ s.label }}</span>
+    </a>
+    {% endfor %}
+  </section>
+
+  <div class="dash-grid">
+    <section class="dash-card dash-leads">
+      <div class="dash-card-head">
+        <h2>Последние заявки</h2>
+        <a href="{{ dash_lead_list }}">Все заявки →</a>
+      </div>
+      {% if dash_leads %}
+      <ul class="dash-lead-list">
+        {% for l in dash_leads %}
+        <li>
+          <a href="{{ l.url }}">
+            <span class="dash-lead-name">{{ l.name }}</span>
+            <span class="dash-lead-what">{{ l.what }}</span>
+            <span class="dash-lead-when">{{ l.when|date:"j E, H:i" }}</span>
+            <span class="dash-chip dash-chip-{{ l.tone }}">{{ l.status }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="dash-empty">Заявок пока нет. Они появятся здесь сразу после отправки формы на сайте.</p>
+      {% endif %}
+    </section>
+
+    <aside class="dash-side">
+      <section class="dash-card dash-home">
+        <p class="dash-label">Главная страница</p>
+        {% if dash_home.banner %}<img src="{{ dash_home.banner }}" alt="">{% endif %}
+        <div class="dash-home-row">
+          <strong>{{ dash_home.title|default:"Баннер и текст" }}</strong>
+          {% if dash_home.url %}<a href="{{ dash_home.url }}">Редактировать</a>{% endif %}
+        </div>
+      </section>
+
+      <section class="dash-card">
+        <p class="dash-label">Готовность сайта</p>
+        <ul class="dash-checks">
+          {% for c in dash_checks %}
+          <li class="{% if c.ok %}is-ok{% else %}is-todo{% endif %}">
+            <span class="material-symbols-outlined">{% if c.ok %}check_circle{% else %}error{% endif %}</span>
+            <span>{% if c.link %}<a href="{{ c.link }}">{{ c.title }}</a>{% else %}{{ c.title }}{% endif %}{% if not c.ok %}<small>{{ c.hint }}</small>{% endif %}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <section class="dash-actions" aria-label="Быстрые действия">
+    <h2>Быстрые действия</h2>
+    <div class="dash-action-row">
+      {% for a in dash_actions %}<a href="{{ a.url }}"><span class="material-symbols-outlined">{{ a.icon }}</span>{{ a.title }}</a>{% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

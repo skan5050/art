@@ -1,0 +1,369 @@
+# Русский перевод интерфейса темы админки Unfold (строки, которых нет в переводе Django).
+# После правок: python tools/compile_po.py locale/ru/LC_MESSAGES/django.po
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "%(class_name)s %(instance)s"
+msgstr "%(class_name)s %(instance)s"
+
+msgid "Add new item"
+msgstr "Добавить"
+
+msgid "Add row"
+msgstr "Добавить строку"
+
+msgid "After you've created a user, you’ll be able to edit more user options."
+msgstr "После создания пользователя можно будет настроить остальные параметры."
+
+msgid "All applications"
+msgstr "Все разделы"
+
+msgid "Apply Filters"
+msgstr "Применить фильтры"
+
+msgid "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'"
+msgstr "Ниже — предпросмотр импортируемых данных. Если всё верно, нажмите «Подтвердить импорт»."
+
+msgid "Bold"
+msgstr "Жирный"
+
+msgid "By %(filter_title)s"
+msgstr "%(filter_title)s"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Change History"
+msgstr "История изменений"
+
+msgid "Change reason"
+msgstr "Причина изменения"
+
+msgid "Changed by"
+msgstr "Изменил"
+
+msgid "Changes"
+msgstr "Изменения"
+
+msgid "Choose a date from the list below to revert to a previous version of this object"
+msgstr "Выберите дату, чтобы вернуть предыдущую версию"
+
+msgid "Choose file to upload"
+msgstr "Выберите файл"
+
+msgid "Click to cancel"
+msgstr "Нажмите, чтобы отменить"
+
+msgid "Click to download"
+msgstr "Нажмите, чтобы скачать"
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Collapse"
+msgstr "Свернуть"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Confirm import"
+msgstr "Подтвердить импорт"
+
+msgid "Current file"
+msgstr "Текущий файл"
+
+msgid "Dark"
+msgstr "Тёмная"
+
+msgid "Dataset not found. No action performed."
+msgstr "Данные не найдены. Ничего не изменено."
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Date from"
+msgstr "Дата с"
+
+msgid "Date to"
+msgstr "Дата по"
+
+msgid "Default"
+msgstr "По умолчанию"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Enter an URL"
+msgstr "Введите адрес"
+
+msgid "Expand row"
+msgstr "Развернуть строку"
+
+msgid "Export"
+msgstr "Экспорт"
+
+msgid "False"
+msgstr "Нет"
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "Forgotten your password or username?"
+msgstr "Забыли пароль или имя пользователя?"
+
+msgid "From"
+msgstr "С"
+
+msgid "General"
+msgstr "Основное"
+
+msgid "Go back"
+msgstr "Назад"
+
+msgid "Group"
+msgstr "Группа"
+
+msgid "Group permissions"
+msgstr "Права группы"
+
+msgid "Heading"
+msgstr "Заголовок"
+
+msgid "Image preview"
+msgstr "Просмотр изображения"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Indent decrease"
+msgstr "Уменьшить отступ"
+
+msgid "Indent increase"
+msgstr "Увеличить отступ"
+
+msgid "Italic"
+msgstr "Курсив"
+
+msgid "Light"
+msgstr "Светлая"
+
+msgid "Line number"
+msgstr "Номер строки"
+
+msgid "Link"
+msgstr "Ссылка"
+
+msgid "Loading more results..."
+msgstr "Загружаем ещё…"
+
+msgid "Manage group"
+msgstr "Настроить группу"
+
+msgid "Manage user"
+msgstr "Настроить пользователя"
+
+msgid "More actions"
+msgstr "Другие действия"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "New"
+msgstr "Новый"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "No data"
+msgstr "Нет данных"
+
+msgid "No recent searches"
+msgstr "Недавних поисков нет"
+
+msgid "No results found"
+msgstr "Ничего не найдено"
+
+msgid "No results matching your query"
+msgstr "По запросу ничего не найдено"
+
+msgid "Non field specific"
+msgstr "Общие ошибки"
+
+msgid "Not enough data."
+msgstr "Недостаточно данных."
+
+msgid "Object"
+msgstr "Объект"
+
+msgid "Object permissions"
+msgstr "Права на объект"
+
+msgid "Ordered list"
+msgstr "Нумерованный список"
+
+msgid "Paragraph"
+msgstr "Абзац"
+
+msgid "Please correct these errors in your data where possible, then reupload it using the form above."
+msgstr "Исправьте ошибки в данных и загрузите файл снова через форму выше."
+
+msgid "Press the 'Change History' button below to edit the history."
+msgstr "Нажмите «История изменений», чтобы изменить историю."
+
+msgid "Press the 'Revert' button below to revert to this version of the object."
+msgstr "Нажмите «Вернуть», чтобы восстановить эту версию."
+
+msgid "Previous"
+msgstr "Назад"
+
+msgid "Quote"
+msgstr "Цитата"
+
+msgid "Recent searches"
+msgstr "Недавние поиски"
+
+msgid "Record picture"
+msgstr "Изображение записи"
+
+msgid "Redo"
+msgstr "Повторить"
+
+msgid "Reset filters"
+msgstr "Сбросить фильтры"
+
+msgid "Reset to default"
+msgstr "Сбросить"
+
+msgid "Return to site"
+msgstr "Вернуться на сайт"
+
+msgid "Revert"
+msgstr "Вернуть"
+
+msgid "Row"
+msgstr "Строка"
+
+msgid "Run"
+msgstr "Выполнить"
+
+msgid "Search apps and models..."
+msgstr "Поиск по разделам…"
+
+msgid "Select action"
+msgstr "Выберите действие"
+
+msgid "Select action to run"
+msgstr "Выберите действие"
+
+msgid "Select all rows"
+msgstr "Выбрать все строки"
+
+msgid "Select currency"
+msgstr "Выберите валюту"
+
+msgid "Select format"
+msgstr "Выберите формат"
+
+msgid "Select record"
+msgstr "Выберите запись"
+
+msgid "Select value"
+msgstr "Выберите значение"
+
+msgid "Skipped"
+msgstr "Пропущено"
+
+msgid "Some rows failed to validate"
+msgstr "Некоторые строки не прошли проверку"
+
+msgid "Strike"
+msgstr "Зачёркнутый"
+
+msgid "Submit"
+msgstr "Отправить"
+
+msgid "System"
+msgstr "Системная"
+
+msgid "This exporter will export the following fields"
+msgstr "Будут выгружены поля"
+
+msgid "This exporter will export the following fields: "
+msgstr "Будут выгружены поля: "
+
+msgid "This importer will import the following fields: "
+msgstr "Будут загружены поля: "
+
+msgid "This item will be deleted."
+msgstr "Этот элемент будет удалён."
+
+msgid "This object doesn't have a change history."
+msgstr "У этого объекта нет истории изменений."
+
+msgid "This page yielded into no results. Create a new item or reset your filters."
+msgstr "Ничего не найдено. Добавьте запись или сбросьте фильтры."
+
+msgid "To"
+msgstr "По"
+
+msgid "Toggle password visibility"
+msgstr "Показать или скрыть пароль"
+
+msgid "True"
+msgstr "Да"
+
+msgid "Type to search"
+msgstr "Начните вводить для поиска"
+
+msgid "Underlined"
+msgstr "Подчёркнутый"
+
+msgid "Undo"
+msgstr "Отменить"
+
+msgid "Unlink"
+msgstr "Убрать ссылку"
+
+msgid "Unordered list"
+msgstr "Маркированный список"
+
+msgid "Update"
+msgstr "Обновить"
+
+msgid "User permissions"
+msgstr "Права пользователя"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "View traceback"
+msgstr "Показать подробности ошибки"
+
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+msgid "Welcome back to"
+msgstr "Вход в"
+
+msgid "You can not create nested object without parent"
+msgstr "Нельзя создать вложенный объект без родительского"
+
+msgid "You have been successfully logged out from the administration"
+msgstr "Вы вышли из админки"
+
+msgid "Export %(len)s selected item."
+msgid_plural "Export %(len)s selected items."
+msgstr[0] "Выгрузить %(len)s выбранную запись."
+msgstr[1] "Выгрузить %(len)s выбранные записи."
+msgstr[2] "Выгрузить %(len)s выбранных записей."
+msgstr[3] "Выгрузить %(len)s выбранных записей."
+
+msgid "Found %(counter)s result in %(time)s seconds"
+msgid_plural "Found %(counter)s results in %(time)s seconds"
+msgstr[0] "Найден %(counter)s результат за %(time)s с"
+msgstr[1] "Найдено %(counter)s результата за %(time)s с"
+msgstr[2] "Найдено %(counter)s результатов за %(time)s с"
+msgstr[3] "Найдено %(counter)s результатов за %(time)s с"

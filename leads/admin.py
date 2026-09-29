@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
+from unfold.admin import ModelAdmin, TabularInline
 
 from .models import Lead, LeadAttachment
 
 
-class AttachmentInline(admin.TabularInline):
+class AttachmentInline(TabularInline):
     model = LeadAttachment
     extra = 0
     fields = ("link", "original_name", "size")
@@ -22,7 +23,7 @@ class AttachmentInline(admin.TabularInline):
 
 
 @admin.register(Lead)
-class LeadAdmin(admin.ModelAdmin):
+class LeadAdmin(ModelAdmin):
     list_display = ("id", "created_at", "status", "kind", "name", "contact_line", "context", "notification_ok")
     list_display_links = ("id", "created_at")
     list_editable = ("status",)

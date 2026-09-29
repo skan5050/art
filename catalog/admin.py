@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
+from unfold.admin import ModelAdmin, TabularInline
 
 from core.admin import SEO_FIELDSET, site_link, thumb
 from core.models import SharedBlock
@@ -48,7 +49,7 @@ class CategoryAdminForm(forms.ModelForm):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     form = CategoryAdminForm
     list_display = ("tree_name", "cover_thumb", "works_count", "order", "visible", "link")
     list_editable = ("order", "visible")
@@ -154,12 +155,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Technique)
-class TechniqueAdmin(admin.ModelAdmin):
+class TechniqueAdmin(ModelAdmin):
     list_display = ("name_ru", "name_en", "order")
     list_editable = ("order",)
 
 
-class PaintingImageInline(admin.TabularInline):
+class PaintingImageInline(TabularInline):
     model = PaintingImage
     extra = 1
     fields = ("preview", "image", "alt_ru", "alt_en", "caption_ru", "caption_en", "order")
@@ -170,7 +171,7 @@ class PaintingImageInline(admin.TabularInline):
         return thumb(obj.image, 80)
 
 
-class PaintingSizeInline(admin.TabularInline):
+class PaintingSizeInline(TabularInline):
     model = PaintingSize
     extra = 0
     fields = ("standard", "width", "height", "order")
@@ -190,7 +191,7 @@ class PaintingAdminForm(forms.ModelForm):
 
 
 @admin.register(Painting)
-class PaintingAdmin(admin.ModelAdmin):
+class PaintingAdmin(ModelAdmin):
     form = PaintingAdminForm
     list_display = ("image_thumb", "title_ru", "category", "status", "published", "has_en", "link")
     list_display_links = ("image_thumb", "title_ru")
