@@ -1,9 +1,10 @@
 <li class="cat-card">
   <a href="{{ cat.url }}" class="cat-card-link">
+    <span class="cat-card-num" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
     <span class="cat-card-media">
       {% if cat.cover %}{% picture cat.cover widths="360,720" sizes="(min-width: 1200px) 25vw, (min-width: 640px) 50vw, 100vw" alt=cat.t.cover_alt cls="cat-card-img" style=cat.cover_style %}
       {% else %}<span class="cat-card-placeholder" aria-hidden="true"></span>{% endif %}
     </span>
-    <span class="cat-card-title">{{ cat.t.name }}</span>
+    <span class="cat-card-title"><span>{{ cat.t.name }}</span>{% icon "arrow" "icon cat-card-arrow" %}</span>
   </a>
 </li>

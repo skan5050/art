@@ -1,0 +1,30 @@
+{% comment %}Тема D «Арт-пространство»: баннер как арт-плакат; на внутренних страницах — логотип и меню в одной строке. Все надписи — из админки.{% endcomment %}
+{% if is_home %}
+{% with p=page %}
+<header class="hero hero-d" role="banner">
+  {% if p.banner_image %}
+  <picture class="hero-media">
+    {% if p.banner_image_mobile %}<source media="(max-width: 720px)" srcset="{% img_url p.banner_image_mobile 1080 %}">{% endif %}
+    <img src="{% img_url p.banner_image 2400 %}" alt="" style="object-position: {{ p.banner_focus_x }}% {{ p.banner_focus_y }}%" fetchpriority="high" decoding="async">
+  </picture>
+  {% endif %}
+  <div class="hero-d-top container">
+    <a class="hero-d-brand" href="{{ home_url }}" aria-label="{{ brand }}">
+      {% if site.logo %}<img src="{{ site.logo.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}
+    </a>
+    {% if p.t.banner_kicker %}<p class="hero-d-kicker">{{ p.t.banner_kicker|brandify }}</p>{% endif %}
+  </div>
+  <div class="hero-d-body container">
+    <h1 class="hero-d-title">{{ p.t.banner_title|default:p.t.title|brandify }}</h1>
+    {% if p.t.banner_text %}<p class="hero-d-text">{{ p.t.banner_text|brandify }}</p>{% endif %}
+    <div class="hero-actions">
+      {% if p.t.banner_button1 %}<a class="btn btn-accent" href="{% if p.banner_button1_link == 'catalog' or not p.banner_button1_link %}{% page_url 'catalog' %}{% else %}{{ p.banner_button1_link }}{% endif %}">{{ p.t.banner_button1 }}</a>{% endif %}
+      {% if p.t.banner_button2 %}<a class="btn btn-primary" href="{% page_url 'contacts' %}#order" data-order data-kind="custom">{{ p.t.banner_button2 }}</a>{% endif %}
+    </div>
+  </div>
+</header>
+{% endwith %}
+{% include "partials/nav.html" %}
+{% else %}
+{% include "partials/nav.html" with nav_brand=True %}
+{% endif %}

@@ -1,0 +1,199 @@
+/* Тема D «Арт-пространство» — ХолСтори.
+   Палитра: теплый белый #F5F3EA, угольный #171A17, лимонный #E7F36A, терракота #79352F.
+   Гротеск для навигации и заголовков, антиква — для редакционных акцентов. */
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/manrope-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/manrope-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2190-2193; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/manrope-cyrillic-500-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/manrope-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2190-2193; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/manrope-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/manrope-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2190-2193; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 800; font-display: swap; src: url("../fonts/manrope-cyrillic-800-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-style: normal; font-weight: 800; font-display: swap; src: url("../fonts/manrope-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2190-2193; }
+@font-face { font-family: "Lora"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/lora-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Lora"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/lora-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: "Lora"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/lora-cyrillic-400-italic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Lora"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/lora-latin-400-italic.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+
+:root {
+  --bg: #f5f3ea;
+  --surface: #ebe8dd;
+  --surface-2: #e3dfd1;
+  --text: #171a17;
+  --muted: #5e605a;
+  --line: #d6d2c3;
+  --primary: #171a17;
+  --primary-ink: #f5f3ea;
+  --primary-dark: #000000;
+  --accent: #e7f36a;
+  --accent-ink: #171a17;
+  --terracotta: #79352f;
+  --footer-bg: #171a17;
+  --footer-ink: #f5f3ea;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font);
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --radius: 0px;
+  --radius-btn: 0px;
+  --shadow: 0 10px 30px rgba(23, 26, 23, .08);
+  --container: 1280px;
+}
+
+body { font-size: 16px; }
+a { color: var(--text); }
+a:hover { color: var(--terracotta); }
+:focus-visible { outline-color: var(--terracotta); }
+
+/* Кнопки: прямоугольные, со стрелкой; лимонный цвет — только для ключевых действий */
+.btn { border-radius: 0; justify-content: space-between; gap: 24px; font-weight: 700; min-height: 50px; padding: 12px 20px; text-align: left; }
+.btn::after { content: ""; width: 22px; height: 12px; flex: none; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 6h20M15 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 6h20M15 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat; }
+.btn .btn-arrow, .btn .icon + .btn-arrow { display: none; }
+.btn-primary { background: var(--primary); color: var(--primary-ink); }
+.btn-primary:hover { background: #33372f; color: var(--primary-ink); }
+.btn-accent, .btn-gold { background: var(--accent); color: var(--accent-ink); }
+.btn-accent:hover, .btn-gold:hover { background: #dbe85a; color: var(--accent-ink); filter: none; }
+.btn-outline { border: 1.5px solid var(--text); color: var(--text); }
+.btn-outline:hover { background: var(--text); color: var(--bg); }
+.btn-light { background: var(--bg); color: var(--text); }
+.modal-close::after, .thumb-btn::after, .nav-toggle::after, .messenger-btn::after { content: none; }
+
+/* Навигация: одна строка — логотип, меню по центру, каналы связи справа */
+.site-nav { background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav-row { min-height: 72px; }
+.nav-brand .brand-logo { height: 58px; max-width: 150px; }
+.menu a { font-size: 14px; font-weight: 500; border-radius: 0; padding: 10px 10px; position: relative; }
+.menu a:hover, .menu a[aria-current="page"] { background: transparent; color: var(--text); }
+.menu a[aria-current="page"]::after, .menu a:hover::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 2px; height: 2px; background: var(--text); }
+.messenger-btn { color: var(--text); border-radius: 0; }
+.messenger-btn:hover { background: var(--accent); }
+.messenger-list { border-radius: 0; }
+.lang-switch { font-weight: 700; border-radius: 0; }
+.nav-toggle { border-radius: 0; border-color: var(--text); }
+
+/* Баннер: арт-сцена во весь экран, крупная плакатная надпись */
+.hero-d { position: relative; min-height: min(86vh, 820px); display: flex; flex-direction: column; justify-content: space-between; background: #3a2a22; color: var(--bg); overflow: hidden; }
+.hero-d .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-d-top { position: relative; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-top: 24px; }
+.hero-d-brand { display: inline-block; background: var(--bg); padding: 10px 14px; }
+.hero-d-brand img { height: 84px; width: auto; }
+.hero-d-kicker { margin: 0; background: var(--bg); color: var(--text); padding: 8px 12px; font-size: 13px; max-width: 280px; }
+.hero-d-body { position: relative; padding-bottom: clamp(28px, 5vw, 56px); }
+.hero-d-title { display: inline-block; background: var(--text); color: var(--bg); text-transform: uppercase; font-weight: 800; letter-spacing: -.01em;
+  font-size: clamp(34px, 5.6vw, 76px); line-height: 1.02; padding: .22em .32em; margin: 0 0 16px; max-width: 14ch; }
+.hero-d-text { max-width: 560px; background: rgba(23, 26, 23, .78); color: var(--bg); padding: 12px 16px; margin: 0 0 18px; font-size: 16px; }
+.hero-d .hero-actions { justify-content: flex-start; }
+.hero-d .hero-actions .btn { min-width: 240px; }
+
+/* Заголовки-плакаты и редакционные акценты */
+.page-title, .section-title { color: var(--text); font-weight: 800; letter-spacing: -.02em; }
+.page-title { font-size: clamp(34px, 5vw, 60px); }
+.section-title { font-size: clamp(28px, 3.6vw, 44px); }
+.page-intro, .lead, .section-text { font-family: var(--font-serif); font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); }
+.breadcrumbs { text-transform: uppercase; font-size: 12px; letter-spacing: .06em; }
+.page-kicker { color: var(--text); background: var(--accent); display: inline-block; padding: 2px 8px; letter-spacing: .1em; font-size: 13px; }
+.section-intro .lead, .section-intro .section-title { text-align: left; }
+
+/* Рубрики и работы — «экспонаты» с номерами */
+.cat-card-num { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.cat-card-link { gap: 0; }
+.cat-card-media { aspect-ratio: 1 / 0.82; background: var(--surface); border-radius: 0; }
+.cat-card-media .cat-card-img { object-fit: cover; }
+.cat-card-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 12px; font-size: 18px; font-weight: 700; text-align: left; }
+.cat-card-arrow { display: inline-block; width: 22px; height: 22px; flex: none; transition: transform .2s; }
+.cat-card-link:hover .cat-card-arrow { transform: translateX(4px); }
+.cat-card-link:hover .cat-card-title { color: var(--text); }
+.cat-card-placeholder { background: linear-gradient(135deg, var(--surface), var(--surface-2)); }
+.art-card-media { border-radius: 0; background: var(--surface); }
+.art-card-img { box-shadow: none; }
+.art-card-title { font-size: 17px; font-weight: 700; }
+.art-card-meta { color: var(--text); font-weight: 700; }
+.badge { border-radius: 0; font-weight: 500; padding: 4px 10px; }
+.badge-available { background: var(--accent); color: var(--text); }
+.badge-custom { background: #dcd8cb; color: var(--text); }
+.badge-sold { background: var(--text); color: var(--bg); letter-spacing: .04em; }
+.pagination a, .pagination span { border-radius: 0; }
+.pagination span[aria-current] { background: var(--text); border-color: var(--text); }
+.empty-state { border-radius: 0; background: var(--surface); }
+
+/* Страница картины: работа во всю экспозицию, данные снизу */
+.artwork { grid-template-columns: 1fr !important; gap: 0; }
+.artwork-main { border-radius: 0; background: #ebe8dd; min-height: 420px; padding: clamp(20px, 4vw, 56px); }
+.artwork-img { max-height: 70vh; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.zoom-icon { border-radius: 0; background: var(--bg); }
+.sold-stamp { border-radius: 0; background: var(--text); }
+.artwork-thumbs { margin-top: 12px; }
+.thumb-btn { border-radius: 0; }
+.thumb-btn.is-active { border-color: var(--text); }
+.artwork-info { display: grid !important; grid-template-columns: 1fr; gap: 24px; border-top: 1px solid var(--line); margin-top: 24px; padding-top: 24px; }
+.artwork-info > div { display: block !important; }
+@media (min-width: 960px) { .artwork-info { grid-template-columns: minmax(0, 1.4fr) minmax(0, .9fr) minmax(0, 1fr); gap: 40px; } }
+.artwork-info .badge { margin-bottom: 8px; }
+.artwork-title { font-size: clamp(30px, 3.6vw, 44px); font-weight: 800; color: var(--text); margin: 4px 0 6px; }
+.artwork-params { display: block; color: var(--muted); margin: 0 0 12px; }
+.artwork-params:empty { display: none; }
+.artwork-note { border-left-color: var(--terracotta); border-radius: 0; background: var(--surface); }
+.artwork-description { font-family: var(--font-serif); font-size: 17px; }
+.specs { margin-top: 0; border-top: 0; }
+.specs div { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+.artwork-price { font-size: 26px; font-weight: 800; color: var(--text); margin: 0 0 14px; }
+.artwork-order .btn { background: var(--accent); color: var(--accent-ink); }
+.artwork-order .btn:hover { background: #dbe85a; color: var(--accent-ink); }
+.size-picker select { border-radius: 0; }
+
+/* Крупный блок заказа — лимонный плакат */
+.order-banner { background: var(--accent); border-radius: 0; }
+.section-order .section-title { text-transform: uppercase; font-size: clamp(32px, 4.6vw, 60px); line-height: 1.02; max-width: 16ch; }
+.order-banner { padding: clamp(28px, 5vw, 56px); align-items: flex-end; }
+.order-banner-text > div { font-family: var(--font-serif); font-size: 18px; max-width: 560px; }
+.order-cta { padding: 8px 0 56px; }
+.order-cta-inner.container { background: transparent; border-radius: 0; border-top: 1px solid var(--line); padding-top: 28px; padding-bottom: 0; }
+.order-cta-text { color: var(--text); font-weight: 800; font-size: clamp(20px, 2.4vw, 28px); }
+.order-cta .btn { min-width: 260px; }
+.delivery-strip { border-color: var(--text); }
+.note-box { border-radius: 0; background: var(--surface); }
+.note-conditions { border-left: 4px solid var(--accent); }
+.tag { border-radius: 0; background: var(--accent); }
+
+/* Статьи, отзывы, формы */
+.article-card-link { border-radius: 0; background: transparent; border-color: var(--line); }
+.article-card-link:hover { background: #fff; box-shadow: none; border-color: var(--text); }
+.article-card-title { color: var(--text); }
+.review { border-radius: 0; background: var(--surface); }
+.review-text { font-family: var(--font-serif); font-size: 17px; }
+.review-author { color: var(--text); }
+.form-card { border-radius: 0; box-shadow: none; border-color: var(--text); background: #fbfaf5; }
+.form-card-title, .modal-title { color: var(--text); font-weight: 800; }
+.field input[type="text"], .field input[type="email"], .field input[type="tel"], .field select, .field textarea,
+.size-custom input, .cert-custom, .geo-list input { border-radius: 0; border-color: #bdb8a7; background: #fffef9; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(231, 243, 106, .8); }
+.chip span { border-radius: 0; }
+.chip input:checked + span { background: var(--accent); border-color: var(--text); color: var(--text); }
+.form-context { background: var(--accent); border-radius: 0; }
+.form-more summary { color: var(--text); }
+.modal { border-radius: 0; background: var(--bg); }
+.modal-close { border-radius: 0; background: var(--surface); }
+.modal-success-title { color: var(--text); }
+.flash { border-radius: 0; }
+
+/* Карта продаж: темное поле, лимонный список */
+.geo-section { background: var(--bg); }
+.geo-map { background: var(--text); border-radius: 0; }
+.geo-list { border-radius: 0; background: var(--accent); }
+.geo-country > span { color: var(--text); }
+.geo-country button { color: var(--text); text-decoration: underline; }
+.contact-list .icon { color: var(--text); }
+
+/* Сертификат — лимонный прямоугольник справа снизу */
+.cert-fab { border-radius: 0; background: var(--accent); color: var(--accent-ink); box-shadow: 0 6px 20px rgba(23,26,23,.2); font-weight: 700; }
+.cert-fab::after { content: "→"; margin-left: 4px; }
+@media (max-width: 720px) { .cert-fab::after { content: none; } }
+
+/* Футер — крупный блок контакта и заказа */
+.site-footer { background: var(--footer-bg); margin-top: 0; }
+.footer-cta-text { font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; line-height: 1.15; opacity: 1; }
+.footer-actions .btn-light { background: var(--accent); color: var(--accent-ink); }
+.footer-actions .btn-gold { background: transparent; color: var(--bg); border: 1.5px solid var(--bg); }
+.footer-actions .btn-gold .icon { display: none; }
+.footer-title { opacity: .6; }
+.footer-bottom { border-color: rgba(245, 243, 234, .2); }

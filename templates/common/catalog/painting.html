@@ -29,49 +29,52 @@
     </div>
 
     <div class="artwork-info">
-      <span class="badge badge-{{ painting.status }}">{% status_label painting %}</span>
-      <h1 class="artwork-title">{{ painting.t.title }}</h1>
-      {% if painting.t.author %}<p class="artwork-author">{{ painting.t.author }}</p>{% endif %}
-      {% if not painting.is_sold %}
-      <p class="artwork-price">{% if painting.price %}{{ painting.price|floatformat:0 }} {{ site.currency }}{% else %}{% t "price.on_request" %}{% endif %}</p>
-      {% endif %}
-      {% if painting.is_sold %}<p class="artwork-note">{% t "painting.sold_note" %}</p>
-      {% elif painting.status == "custom" %}<p class="artwork-note">{% t "painting.custom_note" %}</p>{% endif %}
-
-      {% if description %}<div class="artwork-description">{{ description|rich }}</div>{% endif %}
-
-      <dl class="specs">
-        {% if painting.actual_size %}<div><dt>{% if painting.status == "available" %}{% t "spec.size" %}{% else %}{% t "size.actual" %}{% endif %}</dt><dd>{{ painting.actual_size }}</dd></div>{% endif %}
-        {% if painting.technique %}<div><dt>{% t "spec.technique" %}</dt><dd>{{ painting.technique.t.name }}</dd></div>{% endif %}
-        {% if painting.t.base %}<div><dt>{% t "spec.base" %}</dt><dd>{{ painting.t.base }}</dd></div>{% endif %}
-        {% if painting.t.framing %}<div><dt>{% t "spec.framing" %}</dt><dd>{{ painting.t.framing }}</dd></div>{% endif %}
-        {% if painting.year %}<div><dt>{% t "spec.year" %}</dt><dd>{{ painting.year }}</dd></div>{% endif %}
-        <div><dt>{% t "spec.status" %}</dt><dd>{% status_label painting %}</dd></div>
-        {% if painting.sku %}<div><dt>{% t "spec.sku" %}</dt><dd>{{ painting.sku }}</dd></div>{% endif %}
-      </dl>
-
-      {% if desired_sizes %}
-      <div class="size-picker" data-size-picker>
-        <label for="page-size">{% t "size.title" %}</label>
-        <select id="page-size" data-page-size>
-          <option value="">{% t "size.none" %}</option>
-          {% for s in desired_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% else %}см{% endif %}</option>{% endfor %}
-          <option value="custom">{% t "size.custom" %}</option>
-          <option value="undecided">{% t "size.undecided" %}</option>
-        </select>
+      <div class="artwork-main-info">
+        <span class="badge badge-{{ painting.status }}">{% status_label painting %}</span>
+        <h1 class="artwork-title">{{ painting.t.title }}</h1>
+        {% if painting.t.author %}<p class="artwork-author">{{ painting.t.author }}</p>{% endif %}
+        <p class="artwork-params">{% if painting.t.base %}{{ painting.t.base }}{% endif %}{% if painting.technique %}{% if painting.t.base %}, {% endif %}{{ painting.technique.t.name|lower }}{% endif %}{% if painting.actual_size %}{% if painting.t.base or painting.technique %} / {% endif %}{{ painting.actual_size }}{% endif %}</p>
+        {% if painting.is_sold %}<p class="artwork-note">{% t "painting.sold_note" %}</p>
+        {% elif painting.status == "custom" %}<p class="artwork-note">{% t "painting.custom_note" %}</p>{% endif %}
+        {% if description %}<div class="artwork-description">{{ description|rich }}</div>{% endif %}
       </div>
-      {% endif %}
-
-      <a class="btn btn-primary btn-block btn-lg" href="{% page_url 'contacts' %}?order=painting&amp;painting={{ painting.pk }}#order"
-         data-order data-kind="painting" data-painting="{{ painting.pk }}" data-status="{{ painting.status }}"
-         data-context-name="{{ painting.t.title }}" data-category="{{ painting.category_id }}"
-         {% if desired_sizes %}data-sizes="{{ desired_sizes|sizes_json }}"{% endif %}>
-        {% if painting.is_sold %}{% t "btn.similar" %}{% elif painting.status == "custom" %}{% t "btn.discuss" %}{% else %}{% t "btn.order_this" %}{% endif %}
-      </a>
-      {% shared "painting-under-button" as under %}
-      {% if under and under.t.text %}<p class="artwork-hint">{{ under.t.text|brandify }}</p>{% endif %}
-      {% shared "delivery-short" as delivery %}
-      {% if delivery and delivery.t.text %}<p class="artwork-delivery">{{ delivery.t.text|plain }}{% if site_pages.delivery %} <a href="{{ site_pages.delivery.url }}">{{ site_pages.delivery.nav_title }}</a>{% endif %}</p>{% endif %}
+      <div class="artwork-specs">
+        <dl class="specs">
+          {% if painting.actual_size %}<div><dt>{% if painting.status == "available" %}{% t "spec.size" %}{% else %}{% t "size.actual" %}{% endif %}</dt><dd>{{ painting.actual_size }}</dd></div>{% endif %}
+          {% if painting.technique %}<div><dt>{% t "spec.technique" %}</dt><dd>{{ painting.technique.t.name }}</dd></div>{% endif %}
+          {% if painting.t.base %}<div><dt>{% t "spec.base" %}</dt><dd>{{ painting.t.base }}</dd></div>{% endif %}
+          {% if painting.t.framing %}<div><dt>{% t "spec.framing" %}</dt><dd>{{ painting.t.framing }}</dd></div>{% endif %}
+          {% if painting.year %}<div><dt>{% t "spec.year" %}</dt><dd>{{ painting.year }}</dd></div>{% endif %}
+          <div><dt>{% t "spec.status" %}</dt><dd>{% status_label painting %}</dd></div>
+          {% if painting.sku %}<div><dt>{% t "spec.sku" %}</dt><dd>{{ painting.sku }}</dd></div>{% endif %}
+        </dl>
+      </div>
+      <div class="artwork-order">
+        {% if not painting.is_sold %}
+        <p class="artwork-price">{% if painting.price %}{{ painting.price|floatformat:0 }} {{ site.currency }}{% else %}{% t "price.on_request" %}{% endif %}</p>
+        {% endif %}
+        {% if desired_sizes %}
+        <div class="size-picker" data-size-picker>
+          <label for="page-size">{% t "size.title" %}</label>
+          <select id="page-size" data-page-size>
+            <option value="">{% t "size.none" %}</option>
+            {% for s in desired_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% else %}см{% endif %}</option>{% endfor %}
+            <option value="custom">{% t "size.custom" %}</option>
+            <option value="undecided">{% t "size.undecided" %}</option>
+          </select>
+        </div>
+        {% endif %}
+        <a class="btn btn-primary btn-block btn-lg" href="{% page_url 'contacts' %}?order=painting&amp;painting={{ painting.pk }}#order"
+           data-order data-kind="painting" data-painting="{{ painting.pk }}" data-status="{{ painting.status }}"
+           data-context-name="{{ painting.t.title }}" data-category="{{ painting.category_id }}"
+           {% if desired_sizes %}data-sizes="{{ desired_sizes|sizes_json }}"{% endif %}>
+          <span>{% if painting.is_sold %}{% t "btn.similar" %}{% elif painting.status == "custom" %}{% t "btn.discuss" %}{% else %}{% t "btn.order_this" %}{% endif %}</span>{% icon "arrow" "icon btn-arrow" %}
+        </a>
+        {% shared "painting-under-button" as under %}
+        {% if under and under.t.text %}<p class="artwork-hint">{{ under.t.text|brandify }}</p>{% endif %}
+        {% shared "delivery-short" as delivery %}
+        {% if delivery and delivery.t.text %}<p class="artwork-delivery">{{ delivery.t.text|plain }}{% if site_pages.delivery %} <a href="{{ site_pages.delivery.url }}">{{ site_pages.delivery.nav_title }}</a>{% endif %}</p>{% endif %}
+      </div>
     </div>
   </article>
 
