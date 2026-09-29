@@ -27,7 +27,7 @@
           <label class="visually-hidden" for="{{ map_id|default:'m' }}-country">{% t "map.country" %}</label>
           <select id="{{ map_id|default:'m' }}-country" data-geo-country>
             <option value="">{% t "map.all_countries" %}</option>
-            {% regroup cities by country as countries %}{% for g in countries %}<option value="{{ g.grouper }}">{{ g.grouper }}</option>{% endfor %}
+            {% regroup cities by country as countries %}{% for g in countries %}<option value="{{ g.grouper }}">{{ g.grouper }} ({{ g.list|length }})</option>{% endfor %}
           </select>
         </div>
         <ul class="geo-list" data-geo-list aria-label="{% t 'map.list' %}">

@@ -210,7 +210,7 @@ class RedirectAdmin(ModelAdmin):
 
 
 SEO_FIELDSET = ("SEO", {
-    "classes": ("collapse",),
+    "classes": ("tab",),
     "fields": (
         ("seo_title_ru", "seo_title_en"), ("seo_description_ru", "seo_description_en"), "indexable", "canonical_override",
         ("og_title_ru", "og_title_en"), ("og_description_ru", "og_description_en"), "og_image",

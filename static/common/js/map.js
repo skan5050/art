@@ -10,6 +10,7 @@
     var v = function (name, fallback) { return (css.getPropertyValue(name) || "").trim() || fallback; };
     var map = L.map(el, { scrollWheelZoom: false, worldCopyJump: false, zoomSnap: 0.25, attributionControl: true });
     map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+    map.attributionControl.addAttribution('Города: <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0)');
     var tiles = el.getAttribute("data-tiles");
     if (tiles) {
       L.tileLayer(tiles, { maxZoom: 12, attribution: el.getAttribute("data-attribution") }).addTo(map);

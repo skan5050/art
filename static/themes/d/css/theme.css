@@ -330,3 +330,13 @@ a:hover { color: var(--terracotta); }
 .site-footer-d .btn-ghost:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); text-decoration: none; }
 .modal [data-submit], .form-card-d [data-submit], .cert-form-col [data-submit] { background: var(--accent); color: var(--accent-ink); }
 .modal [data-submit]:hover, .form-card-d [data-submit]:hover, .cert-form-col [data-submit]:hover { background: #dbe85a; color: var(--accent-ink); }
+
+/* Липкая шапка D: одна строка, при прокрутке ниже */
+.nav-row { min-height: 64px; transition: min-height .2s; }
+.nav-brand .brand-logo { height: 48px; transition: height .2s; }
+.site-nav.is-stuck .nav-row { min-height: 54px; }
+.site-nav.is-stuck .nav-brand .brand-logo { height: 40px; }
+.artwork-sample { border-left-color: var(--text); background: var(--accent); border-radius: 0; }
+.artwork-sample-title { color: var(--text); font-weight: 800; }
+.artwork-sample-text { font-family: var(--font-serif); font-size: 16px; }
+.art-card-sample { color: var(--terracotta); }

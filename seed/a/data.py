@@ -15,8 +15,8 @@ SETTINGS = {
     "logo_alt_ru": "МираМе — картины, в которых есть вы",
     "logo_alt_en": "MiraMe — paintings with a bit of you in them",
     "logo_contains_slogan": True,
-    "geography_ru": "Работаем из Новосибирска и Москвы. Принимаем заказы из России, СНГ и Европы.",
-    "geography_en": "We work from Novosibirsk and Moscow and take orders from Russia, the CIS and Europe.",
+    "geography_ru": "",
+    "geography_en": "",
     "hours_ru": "",
     "hours_en": "",
     "copyright_ru": "© {year} {brand}",
@@ -30,6 +30,9 @@ SETTINGS = {
 
 # Надписи, которые на этом сайте звучат иначе, чем по умолчанию: ключ → (RU, EN).
 LABELS = {
+    "form.sample_note": ("Картину из каталога можно взять за образец: напишем похожую — индивидуально для вас.", "Any painting in the catalogue can be a sample: we will paint a similar one individually for you."),
+    "catalog.list_hint": ("Каждая работа может стать образцом — напишем похожую для вас", "Any work can be a sample — we will paint a similar one for you"),
+    "catalog.sample_badge": ("Образец · напишем похожую", "Sample · we paint a similar one"),
     "painting.status_page_sold": ("SOLD / Продано", "SOLD / Sold"),
     "catalog.order_cta": ("Любой сюжет можно обсудить", "Any subject is up for discussion"),
     "painting.sold_note": (
@@ -51,6 +54,27 @@ LABELS = {
 }
 
 BLOCKS = [
+    {
+        "key": "painting-sample-available", "name": "Картина в наличии — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Понравилась, но хочется немного иначе?", "title_en": "Liked it, but want it a little different?",
+        "text_ru": "Эта картина — оригинал в наличии, и её можно забрать домой. А ещё она может стать образцом: напишем похожую работу под ваш размер и оттенки. Новая картина будет индивидуальной — не копией, а вашей версией сюжета.",
+        "text_en": "This painting is an original in stock, ready to go home with you. It can also become a sample: we will paint a similar work in your size and shades. The new painting will be individual — not a copy, but your own version of the subject.",
+    },
+    {
+        "key": "painting-sample-custom", "name": "Картина под заказ — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Это образец — картину напишем для вас", "title_en": "This is a sample — we will paint one for you",
+        "text_ru": "Работа показывает сюжет, настроение и манеру. Мы напишем похожую картину специально для вас, и она будет индивидуальной: размер, оттенки и детали обсудим вместе. Точной копии не будет — и в этом её ценность.",
+        "text_en": "The work shows the subject, mood and style. We will paint a similar picture especially for you, and it will be individual: we will agree the size, shades and details together. It won’t be an exact copy — and that is what makes it valuable.",
+    },
+    {
+        "key": "painting-sample-sold", "name": "Проданная картина — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Оригинал уже дома у владельца", "title_en": "The original is already in its new home",
+        "text_ru": "Но эту картину можно взять за образец: напишем новую работу по её мотивам. Она будет индивидуальной — со своими отличиями, вашим размером и вашей историей.",
+        "text_en": "But this painting can be used as a sample: we will paint a new work inspired by it. It will be individual — with its own differences, your size and your story.",
+    },
     {
         "key": "painting-description", "name": "Общий текст описания картины",
         "usage": "Страница картины, если выбран «Общий текст описания»",
@@ -323,19 +347,19 @@ PAGES = [
         "title_ru": "Немного о нашей мастерской", "title_en": "A little about our studio",
         "nav_title_ru": "О студии", "nav_title_en": "The studio",
         "body_ru": (
-            "Мы работаем из Новосибирска и Москвы, а заказы принимаем из России, стран СНГ и Европы. Личного приема клиентов у нас нет: все обсуждаем онлайн — так удобнее и вам, и картинам, которым не нужно лишний раз ездить на встречи.\n\n"
+            "Мастерская — место, где идеи становятся картинами: здесь пахнет краской, сохнут холсты и лежат эскизы будущих работ. Обсудить заказ удобно онлайн, а адрес и способ встречи для вашего города указаны на его странице и в контактах.\n\n"
             "Как проходит работа: вы рассказываете об идее или выбираете готовую картину, мы уточняем детали — размер, оформление, стоимость и доставку. Для работы на заказ согласуем сюжет и сроки до начала. Если нужно что-то показать — пришлите фото комнаты или пример, это лучше тысячи слов.\n\n"
             "Изображения в этом разделе — иллюстрации настроения мастерской, а не фотографии конкретного помещения."
         ),
         "body_en": (
-            "We work from Novosibirsk and Moscow and take orders from Russia, the CIS and Europe. We don’t receive visitors in person: everything is discussed online — which suits both you and the paintings, who don’t need extra trips to meetings.\n\n"
+            "The studio is where ideas turn into paintings: it smells of paint, canvases are drying and sketches of future works lie on the table. An order is easy to discuss online, and the address and way to meet in your city are listed on its page and in the contacts.\n\n"
             "How it works: you tell us your idea or choose a ready painting, and we agree the details — size, framing, price and delivery. For a work made to order, we agree the subject and timing before starting. If you want to show us something, send a photo of the room or an example — it says more than a thousand words.\n\n"
             "The images in this section are illustrations of the studio’s mood, not photographs of a specific room."
         ),
         "button_ru": "Рассказать об идее", "button_en": "Tell us your idea",
         "seo_title_ru": "О студии", "seo_title_en": "About the studio",
-        "seo_description_ru": "Как мы работаем: из Новосибирска и Москвы, с заказами из России, СНГ и Европы. Все обсуждаем онлайн — от идеи до доставки.",
-        "seo_description_en": "How we work: from Novosibirsk and Moscow, with orders from Russia, the CIS and Europe. Everything is discussed online, from idea to delivery.",
+        "seo_description_ru": "Как устроена наша мастерская и как проходит работа над картиной: от идеи и размера до оформления и доставки.",
+        "seo_description_en": "How our studio works and how a painting comes together: from the idea and size to framing and delivery.",
     },
     {
         "kind": "guides", "slug_ru": "полезное", "slug_en": "guides",

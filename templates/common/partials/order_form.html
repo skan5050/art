@@ -21,6 +21,7 @@
     <span class="form-context-badge">{% t "form.selected" %}</span>
   </div>
   <p class="form-note" data-similar-note {% if not fpainting.is_sold %}hidden{% endif %}>{% t "form.similar_note" %}</p>
+  <p class="form-note" data-sample-note {% if not fpainting or fpainting.is_sold %}hidden{% endif %}>{% t "form.sample_note" %}</p>
 
   <div class="form-grid">
     <div class="field f-name">

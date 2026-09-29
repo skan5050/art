@@ -1,5 +1,6 @@
 <nav class="site-nav" data-nav aria-label="{% t 'nav.menu' %}">
   <div class="container nav-row">
+    {% if not nav_brand %}<a class="nav-mini-brand" href="{{ home_url }}" tabindex="-1" aria-hidden="true">{% if site.logo %}<img src="{{ site.logo.url }}" alt="">{% else %}{{ brand }}{% endif %}</a>{% endif %}
     {% if nav_brand %}<a class="brand nav-brand" href="{{ home_url }}">{% if site.logo %}<img class="brand-logo" src="{{ site.logo.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}</a>{% endif %}
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-nav-toggle>
       <span class="nav-toggle-open">{% icon "menu" %}</span><span class="nav-toggle-close">{% icon "close" %}</span>

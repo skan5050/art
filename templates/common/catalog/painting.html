@@ -41,8 +41,13 @@
         <h1 class="artwork-title">{{ painting.t.title }}</h1>
         {% if painting.t.author %}<p class="artwork-author">{{ painting.t.author }}</p>{% endif %}
         {% if painting.params_line %}<p class="artwork-params">{{ painting.params_line }}</p>{% endif %}
-        {% if painting.is_sold %}<p class="artwork-note">{% t "painting.sold_note" %}</p>
-        {% elif painting.status == "custom" %}<p class="artwork-note">{% t "painting.custom_note" %}</p>{% endif %}
+        {% with sample_key="painting-sample-"|add:painting.status %}{% shared sample_key as sample %}
+        {% if sample %}<aside class="artwork-sample artwork-sample-{{ painting.status }}">
+          {% if sample.t.title %}<p class="artwork-sample-title">{{ sample.t.title|brandify }}</p>{% endif %}
+          {% if sample.t.text %}<div class="artwork-sample-text">{{ sample.t.text|rich }}</div>{% endif %}
+        </aside>
+        {% elif painting.is_sold %}<p class="artwork-note">{% t "painting.sold_note" %}</p>
+        {% elif painting.status == "custom" %}<p class="artwork-note">{% t "painting.custom_note" %}</p>{% endif %}{% endwith %}
         {% if description %}<div class="artwork-description">{{ description|rich }}</div>{% endif %}
       </div>
       <div class="artwork-specs">

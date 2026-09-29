@@ -36,6 +36,20 @@
     window.addEventListener("resize", function () { clearTimeout(timer); timer = setTimeout(measure, 80); });
     if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measure); }
     measure();
+
+    /* Липкое меню: при прокрутке закрепляется вверху, становится компактнее, в A появляется мини-логотип */
+    var stuck = false;
+    var onScroll = function () {
+      var now = nav.getBoundingClientRect().top <= 0 && window.scrollY > 4;
+      if (now !== stuck) {
+        stuck = now;
+        nav.classList.toggle("is-stuck", now);
+        document.body.classList.toggle("nav-stuck", now);
+        measure();
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
 
   /* ---------- Выпадающее меню мессенджеров ---------- */
@@ -238,6 +252,8 @@
       var thumb = $("[data-form-context-img]", form), thumbSrc = trigger.getAttribute("data-thumb");
       if (thumb) { thumb.hidden = !thumbSrc; if (thumbSrc) thumb.src = thumbSrc; }
       $("[data-similar-note]", form).hidden = kind !== "similar";
+      var sampleNote = $("[data-sample-note]", form);
+      if (sampleNote) sampleNote.hidden = kind !== "painting";
       $("[data-cert-fields]", form).hidden = kind !== "certificate";
       $$("[data-optional-field]", form).forEach(function (f) { f.hidden = kind === "certificate"; });
       modal.classList.toggle("has-context", !!ctx);

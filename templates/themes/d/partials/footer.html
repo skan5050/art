@@ -11,8 +11,8 @@
       <p class="muted">{{ brand }}</p>
     </div>
     <div class="footer-d-actions">
-      <a class="btn btn-accent" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.discuss" %}</a>
-      {% if site_pages.certificate %}<a class="btn btn-ghost" href="{{ site_pages.certificate.url }}">{% t "btn.certificate" %}</a>{% endif %}
+      <a class="btn btn-accent" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.order" %}</a>
+      {% if site_pages.certificate %}<a class="btn btn-ghost" href="{{ site_pages.certificate.url }}">{% t "footer.certificate" %}</a>{% endif %}
     </div>
   </div>
   <div class="container footer-bottom">

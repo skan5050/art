@@ -14,8 +14,8 @@ SETTINGS = {
     "logo_alt_ru": "ХолСтори — ваши истории на холсте",
     "logo_alt_en": "HolStory — your stories on canvas",
     "logo_contains_slogan": True,
-    "geography_ru": "Новосибирск и Москва. Заказы из России, стран СНГ и Европы.",
-    "geography_en": "Novosibirsk and Moscow. Orders from Russia, the CIS and Europe.",
+    "geography_ru": "",
+    "geography_en": "",
     "copyright_ru": "© {year} {brand}",
     "copyright_en": "© {year} {brand}",
     "painting_prefix_ru": "картина",
@@ -26,13 +26,15 @@ SETTINGS = {
 }
 
 LABELS = {
+    "form.sample_note": ("Выбранная работа может служить образцом: новая картина выполняется индивидуально и не является копией.", "The selected work can serve as a sample: the new painting is made individually and is not a copy."),
+    "catalog.sample_badge": ("Образец для заказа", "Sample for commission"),
     "status.sold_badge": ("Продано", "Sold"),
     "painting.status_page_sold": ("Продано", "Sold"),
     "painting.hint.available": ("Ответим на вопросы перед заказом", "We will answer your questions before you order", ),
     "painting.hint.custom": ("Размер и срок согласуются индивидуально", "Size and timing are agreed individually"),
     "painting.hint.sold": ("Новая работа по мотивам", "A new work based on this one"),
     "catalog.list_title": ("Работы рубрики", "Works in this category"),
-    "catalog.list_hint": ("Откройте карточку, чтобы рассмотреть детали и обсудить заказ", "Open a work to see the details and discuss an order"),
+    "catalog.list_hint": ("Работы каталога служат образцами для индивидуального заказа", "Catalogue works serve as samples for custom commissions"),
     "catalog.order_cta": ("Картина по вашей идее", "A painting based on your idea"),
     "btn.certificate": ("Сертификат", "Certificate"),
     "painting.sold_note": (
@@ -50,6 +52,27 @@ LABELS = {
 }
 
 BLOCKS = [
+    {
+        "key": "painting-sample-available", "name": "Картина в наличии — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Оригинал и образец для заказа", "title_en": "An original and a sample for commission",
+        "text_ru": "Работа доступна как оригинал в наличии. Она также может служить образцом для индивидуального заказа: новая картина по мотивам выполняется с учетом согласованного размера и цветового решения и является самостоятельным произведением, а не копией.",
+        "text_en": "The work is available as an original in stock. It can also serve as a sample for a custom commission: a new painting inspired by it is made to the agreed size and colour scheme and is an independent work, not a copy.",
+    },
+    {
+        "key": "painting-sample-custom", "name": "Картина под заказ — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Образец для индивидуального заказа", "title_en": "A sample for a custom commission",
+        "text_ru": "Работа демонстрирует сюжет, композицию и технику исполнения. Похожая картина выполняется индивидуально по согласованным параметрам — размер, цветовое решение, детали — и является самостоятельным произведением, а не копией образца.",
+        "text_en": "The work demonstrates the subject, composition and technique. A similar painting is made individually to the agreed parameters — size, colour scheme, details — and is an independent work, not a copy of the sample.",
+    },
+    {
+        "key": "painting-sample-sold", "name": "Проданная картина — пояснение об образце",
+        "usage": "Страница картины: блок под названием (по статусу работы)",
+        "title_ru": "Оригинал продан — доступен заказ по мотивам", "title_en": "The original is sold — a commission inspired by it is available",
+        "text_ru": "Работа представлена в портфолио как образец. По ее мотивам может быть выполнена новая картина: индивидуально, с учетом согласованных параметров. Новая работа не является копией проданного оригинала.",
+        "text_en": "The work is presented in the portfolio as a sample. A new painting can be made inspired by it: individually, to the agreed parameters. The new work is not a copy of the sold original.",
+    },
     {
         "key": "painting-description", "name": "Общий текст описания картины",
         "usage": "Страница картины, если выбран «Общий текст описания»",
@@ -318,7 +341,7 @@ PAGES = [
         "title_ru": "Мастерская и порядок работы", "title_en": "The studio and how we work",
         "nav_title_ru": "О студии", "nav_title_en": "The studio",
         "body_ru": (
-            "Мастерская работает в Новосибирске и Москве. Заказы принимаются из России, стран СНГ и Европы. Личный прием клиентов не проводится: обсуждение, согласование и передача материалов выполняются дистанционно.\n\n"
+            "Мастерская выполняет готовые работы и индивидуальные заказы. Обсуждение и согласование доступны дистанционно; адреса и порядок встречи в городах указаны на городских страницах и в разделе «Контакты».\n\n"
             "## Порядок работы\n"
             "- Обращение: выбор картины из каталога или описание задачи для индивидуального заказа.\n"
             "- Согласование: параметры работы, оформление, стоимость, сроки и доставка.\n"
@@ -327,7 +350,7 @@ PAGES = [
             "Изображения в этом разделе являются иллюстрациями и не представляют фотографии конкретного помещения."
         ),
         "body_en": (
-            "The studio works in Novosibirsk and Moscow. Orders are accepted from Russia, the CIS and Europe. We do not receive clients in person: discussion, agreement and exchange of materials take place remotely.\n\n"
+            "The studio produces ready works and custom commissions. Discussion and agreement are available remotely; addresses and meeting arrangements in each city are listed on the city pages and in Contacts.\n\n"
             "## How we work\n"
             "- Inquiry: choosing a painting from the catalogue or describing the task for a custom order.\n"
             "- Agreement: parameters of the work, framing, price, timing and delivery.\n"
@@ -337,8 +360,8 @@ PAGES = [
         ),
         "button_ru": "Отправить пожелания", "button_en": "Send your requirements",
         "seo_title_ru": "О студии", "seo_title_en": "About the studio",
-        "seo_description_ru": "Мастерская в Новосибирске и Москве, заказы из России, СНГ и Европы. Порядок работы: обращение, согласование, выполнение, доставка.",
-        "seo_description_en": "A studio in Novosibirsk and Moscow, orders from Russia, the CIS and Europe. How we work: inquiry, agreement, execution, delivery.",
+        "seo_description_ru": "Мастерская и порядок работы над картиной: обращение, согласование параметров, выполнение, подготовка к отправке и доставка.",
+        "seo_description_en": "The studio and how a painting is made: inquiry, agreeing the parameters, execution, preparation for shipping and delivery.",
     },
     {
         "kind": "guides", "slug_ru": "полезное", "slug_en": "guides",

@@ -521,3 +521,23 @@ body.modal-open .cert-fab, body.form-focus .cert-fab { opacity: 0; pointer-event
 .leaflet-tooltip.geo-label.is-active { font-weight: 800; z-index: 1000; }
 .geo-panel { max-height: none; }
 .geo-list { flex: 1 1 auto; min-height: 150px; max-height: 240px; }
+
+/* Компактная липкая шапка (по макетам: строка логотипа ~56px, меню ~48px) */
+.topbar-row { min-height: 60px; padding-top: 6px; padding-bottom: 6px; }
+.topbar .brand-logo { height: 48px; }
+.site-nav { position: sticky; top: 0; z-index: 50; transition: box-shadow .2s; }
+.nav-row { min-height: 48px; }
+.menu a { padding-top: 8px; padding-bottom: 8px; }
+.site-nav.is-stuck { box-shadow: 0 4px 18px rgba(0, 0, 0, .08); }
+.nav-mini-brand { display: none; align-items: center; flex: none; text-decoration: none; color: var(--primary-dark); font-weight: 700; }
+.nav-mini-brand img { height: 36px; width: auto; }
+.site-nav.is-stuck .nav-mini-brand { display: inline-flex; }
+html { scroll-padding-top: 64px; }
+@media (max-width: 720px) { .topbar .brand-logo { height: 42px; } .topbar-row { min-height: 54px; } }
+
+/* Пояснение «образец — напишем похожую» на странице картины */
+.artwork-sample { order: 5; margin: 14px 0 6px; padding: 14px 16px 14px 18px; border-left: 4px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; }
+.artwork-sample-title { margin: 0 0 4px; font-weight: 700; color: var(--primary-dark); }
+.artwork-sample-text { font-size: 15px; }
+.artwork-sample-text p:last-child { margin: 0; }
+.art-card-sample { font-size: 12px; font-weight: 600; color: var(--primary); }

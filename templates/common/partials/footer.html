@@ -26,7 +26,7 @@
     <div class="footer-col footer-actions">
       {% if footer_cta and footer_cta.t.text %}<p class="footer-cta-text">{{ footer_cta.t.text|brandify }}</p>{% endif %}
       <a class="btn btn-light" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.order" %}</a>
-      {% if site_pages.certificate %}<a class="btn btn-gold" href="{{ site_pages.certificate.url }}">{% icon "gift" %}<span>{% t "btn.certificate" %}</span></a>{% endif %}
+      {% if site_pages.certificate %}<a class="btn btn-gold" href="{{ site_pages.certificate.url }}">{% icon "gift" %}<span>{% t "footer.certificate" %}</span></a>{% endif %}
     </div>
   </div>
   <div class="container footer-bottom">

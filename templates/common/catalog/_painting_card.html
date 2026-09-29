@@ -9,6 +9,7 @@
       <span class="art-card-title"><span>{{ p.t.title }}</span>{% icon "arrow" "icon art-card-arrow" %}</span>
       {% if p.params_line %}<span class="art-card-params">{{ p.params_line }}</span>{% endif %}
       {% if p.t.short %}<span class="art-card-text">{{ p.t.short }}</span>{% endif %}
+      {% if p.status == "custom" %}<span class="art-card-sample">{% t "catalog.sample_badge" %}</span>{% endif %}
       <span class="art-card-meta">{% if p.is_sold %}{% t "catalog.order_similar_hint" %}{% elif p.price %}{{ p.price|floatformat:0 }} {{ site.currency }}{% else %}{% t "price.on_request" %}{% endif %}</span>
     </span>
   </a>
