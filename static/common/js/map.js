@@ -7,6 +7,7 @@
   var cities = JSON.parse(dataEl.textContent);
   var countLabel = el.getAttribute("data-count-label") || "";
   var map = L.map(el, { scrollWheelZoom: false, worldCopyJump: true });
+  map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
   L.tileLayer(el.getAttribute("data-tiles"), { maxZoom: 12, attribution: el.getAttribute("data-attribution") }).addTo(map);
   var group = L.markerClusterGroup ? L.markerClusterGroup({
     showCoverageOnHover: false,

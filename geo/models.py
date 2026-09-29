@@ -19,6 +19,10 @@ class City(TranslatableMixin, models.Model):
     name_ru = models.CharField("Название", max_length=120, db_index=True)
     name_en = models.CharField("Название (EN)", max_length=120, blank=True)
     name_source = models.CharField("Название в источнике", max_length=120, blank=True)
+    name_ru_verified = models.BooleanField(
+        "Русское название подтверждено", default=False,
+        help_text="Да — взято из языковых альтернатив GeoNames (ru) или проверено вручную.",
+    )
     latitude = models.DecimalField("Широта", max_digits=9, decimal_places=5)
     longitude = models.DecimalField("Долгота", max_digits=9, decimal_places=5)
     population = models.PositiveIntegerField("Население", null=True, blank=True)

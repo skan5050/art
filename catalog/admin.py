@@ -62,31 +62,20 @@ class CategoryAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
+        self._depths = {cat.pk: depth for cat, depth in tree_order()}
         return super().get_queryset(request).select_related("parent")
 
-    def changelist_view(self, request, extra_context=None):
-        self._depths = {cat.pk: (i, depth) for i, (cat, depth) in enumerate(tree_order())}
-        return super().changelist_view(request, extra_context)
-
     def get_ordering(self, request):
-        return ("order", "name_ru")
+        from django.db.models import Case, IntegerField, Value, When
 
-    def get_changelist(self, request, **kwargs):
-        from django.contrib.admin.views.main import ChangeList
-
-        admin_self = self
-
-        class TreeChangeList(ChangeList):
-            def get_results(self, request):
-                super().get_results(request)
-                depths = getattr(admin_self, "_depths", {})
-                self.result_list = sorted(self.result_list, key=lambda c: depths.get(c.pk, (10**6, 0))[0])
-
-        return TreeChangeList
+        order = tree_order()
+        if not order:
+            return ("order", "name_ru")
+        return [Case(*[When(pk=cat.pk, then=Value(i)) for i, (cat, _) in enumerate(order)], output_field=IntegerField()).asc()]
 
     @admin.display(description="Рубрика")
     def tree_name(self, obj):
-        depth = getattr(self, "_depths", {}).get(obj.pk, (0, 0))[1]
+        depth = getattr(self, "_depths", {}).get(obj.pk, 0)
         return format_html('<span style="padding-left:{}px">{}{}</span>', depth * 22, "↳ " if depth else "", obj.name_ru)
 
     @admin.display(description="Обложка")

@@ -23,7 +23,7 @@
     {% if geo.t.text %}<div class="section-text">{{ geo.t.text|rich }}</div>{% endif %}
     {% if cities %}
     <div class="geo-layout">
-      <div class="geo-map" id="sales-map" data-sales-map data-tiles="{{ site.map_tiles_url }}" data-attribution="{{ site.map_attribution }}" data-count-label="{% t 'map.cities_count' %}" role="region" aria-label="{{ geo.t.title }}"></div>
+      <div class="geo-map" id="sales-map" data-sales-map data-tiles="{{ site.map_tiles_url }}" data-attribution="{{ site.map_attribution }} | {{ geo_attribution }}" data-count-label="{% t 'map.cities_count' %}" role="region" aria-label="{{ geo.t.title }}"></div>
       <div class="geo-list">
         <label class="visually-hidden" for="geo-search">{% t "map.search" %}</label>
         <input id="geo-search" type="search" placeholder="{% t 'map.search' %}" data-geo-search>

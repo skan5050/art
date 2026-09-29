@@ -63,7 +63,7 @@ def _category_tree():
             "id": cat.pk, "parent_id": cat.parent_id, "name": cat.name_ru, "name_en": cat.name_en,
             "path": " / ".join(c.name_ru for c in cat.ancestors(include_self=True)), "visible": cat.visible,
         }
-    return list(nodes.values())
+    return sorted(nodes.values(), key=lambda n: n["path"])
 
 
 @api_auth

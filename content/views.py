@@ -79,6 +79,8 @@ def page_view(request, page):
         context["reviews"] = [r for r in Review.objects.filter(published=True) if tr(r, "text")]
     elif page.kind == "delivery":
         context["cities"] = _map_cities(lang)
+        context["geo_attribution"] = 'Города: <a href="https://www.geonames.org/">GeoNames</a> (CC BY 4.0)'
+
     elif page.kind == "contacts":
         context.update(_inline_form_context(request))
     elif page.kind == "certificate":
