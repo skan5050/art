@@ -54,6 +54,8 @@ class Command(BaseCommand):
         parser.add_argument("--registry-in", default=str(Path(__file__).resolve().parents[2] / "data" / "cities.csv"),
                             help="Готовый реестр для импорта (по умолчанию geo/data/cities.csv)")
         parser.add_argument("--dry-run", action="store_true")
+        parser.add_argument("--mark-major", action="store_true",
+                            help="Сразу включить на карте центры регионов и крупные города (только для тестовых стендов)")
 
     def handle(self, *args, **opts):
         countries = [c.strip().upper() for c in opts["countries"].split(",") if c.strip()]
@@ -102,8 +104,8 @@ class Command(BaseCommand):
                 city.save()  # отметки продаж, видимость и подписи не трогаем
                 updated += 1
         self.stdout.write(self.style.SUCCESS(f"Добавлено: {created}, обновлено: {updated}, пропущено (ручные правки): {skipped}."))
-        # Новые центры регионов и крупные города сразу появляются на карте; у существующих отметки не меняем.
-        marked = apply_major_cities(City.objects.filter(source_id__in=new_ids))
+        # По умолчанию отметки продаж выключены: на карте только подтверждённые продажи (аудит F-10).
+        marked = apply_major_cities(City.objects.filter(source_id__in=new_ids)) if opts.get("mark_major") else 0
         if marked:
             self.stdout.write(f"На карте включены города по умолчанию: {marked} (центры регионов и крупные города, см. geo/major_cities.py).")
 

@@ -195,7 +195,7 @@ PAGES = [
         "title_ru": "Картины, с которыми дома еще уютнее",
         "title_en": "Paintings that make home even cosier",
         "nav_title_ru": "Главная", "nav_title_en": "Home",
-        "banner_image": "mirame_home_hero_desktop.jpg", "banner_image_mobile": "mirame_home_hero_mobile.jpg", "banner_focus_x": 50, "banner_focus_y": 15,
+        "banner_image": "banner.jpg", "banner_image_mobile": "banner-mobile.jpg",
         "banner_title_ru": "", "banner_title_en": "",
         "banner_text_ru": "У стены уже есть цвет. Осталось добавить настроение. Выберите картину из наличия или расскажите, о какой мечтаете, — начнем с вашей идеи.",
         "banner_text_en": "The wall already has a colour. All it needs now is a mood. Choose a painting that is ready or tell us about the one you dream of — we will start with your idea.",
@@ -419,7 +419,7 @@ CTA = {
 
 
 
-def _covers(prefix):
+def _covers(prefix, omit=()):
     """Обложки рубрик из комплекта заказчика: подписи выводятся HTML-текстом, в файлах текста нет."""
     files = {
         "женщины": "01_women", "пары": "02_couples", "дети": "03_children", "пейзажи": "04_landscape",
@@ -428,10 +428,10 @@ def _covers(prefix):
         "город-и-архитектура": "12_city", "натюрморт": "13_still_life", "интерьер-и-бытовые-сцены": "14_interior",
         "прочее": "15_other", "портрет-и-фигура": "01_women", "животные-и-птицы": "07_animals",
     }
-    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items()}
+    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items() if name.split("_")[0] not in omit}
 
 
-COVERS = _covers("mirame")
+COVERS = _covers("mirame", omit=("10",))
 
 
 def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, children=None):

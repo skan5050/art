@@ -411,7 +411,7 @@ HOME_SECTIONS = [
 ]
 
 
-def _covers(prefix):
+def _covers(prefix, omit=()):
     """Обложки рубрик из комплекта заказчика: подписи выводятся HTML-текстом, в файлах текста нет."""
     files = {
         "женщины": "01_women", "пары": "02_couples", "дети": "03_children", "пейзажи": "04_landscape",
@@ -420,10 +420,10 @@ def _covers(prefix):
         "город-и-архитектура": "12_city", "натюрморт": "13_still_life", "интерьер-и-бытовые-сцены": "14_interior",
         "прочее": "15_other", "портрет-и-фигура": "01_women", "животные-и-птицы": "07_animals",
     }
-    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items()}
+    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items() if name.split("_")[0] not in omit}
 
 
-COVERS = _covers("holstori")
+COVERS = _covers("holstori", omit=("01", "02", "03", "10"))
 
 
 CAPTIONS = {

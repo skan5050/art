@@ -31,8 +31,8 @@
 
 .hero { min-height: clamp(420px, 44vw, 620px); display: flex; align-items: center; }
 .hero-inner { color: #0a2f55; }
-.hero-title { font-family: var(--font-script); font-weight: 400; font-size: clamp(42px, 7vw, 86px); line-height: 1.05; color: #0b2a4f; text-shadow: 0 0 14px rgba(255,255,255,.9), 0 1px 0 rgba(255,255,255,.6); }
-.hero-text { font-weight: 500; color: #183a60; text-shadow: 0 0 10px rgba(255,255,255,.95), 0 0 3px rgba(255,255,255,.9); }
+.hero-title { font-family: var(--font-script); font-weight: 400; font-size: clamp(42px, 7vw, 86px); line-height: 1.05; color: #0b2a4f; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
+.hero-text { font-weight: 500; color: #183a60; }
 .hero-kicker { color: #1c497e; }
 .hero .btn-outline { background: rgba(255,255,255,.75); }
 .hero-logo { filter: drop-shadow(0 1px 1px rgba(255,255,255,.6)); }

@@ -145,6 +145,10 @@ class Command(BaseCommand):
             item.setdefault("order", i * 10)
             item["parent"] = parent
             obj = self.upsert(Category, {"parent": parent, "slug_ru": item["slug_ru"]}, item, files)
+            if self.update and not files and obj.cover:
+                obj.cover.delete(save=False)  # обложки нет в наполнении — остаётся штатная заглушка макета
+                obj.cover = None
+                obj.save()
             self.categories(children, obj)
 
     def menu(self, items, pages):
@@ -178,6 +182,7 @@ class Command(BaseCommand):
             files = {"cover": item.pop("cover")} if item.get("cover") else {}
             item.pop("cover", None)
             item.setdefault("order", i * 10)
+            item.setdefault("published", i < 3)  # для согласования открыты три статьи; остальные — черновики
             obj = self.upsert(Article, {"slug_ru": item["slug_ru"]}, item, files)
             if categories:
                 obj.related_categories.set(Category.objects.filter(slug_ru__in=categories))

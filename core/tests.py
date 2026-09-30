@@ -197,11 +197,14 @@ class SiteTests(TestCase):
         data = {k: v for k, v in data.items() if v is not None}
         return self.client.post("/lead/", data, HTTP_X_REQUESTED_WITH="fetch")
 
-    def test_import_cities_enables_regional_centers_and_major_cities(self):
+    def test_import_cities_marks_nothing_unless_asked(self):
         from geo.major_cities import MAJOR_CITIES, THRESHOLD
         from geo.models import City
 
         call_command("import_cities", stdout=io.StringIO())
+        self.assertFalse(City.objects.filter(sale_confirmed=True).exists())  # без подтверждения продаж карта пуста
+        City.objects.all().delete()
+        call_command("import_cities", mark_major=True, stdout=io.StringIO())
         shown = City.objects.filter(sale_confirmed=True, visible=True)
         abroad = shown.exclude(country_code="RU")
         self.assertEqual(abroad.count(), 10)
@@ -266,7 +269,9 @@ class SiteTests(TestCase):
         r = self.client.get(quote(landing.url("ru")))
         self.assertContains(r, "yandex.ru/map-widget")
         self.assertContains(r, "49.120000%2C55.790000")
-        # ссылка на страницу города в данных карты продаж
+        # ссылка на страницу города в данных карты продаж (отметка — только у подтверждённой продажи)
+        kazan.sale_confirmed = kazan.visible = True
+        kazan.save()
         r = self.client.get(quote(Page.objects.get(kind="delivery").url("ru")))
         self.assertContains(r, "\\u0433\\u043e\\u0440\\u043e\\u0434\\u0430")  # «города» в JSON-ссылке
         # черновик недоступен посетителю
@@ -386,8 +391,8 @@ class ContentMapTests(TestCase):
         from content.models import StudioImage
 
         home = self.page("home")
-        self.assertTrue(home.banner_image.name.endswith("mirame_home_hero_desktop.jpg"))
-        self.assertTrue(home.banner_image_mobile.name.endswith("mirame_home_hero_mobile.jpg"))
+        self.assertTrue(home.banner_image.name.endswith("banner.jpg"))  # акварельный баннер макета A
+        self.assertTrue(home.banner_image_mobile.name.endswith("banner-mobile.jpg"))
         self.assertTrue(self.page("about").image.name.endswith("mirame_about_studio.jpg"))
         self.assertTrue(self.page("custom").image.name.endswith("mirame_custom_order.jpg"))
         self.assertTrue(self.page("delivery").image.name.endswith("mirame_delivery.jpg"))
@@ -401,7 +406,7 @@ class ContentMapTests(TestCase):
             self.assertTrue(article.cover_alt_ru and article.cover_alt_en)
             width, height = Image.open(article.cover.path).size
             self.assertAlmostEqual(width / height, 16 / 9, delta=0.02)
-        self.assertEqual(Category.objects.filter(cover="").count(), 0)
+        self.assertEqual(list(Category.objects.filter(cover="").values_list("slug_ru", flat=True)), ["морские-животные"])  # нет подходящего файла — штатная заглушка макета
         # главный hero грузится приоритетно и без alt-набивки; у обложек рубрик подпись — текст HTML
         html = self.client.get("/").content.decode()
         self.assertIn('fetchpriority="high"', html)
