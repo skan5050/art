@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block breadcrumbs %}{% endblock %}
+{% block extrahead %}{{ block.super }}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block content %}
+<div class="pl-page pl-cities">
+  <header class="pl-head">
+    <div><h1 class="pl-title">Города продаж</h1>
+      <p class="pl-lede">Выберите города, которые нужно отметить на странице «Доставка». Координаты подставляются по выбранному городу; данные покупателей сюда не попадают.</p></div>
+    <div class="pl-head-actions"><a class="pl-link" href="{{ table_url }}">Весь справочник городов</a><a class="pl-btn pl-btn-accent" href="{{ add_url }}">Добавить город</a></div>
+  </header>
+  <form method="post" data-city-editor data-search-url="{{ search_url }}" data-geo="{{ geo_url }}">{% csrf_token %}
+    <div class="pl-cities-grid">
+      <section class="pl-cities-list">
+        <label class="pl-cap" for="city-q">Найти город</label>
+        <input id="city-q" type="search" class="pl-input" placeholder="Введите название города" autocomplete="off" data-city-q>
+        <ul class="pl-found" data-city-found hidden></ul>
+        <ul class="pl-city-rows" data-city-rows></ul>
+        <p class="pl-note">Отметьте города, где продажи подтверждены. Неотмеченные города на карте не показываются.</p>
+      </section>
+      <section class="pl-cities-map">
+        <div class="pl-map-card"><p class="pl-cap">Предпросмотр карты</p><div class="pl-map" data-city-map></div>
+          <p class="pl-note" data-city-count></p></div>
+      </section>
+      <section class="pl-cities-point" data-city-point hidden>
+        <h2 class="pl-h2">Выбранная точка</h2>
+        <label class="pl-field"><span>Город</span><input type="text" class="pl-input" data-point-name readonly></label>
+        <label class="pl-field"><span>Подпись (RU)</span><input type="text" class="pl-input" data-point-caption-ru></label>
+        <label class="pl-field"><span>Подпись (EN)</span><input type="text" class="pl-input" data-point-caption-en></label>
+        <label class="pl-check"><input type="checkbox" data-point-visible><span>Показывать на карте</span></label>
+        <p class="pl-note">Координаты подставляются по выбранному городу.</p>
+      </section>
+    </div>
+    <div class="pl-actions"><span></span><button type="submit" class="pl-btn pl-btn-main">Сохранить отметки</button></div>
+    <div data-city-hidden></div>
+  </form>
+  {{ rows|json_script:"city-rows-data" }}
+</div>
+<script src="{% static 'vendor/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'admin-ui/city-map.js' %}"></script>
+{% endblock %}

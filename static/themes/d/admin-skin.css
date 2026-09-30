@@ -12,3 +12,12 @@ body { background: #f5f3ea; font-family: "Liberation Sans", Arial, sans-serif; }
 .dash-stat, .dash-card, .dash-action-row a { border-radius: 0; background: #fff; }
 .dash-title { font-family: "Liberation Sans", Arial, sans-serif; font-weight: 800; }
 #main > div:first-child [class*="bg-"] , #main > div:first-child [class*="bg-"] * { color: #171a17 !important; }
+
+/* Раскладки рабочих экранов (макет D, стр. 21–24): плакатные заголовки, лимонный акцент, прямые углы, вкладки разделов */
+:root { --pl-tabs: 1; --pl-main: #171a17; --pl-main-ink: #f5f3ea; --pl-accent: #e7f36a; --pl-accent-ink: #171a17; --pl-accent-line: #e7f36a; --pl-title: #171a17; --pl-muted: #6b6b63;
+  --pl-line: #d6d2c3; --pl-head-bg: transparent; --pl-current: #e7f36a; --pl-radius: 0; --pl-check: #171a17; --pl-title-size: 34px; --pl-tree-weight: 700;
+  --pl-marker: #e7f36a; --pl-marker-ring: #171a17; --pl-marker-hot: #fff; --pl-land: #d3d3c2; --pl-stroke: #d3d3c2; --pl-map-bg: #171a17; --pl-map-card: #171a17;
+  --pl-label-bg: #171a17; --pl-label-ink: #fff; --pl-menu-aside: 340px; --pl-cities-cols: minmax(0, 1.6fr) minmax(280px, 1fr);
+  --pl-list-order: 3; --pl-map-order: 1; --pl-point-order: 2; }
+.pl-map-card .pl-cap, .pl-map-card .pl-note { color: #d3d3c2; }
+.pl-btn-ghost { border-color: var(--pl-line); }

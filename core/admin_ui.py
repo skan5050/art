@@ -78,7 +78,7 @@ SIDEBAR = {
             item("Общие блоки", "view_agenda", "core.sharedblock"),
         ]},
         {"title": "Карта и SEO", "separator": True, "collapsible": True, "items": [
-            item("Города на карте", "map", "geo.city"),
+            {**item("Города на карте", "map", "geo.city"), "link": reverse_lazy("admin:geo_city_map")},
             item("SEO-шаблоны", "travel_explore", "core.seotemplate"),
             item("Перенаправления", "alt_route", "core.redirect"),
         ]},
@@ -193,7 +193,7 @@ def dashboard_callback(request, context):
         ("Рубрики", "category", _safe_reverse("admin:catalog_category_changelist")),
         ("Отзывы", "reviews", _safe_reverse("admin:content_review_changelist")),
         ("Сертификаты", "card_giftcard", _safe_reverse("admin:content_certificatenominal_changelist")),
-        ("Города на карте", "map", _safe_reverse("admin:geo_city_changelist")),
+        ("Города на карте", "map", _safe_reverse("admin:geo_city_map")),
         ("Контакты и настройки", "settings", _safe_reverse("admin:core_sitesettings_changelist")),
     ]
     context.update({
@@ -220,3 +220,11 @@ def admin_skin(request):
 
 def admin_scripts(request):
     return static("admin-ui/admin.js")
+
+
+def admin_layout(request):
+    return static("admin-ui/layout.js")
+
+
+def admin_layout_css(request):
+    return static("admin-ui/layout.css")

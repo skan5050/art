@@ -217,8 +217,8 @@ UNFOLD = {
     "SHOW_BACK_BUTTON": True,
     "ENVIRONMENT": "core.admin_ui.environment_callback",
     "DASHBOARD_CALLBACK": "core.admin_ui.dashboard_callback",
-    "STYLES": [admin_ui.admin_styles, admin_ui.admin_skin],
-    "SCRIPTS": [admin_ui.admin_scripts],
+    "STYLES": [admin_ui.admin_styles, admin_ui.admin_layout_css, admin_ui.admin_skin],
+    "SCRIPTS": [admin_ui.admin_scripts, admin_ui.admin_layout],
     "COLORS": {"primary": _ADMIN_PRIMARY},
     "SIDEBAR": admin_ui.SIDEBAR,
 }

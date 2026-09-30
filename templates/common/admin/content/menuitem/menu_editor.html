@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}{% endblock %}
+{% block content %}
+<div class="pl-page pl-menu">
+  <header class="pl-head">
+    <div><h1 class="pl-title">Меню сайта</h1>
+      <p class="pl-lede">Один набор пунктов для всех страниц. Порядок меняется перетаскиванием.</p></div>
+    <a class="pl-link" href="{{ table_url }}">Таблица со всеми полями</a>
+  </header>
+  <form method="post" class="pl-menu-form" data-menu-editor>{% csrf_token %}
+    <input type="hidden" name="menu_editor" value="1">
+    <div class="pl-menu-grid">
+      <div class="pl-menu-main">
+        <div class="pl-menu-cols" aria-hidden="true"><span></span><span>Пункт меню</span><span>Страница</span><span>В подвале</span><span>Видимость</span><span></span></div>
+        <ul class="pl-menu-rows" data-menu-rows>
+          {% for r in rows %}
+          <li class="pl-menu-row" draggable="true" data-row>
+            <input type="hidden" name="row" value="{{ r.item.pk }}">
+            <span class="pl-grip" title="Перетащите, чтобы изменить порядок" aria-hidden="true">⋮⋮</span>
+            <span class="pl-menu-label">
+              <input type="text" name="label_ru_{{ r.item.pk }}" value="{{ r.item.label_ru }}" placeholder="{{ r.label }}" aria-label="Надпись RU" data-menu-label>
+              <input type="text" name="label_en_{{ r.item.pk }}" value="{{ r.item.label_en }}" placeholder="EN" aria-label="Надпись EN" class="pl-menu-en">
+            </span>
+            <span class="pl-menu-url">{{ r.link }}</span>
+            <label class="pl-check"><input type="checkbox" name="footer_{{ r.item.pk }}" {% if r.item.in_footer %}checked{% endif %}><span>Да</span></label>
+            <label class="pl-check"><input type="checkbox" name="visible_{{ r.item.pk }}" {% if r.item.visible %}checked{% endif %} data-menu-visible><span>Включено</span></label>
+            <label class="pl-del" title="Удалить пункт"><input type="checkbox" name="delete_{{ r.item.pk }}" data-menu-delete><span aria-hidden="true">✕</span><span class="sr-only">Удалить</span></label>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <aside class="pl-preview" aria-label="Предпросмотр">
+        <p class="pl-cap">Предпросмотр</p>
+        <div class="pl-preview-menu" data-menu-preview></div>
+        <p class="pl-note">Ширина пунктов меняется автоматически. На узком экране меню сворачивается. Выравнивание: по центру; иконка мессенджеров — в правом углу.</p>
+      </aside>
+    </div>
+    <div class="pl-actions">
+      <a class="pl-btn pl-btn-accent" href="{{ add_url }}">+ Добавить пункт</a>
+      <button type="submit" class="pl-btn pl-btn-main">Сохранить меню</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

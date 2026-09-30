@@ -121,6 +121,34 @@ class CategoryAdmin(ModelAdmin):
         actions.pop("delete_selected", None)
         return actions
 
+    # Рабочий экран «Рубрики каталога» по макету: дерево слева, свойства выбранной рубрики справа.
+    # Таблица с порядком и видимостью доступна по ссылке (?table=1).
+    def changelist_view(self, request, extra_context=None):
+        if "table" in request.GET:
+            params = request.GET.copy()
+            params.pop("table")
+            request.GET = params
+        elif request.method == "GET" and not request.GET:
+            first = next(iter(tree_order()), None)
+            if first:
+                return HttpResponseRedirect(reverse("admin:catalog_category_change", args=[first[0].pk]))
+        return super().changelist_view(request, extra_context)
+
+    def _tree_context(self, current_pk=None):
+        return {
+            "pl_tree": [{"name": c.name_ru, "depth": d, "visible": c.visible, "current": c.pk == current_pk,
+                         "url": reverse("admin:catalog_category_change", args=[c.pk])} for c, d in tree_order()],
+            "pl_add_url": reverse("admin:catalog_category_add"),
+            "pl_table_url": reverse("admin:catalog_category_changelist") + "?table=1",
+        }
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra = {**self._tree_context(int(object_id) if str(object_id).isdigit() else None), **(extra_context or {})}
+        return super().change_view(request, object_id, form_url, extra)
+
+    def add_view(self, request, form_url="", extra_context=None):
+        return super().add_view(request, form_url, {**self._tree_context(), **(extra_context or {})})
+
     def move_and_delete(self, request, pk):
         category = get_object_or_404(Category, pk=pk)
         excluded = {category.pk, *category.descendant_ids()}
@@ -204,22 +232,32 @@ class PaintingAdmin(ModelAdmin):
     save_on_top = True
     fieldsets = (
         (None, {"fields": (
-            ("title_ru", "title_en"), ("slug_ru", "slug_en"), ("path_ru", "path_en"), "category", "status", "published", "sku",
-        )}),
-        ("Характеристики оригинала", {"fields": (
-            ("width", "height"), "technique", ("base_ru", "base_en"), ("framing_ru", "framing_en"),
-            ("author_ru", "author_en"), "year", "price",
-        ), "description": "Заполняйте только известные значения — неизвестные не показываются на сайте."}),
+            ("title_ru", "title_en"), ("status", "price"), ("category", "technique"), ("width", "height"), ("base_ru", "base_en"), "published",
+        ), "description": "Фото, состояние, рубрика, цена и описание меняются в одной карточке. Заполняйте только известные значения — неизвестные не показываются на сайте."}),
         ("Описание", {"fields": (
             ("short_ru", "short_en"), "description_mode", "description_source", ("description_ru", "description_en"),
         )}),
+        ("Дополнительно об оригинале", {"fields": (("framing_ru", "framing_en"), ("author_ru", "author_en"), "year")}),
         ("Желаемые размеры новой картины", {"fields": ("sizes_mode", "sizes_preview"),
             "description": "«Общий список» — ссылка на «Настройки сайта → Размеры картин». «Свои размеры» — список ниже, в блоке «Свои размеры». Это не фактический размер оригинала."}),
+        ("Адрес и артикул", {"fields": (("slug_ru", "slug_en"), ("path_ru", "path_en"), "sku"), "classes": ("collapse",)}),
         SEO_FIELDSET,
     )
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("category").prefetch_related("images")
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra = dict(extra_context or {})
+        obj = self.get_object(request, object_id)
+        if obj:
+            extra["pl_preview_url"] = obj.url("ru") or ""
+            image = obj.main_image()
+            if image:
+                from core.images import thumbnail_url
+
+                extra["pl_photo_url"] = thumbnail_url(image.image, 720)
+        return super().change_view(request, object_id, form_url, extra)
 
     @admin.display(description="Фото")
     def image_thumb(self, obj):

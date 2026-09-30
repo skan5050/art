@@ -1,4 +1,8 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 from unfold.admin import ModelAdmin
 
 from core.admin import SEO_FIELDSET, site_link, thumb
@@ -73,6 +77,46 @@ class MenuItemAdmin(ModelAdmin):
     list_display = ("__str__", "page", "url", "order", "visible", "in_footer")
     list_editable = ("order", "visible", "in_footer")
     fields = (("label_ru", "label_en"), "page", "url", "order", "visible", "in_footer")
+
+    # Рабочий экран «Меню сайта» по макету: строки с перетаскиванием, видимость, удаление, предпросмотр.
+    # Обычная таблица доступна по ссылке «Таблица» (?table=1) — прежние возможности сохранены.
+    def changelist_view(self, request, extra_context=None):
+        if "table" in request.GET or request.GET.keys() - {"e"}:
+            if "table" in request.GET:
+                params = request.GET.copy()
+                params.pop("table")
+                request.GET = params
+            return super().changelist_view(request, extra_context)
+        if request.method == "POST" and "menu_editor" in request.POST:
+            return self.save_menu(request)
+        items = list(MenuItem.objects.select_related("page").order_by("order", "id"))
+        rows = [{"item": it, "link": it.page.path_ru if it.page else it.url, "label": str(it)} for it in items]
+        return render(request, "admin/content/menuitem/menu_editor.html", {
+            **self.admin_site.each_context(request),
+            "title": "Меню сайта", "rows": rows, "opts": self.model._meta,
+            "add_url": reverse("admin:content_menuitem_add"), "table_url": "?table=1",
+        })
+
+    def save_menu(self, request):
+        if not self.has_change_permission(request):
+            return HttpResponseRedirect(request.path)
+        ids = [int(x) for x in request.POST.getlist("row") if x.isdigit()]
+        with transaction.atomic():
+            for position, pk in enumerate(ids):
+                item = MenuItem.objects.filter(pk=pk).first()
+                if item is None:
+                    continue
+                if request.POST.get(f"delete_{pk}") and self.has_delete_permission(request, item):
+                    item.delete()
+                    continue
+                item.order = position * 10
+                item.label_ru = request.POST.get(f"label_ru_{pk}", item.label_ru).strip()[:60]
+                item.label_en = request.POST.get(f"label_en_{pk}", item.label_en).strip()[:60]
+                item.visible = bool(request.POST.get(f"visible_{pk}"))
+                item.in_footer = bool(request.POST.get(f"footer_{pk}"))
+                item.save()
+        messages.success(request, "Меню сохранено.")
+        return HttpResponseRedirect(request.path)
 
 
 @admin.register(HomeSection)

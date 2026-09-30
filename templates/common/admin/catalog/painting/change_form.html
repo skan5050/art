@@ -1,0 +1,4 @@
+{% extends "admin/change_form.html" %}
+{% block form_top %}{{ block.super }}
+<div class="pl-meta" hidden data-painting-meta data-preview="{{ pl_preview_url|default:'' }}" data-photo="{{ pl_photo_url|default:'' }}" data-title="{{ original|default:'' }}"></div>
+{% endblock %}

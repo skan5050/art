@@ -577,3 +577,68 @@ class ApprovedPackageTests(TestCase):
                 self.assertNotIn(digest, seen)  # ни одна обложка не повторяется
                 seen.add(digest)
         self.assertEqual(len(seen), 6)
+
+
+class AdminLayoutTests(TestCase):
+    """Рабочие экраны админки по макетам: меню, рубрики, города, карточка картины."""
+
+    def setUp(self):
+        from django.contrib.auth.models import User
+
+        self.client.force_login(User.objects.create_superuser("boss2", "b2@example.com", "x"))
+
+    def test_menu_editor_saves_order_visibility_and_delete(self):
+        from content.models import MenuItem
+
+        call_command("seed_site", verbosity=0)
+        items = list(MenuItem.objects.order_by("order", "id"))
+        self.assertGreaterEqual(len(items), 3)
+        r = self.client.get("/admin/content/menuitem/")
+        self.assertContains(r, "data-menu-editor")
+        self.assertContains(self.client.get("/admin/content/menuitem/?table=1"), "action-select")  # прежняя таблица доступна
+        first, second, third = items[:3]
+        data = {"menu_editor": "1", "row": [second.pk, first.pk, third.pk], f"visible_{second.pk}": "on", f"label_ru_{second.pk}": "Новая надпись",
+                f"delete_{third.pk}": "on"}
+        self.assertEqual(self.client.post("/admin/content/menuitem/", data).status_code, 302)
+        second.refresh_from_db(), first.refresh_from_db()
+        self.assertEqual((second.order, first.order), (0, 10))
+        self.assertEqual(second.label_ru, "Новая надпись")
+        self.assertTrue(second.visible)
+        self.assertFalse(first.visible)  # флажок снят — пункт скрыт
+        self.assertFalse(MenuItem.objects.filter(pk=third.pk).exists())
+
+    def test_category_tree_layout_and_table_fallback(self):
+        call_command("seed_site", verbosity=0)
+        cat = Category.objects.filter(parent=None).order_by("order").first()
+        r = self.client.get("/admin/catalog/category/")
+        self.assertEqual(r.status_code, 302)
+        self.assertIn(f"/{cat.pk}/change/", r["Location"])
+        page = self.client.get(r["Location"])
+        self.assertContains(page, "data-cat-tree")
+        self.assertContains(page, cat.name_ru)
+        self.assertEqual(self.client.get("/admin/catalog/category/?table=1").status_code, 200)
+        self.assertContains(self.client.get("/admin/catalog/category/add/"), "data-cat-tree")
+
+    def test_city_map_screen_saves_marks(self):
+        from geo.models import City
+
+        city = City.objects.create(name_ru="Тестоград", name_en="Testgrad", country_code="RU", country_ru="Россия", country_en="Russia",
+                                   latitude=Decimal("55.75"), longitude=Decimal("37.61"), sale_confirmed=False, visible=True)
+        self.assertNotIn(f'"id": {city.pk},', self.client.get("/admin/geo/city/map/").content.decode())
+        found = self.client.get("/admin/geo/city/map/search/?q=Тестог").json()["results"]
+        self.assertEqual(found[0]["id"], city.pk)
+        self.assertIsInstance(found[0]["lat"], float)
+        data = {"row": [city.pk], f"on_{city.pk}": "1", f"visible_{city.pk}": "1", f"caption_ru_{city.pk}": "Картины в Тестограде"}
+        self.assertEqual(self.client.post("/admin/geo/city/map/", data).status_code, 302)
+        city.refresh_from_db()
+        self.assertTrue(city.sale_confirmed)
+        self.assertEqual(city.caption_ru, "Картины в Тестограде")
+        self.assertIn(f'"id": {city.pk},', self.client.get("/admin/geo/city/map/").content.decode())
+        self.assertEqual(self.client.get("/admin/geo/city/").status_code, 200)  # справочник остался
+
+    def test_painting_form_renders_with_meta(self):
+        call_command("seed_site", verbosity=0)
+        painting = Painting.objects.create(title_ru="Форма", category=Category.objects.first(), status=Painting.AVAILABLE)
+        r = self.client.get(f"/admin/catalog/painting/{painting.pk}/change/")
+        self.assertContains(r, "data-painting-meta")
+        self.assertContains(r, "Фото, состояние, рубрика, цена и описание")

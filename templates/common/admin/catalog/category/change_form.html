@@ -1,0 +1,16 @@
+{% extends "admin/change_form.html" %}
+{% block form_before %}{{ block.super }}
+<nav class="pl-tree" aria-label="Дерево рубрик" data-cat-tree>
+  <p class="pl-cap">Дерево рубрик</p>
+  <ul>
+    {% for node in pl_tree %}
+    <li class="pl-tree-row{% if node.current %} is-current{% endif %}{% if not node.visible %} is-hidden{% endif %}" style="--depth:{{ node.depth }}">
+      <span class="pl-grip" aria-hidden="true">⋮</span>
+      <a href="{{ node.url }}">{% if node.depth %}<span aria-hidden="true">↳ </span>{% endif %}{{ node.name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <a class="pl-btn pl-btn-ghost" href="{{ pl_add_url }}">+ Добавить рубрику</a>
+  <a class="pl-link" href="{{ pl_table_url }}">Таблица рубрик</a>
+</nav>
+{% endblock %}
