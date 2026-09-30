@@ -10,7 +10,7 @@ from .articles_more import ARTICLES_MORE
 ARTICLES = [
     {
         "slug_ru": "картина-в-интерьере", "slug_en": "painting-for-your-room",
-        "cover": "mirame_article_01_interer.jpg", "cover_alt_ru": "Картина с морским пейзажем на столе рядом с цветами, книгами и чашкой", "cover_alt_en": "A seascape painting on a table beside flowers, books and a cup",
+        "cover": "mirame_article_01_interer.jpg", "cover_alt_ru": "Две картины в светлых рамах у окна: морской пейзаж и ветка оливы", "cover_alt_en": "Two framed paintings by a window: a seascape and an olive branch",
         "title_ru": "Как выбрать картину для интерьера — и не спрашивать разрешения у дивана",
         "title_en": "How to choose a painting for your interior — without asking the sofa’s permission",
         "excerpt_ru": "Картине не обязательно быть точной родственницей штор. Начните с места, размера и собственного ощущения: хочется ли видеть эту работу рядом каждый день?",
@@ -46,7 +46,7 @@ ARTICLES = [
     },
     {
         "slug_ru": "готовая-или-на-заказ", "slug_en": "ready-made-or-commissioned",
-        "cover": "mirame_article_02_gotovaya_ili_zakaz.jpg", "cover_alt_ru": "Две картины в рамах у окна: готовая работа и рядом вторая", "cover_alt_en": "Two framed paintings by the window: a finished work and a second one beside it",
+        "cover": "mirame_article_02_gotovaya_ili_zakaz.jpg", "cover_alt_ru": "Мастерская: мольберт с морским пейзажем, кисти и палитра на рабочем столе", "cover_alt_en": "A studio: an easel with a seascape, brushes and a palette on the work table",
         "title_ru": "Готовая картина или картина на заказ: что выбрать?",
         "title_en": "A ready painting or a painting made to order: which to choose?",
         "excerpt_ru": "Иногда все понятно с первого взгляда. А иногда нравится почти все, кроме размера, оттенка и еще одной маленькой детали. Для этих случаев есть два разных пути.",
@@ -82,7 +82,7 @@ ARTICLES = [
     },
     {
         "slug_ru": "как-заказать-картину", "slug_en": "how-to-order-a-painting",
-        "cover": "mirame_article_03_kak_zakazat.jpg", "cover_alt_ru": "Мастерская: мольберт с картиной, кисти и палитра на рабочем столе", "cover_alt_en": "A studio: an easel with a painting, brushes and a palette on the work table",
+        "cover": "mirame_article_03_kak_zakazat.jpg", "cover_alt_ru": "Светлая гостиная с морским пейзажем на стене над диваном", "cover_alt_en": "A bright living room with a seascape on the wall above the sofa",
         "title_ru": "Как заказать картину, если пока не знаете, какую хотите",
         "title_en": "How to order a painting if you don’t yet know which one you want",
         "excerpt_ru": "Не нужно приходить с дипломом искусствоведа и папкой на сорок страниц. Несколько понятных ориентиров помогут превратить «что-нибудь красивое» в предметный разговор.",

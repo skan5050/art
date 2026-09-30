@@ -9,6 +9,7 @@ from .articles_more import ARTICLES_MORE
 ARTICLES = [
     {
         "slug_ru": "картина-в-интерьере", "slug_en": "choosing-a-painting-for-an-interior",
+        "cover": "holstori_article_01_interer.jpg", "cover_alt_ru": "Чёрная ваза с веткой на книге у нейтральной стены", "cover_alt_en": "A black vase with a branch on a book by a neutral wall",
         "title_ru": "Как выбрать картину для интерьера: пространство, формат и композиция",
         "title_en": "How to choose a painting for an interior: space, format and composition",
         "excerpt_ru": "Последовательная оценка места размещения и характеристик работы помогает сопоставить несколько вариантов до покупки или заказа.",
@@ -44,6 +45,7 @@ ARTICLES = [
     },
     {
         "slug_ru": "готовая-или-на-заказ", "slug_en": "ready-work-or-commission",
+        "cover": "holstori_article_02_gotovaya_i_zakaz.jpg", "cover_alt_ru": "Фактурная абстракция в чёрных, белых и золотых тонах", "cover_alt_en": "A textured abstract in black, white and gold",
         "title_ru": "Готовая картина и индивидуальный заказ: различия условий выбора",
         "title_en": "A ready painting or a commission: how the terms differ",
         "excerpt_ru": "В каталоге используются три статуса. Они определяют предмет обращения и помогают не смешивать покупку существующей работы с обсуждением новой.",
@@ -79,6 +81,7 @@ ARTICLES = [
     },
     {
         "slug_ru": "что-подготовить-для-заказа", "slug_en": "preparing-a-painting-commission",
+        "cover": "holstori_article_03_svedeniya.jpg", "cover_alt_ru": "Рука художника с кистью у холста", "cover_alt_en": "An artist’s hand with a brush at the canvas",
         "title_ru": "Какие сведения подготовить для заказа картины: сюжет, размер и срок",
         "title_en": "What information to prepare when commissioning a painting: subject, size and timing",
         "excerpt_ru": "Для предварительного обсуждения достаточно основных ориентиров. Подробные параметры уточняются после оценки задачи.",

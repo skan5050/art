@@ -195,7 +195,7 @@ PAGES = [
         "title_ru": "Картины, с которыми дома еще уютнее",
         "title_en": "Paintings that make home even cosier",
         "nav_title_ru": "Главная", "nav_title_en": "Home",
-        "banner_image": "banner.jpg", "banner_image_mobile": "banner-mobile.jpg",
+        "banner_image": "mirame_home_hero_desktop.jpg", "banner_image_mobile": "mirame_home_hero_mobile.jpg",
         "banner_title_ru": "", "banner_title_en": "",
         "banner_text_ru": "У стены уже есть цвет. Осталось добавить настроение. Выберите картину из наличия или расскажите, о какой мечтаете, — начнем с вашей идеи.",
         "banner_text_en": "The wall already has a colour. All it needs now is a mood. Choose a painting that is ready or tell us about the one you dream of — we will start with your idea.",

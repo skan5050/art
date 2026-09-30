@@ -187,7 +187,7 @@ PAGES = [
         "kind": "home",
         "title_ru": "Картины для вашего пространства", "title_en": "Paintings for your space",
         "nav_title_ru": "Главная", "nav_title_en": "Home",
-        "banner_image": "banner.jpg",
+        "banner_image": "holstori_home_hero_desktop.jpg", "banner_image_mobile": "holstori_home_hero_mobile.jpg",
         "banner_kicker_ru": "Картины в наличии и на заказ", "banner_kicker_en": "Paintings available and made to order",
         "banner_title_ru": "", "banner_title_en": "",
         "banner_text_ru": "Готовые работы и индивидуальные заказы. Выберите произведение в каталоге или согласуйте сюжет, формат и исполнение новой картины.",
@@ -200,7 +200,7 @@ PAGES = [
         "seo_description_en": "A catalogue of ready paintings and custom orders. Images, details, work statuses, portfolio and inquiries about a selected work.",
     },
     {
-        "kind": "about", "image": "holstori_studio_03_space.jpg", "image_alt_ru": "Мастерская с мольбертом, кистями и рабочим столом в мягком свете", "image_alt_en": "A studio with an easel, brushes and a work table in soft light", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "о-нас", "slug_en": "about",
+        "kind": "about", "image": "holstori_about_studio.jpg", "image_alt_ru": "Кисти в керамической банке, палитра и картина в рамке на рабочем столе мастерской", "image_alt_en": "Brushes in a ceramic jar, a palette and a framed painting on the studio table", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "о-нас", "slug_en": "about",
         "title_ru": "Выбор и заказ картин", "title_en": "Choosing and ordering paintings",
         "nav_title_ru": "О нас", "nav_title_en": "About",
         "body_ru": (

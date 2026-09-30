@@ -388,8 +388,8 @@ class ContentMapTests(TestCase):
         from content.models import StudioImage
 
         home = self.page("home")
-        self.assertTrue(home.banner_image.name.endswith("banner.jpg"))  # акварельный баннер макета A
-        self.assertTrue(home.banner_image_mobile.name.endswith("banner-mobile.jpg"))
+        self.assertTrue(home.banner_image.name.endswith("mirame_home_hero_desktop.jpg"))  # утверждённый hero A
+        self.assertTrue(home.banner_image_mobile.name.endswith("mirame_home_hero_mobile.jpg"))
         self.assertTrue(self.page("about").image.name.endswith("mirame_about_studio.jpg"))
         self.assertTrue(self.page("custom").image.name.endswith("mirame_custom_order.jpg"))
         self.assertTrue(self.page("delivery").image.name.endswith("mirame_delivery.jpg"))
@@ -557,3 +557,23 @@ class ContentMapTests(TestCase):
         settings.base_url = ""
         with self.assertRaises(ValidationError):
             settings.clean()
+
+
+class ApprovedPackageTests(TestCase):
+    def test_six_article_covers_are_distinct_and_16_9(self):
+        import hashlib
+        from pathlib import Path as P
+
+        import seed.a.articles as a
+        import seed.d.articles as d
+
+        seen = set()
+        for mod, site in ((a, "a"), (d, "d")):
+            for art in mod.ARTICLES[:3]:
+                path = P("seed") / site / "media" / art["cover"]
+                self.assertTrue(path.exists(), path)
+                self.assertEqual(Image.open(path).size, (1600, 900))
+                digest = hashlib.md5(path.read_bytes()).hexdigest()
+                self.assertNotIn(digest, seen)  # ни одна обложка не повторяется
+                seen.add(digest)
+        self.assertEqual(len(seen), 6)
