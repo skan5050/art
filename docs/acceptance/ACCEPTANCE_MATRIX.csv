@@ -1,7 +1,7 @@
 site,screen_id,screen,reference,design_geometry,typography,colors,images,content_preserved,responsive,final_status,status,notes
 MiraMe,A-01,Главная,PDF A стр. 1,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Баннер, меню под ним, 2 CTA, футер, сертификат совпадают; ниже добавлены блоки «В наличии/Под заказ/Проданные/Доставка» из прежнего ТЗ, которых нет в PDF; рубрик 10 (по ТЗ) вместо 8 демонстрационных."
 MiraMe,A-02,Каталог,PDF A стр. 2,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен."
-MiraMe,A-03,Рубрика/вложенные,PDF A стр. 3,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен. Обложки «Рыбы» и «Морские животные» в пакете — один и тот же файл."
+MiraMe,A-03,Рубрика/вложенные,PDF A стр. 3,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен."
 MiraMe,A-04,Список картин,PDF A стр. 4,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"4 в ряд, картина целиком (contain), CTA."
 MiraMe,A-05,Картина в наличии,PDF A стр. 5,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Две колонки, картина целиком."
 MiraMe,A-06,Картина под заказ,PDF A стр. 6,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Проверено рендером со статусом «Под заказ» (тот же шаблон, меняются статус и CTA); отдельной картины «Под заказ» в демо-наборе нет."
@@ -22,7 +22,7 @@ MiraMe,A-20,Mobile,PDF A стр. 20,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,
 HolStori,D-01,Главная: первый экран,PDF D стр. 5,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,Hero из утверждённого PDF (десктоп и мобильный кадр); текст D v1.4.
 HolStori,D-02,Главная: каталог/заказ,PDF D стр. 6,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен."
 HolStori,D-03,Каталог,PDF D стр. 7,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен."
-HolStori,D-04,Рубрика,PDF D стр. 8,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен. Обложки «Рыбы» и «Морские животные» в пакете — один и тот же файл."
+HolStori,D-04,Рубрика,PDF D стр. 8,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"v5: обложки рубрик из 02_CATEGORY_COVERS (резкие, на весь слот) применены без замен."
 HolStori,D-05,Список картин,PDF D стр. 9,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"4 в ряд, подписи и статус под работой, картина целиком."
 HolStori,D-06,Картина в наличии,PDF D стр. 10,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Большое изображение сверху, пояс данных снизу."
 HolStori,D-07,Картина под заказ,PDF D стр. 11,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,Проверено рендером со статусом «Под заказ».
