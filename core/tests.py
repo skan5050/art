@@ -403,7 +403,7 @@ class ContentMapTests(TestCase):
             self.assertTrue(article.cover_alt_ru and article.cover_alt_en)
             width, height = Image.open(article.cover.path).size
             self.assertAlmostEqual(width / height, 16 / 9, delta=0.02)
-        self.assertEqual(list(Category.objects.filter(cover="").values_list("slug_ru", flat=True)), ["морские-животные"])  # нет подходящего файла — штатная заглушка макета
+        self.assertEqual(list(Category.objects.filter(cover="").values_list("slug_ru", flat=True)), [])  # v5: у всех рубрик есть обложка из комплекта
         # главный hero грузится приоритетно и без alt-набивки; у обложек рубрик подпись — текст HTML
         html = self.client.get("/").content.decode()
         self.assertIn('fetchpriority="high"', html)

@@ -431,7 +431,7 @@ def _covers(prefix, omit=()):
     return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items() if name.split("_")[0] not in omit}
 
 
-COVERS = _covers("mirame", omit=("10",))
+COVERS = _covers("mirame")
 
 
 def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, children=None):

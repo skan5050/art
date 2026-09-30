@@ -423,7 +423,7 @@ def _covers(prefix, omit=()):
     return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items() if name.split("_")[0] not in omit}
 
 
-COVERS = _covers("holstori", omit=("01", "02", "03", "10"))
+COVERS = _covers("holstori")
 
 
 CAPTIONS = {
