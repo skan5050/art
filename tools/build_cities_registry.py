@@ -29,7 +29,7 @@ COUNTRIES = {
     "RU": ("Россия", "Russia"), "BY": ("Беларусь", "Belarus"), "KZ": ("Казахстан", "Kazakhstan"),
     "AM": ("Армения", "Armenia"), "AZ": ("Азербайджан", "Azerbaijan"), "GE": ("Грузия", "Georgia"),
     "KG": ("Кыргызстан", "Kyrgyzstan"), "UZ": ("Узбекистан", "Uzbekistan"), "TJ": ("Таджикистан", "Tajikistan"),
-    "EE": ("Эстония", "Estonia"),
+    "EE": ("Эстония", "Estonia"), "CN": ("Китай", "China"),
 }
 MIN_POPULATION = 100_000
 MIN_SANE_POPULATION = 500  # записи с населением ниже — вероятные ошибки источника

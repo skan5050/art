@@ -32,7 +32,7 @@ COUNTRIES = {
     "RU": ("Россия", "Russia"), "BY": ("Беларусь", "Belarus"), "KZ": ("Казахстан", "Kazakhstan"),
     "AM": ("Армения", "Armenia"), "AZ": ("Азербайджан", "Azerbaijan"), "GE": ("Грузия", "Georgia"),
     "KG": ("Кыргызстан", "Kyrgyzstan"), "UZ": ("Узбекистан", "Uzbekistan"), "TJ": ("Таджикистан", "Tajikistan"),
-    "EE": ("Эстония", "Estonia"),
+    "EE": ("Эстония", "Estonia"), "CN": ("Китай", "China"),
 }
 # Центры регионов, которые не являются крупнейшими городами своего региона (для резервного источника).
 KNOWN_ADMIN_CENTERS = {
@@ -54,8 +54,6 @@ class Command(BaseCommand):
         parser.add_argument("--registry-in", default=str(Path(__file__).resolve().parents[2] / "data" / "cities.csv"),
                             help="Готовый реестр для импорта (по умолчанию geo/data/cities.csv)")
         parser.add_argument("--dry-run", action="store_true")
-        parser.add_argument("--mark-major", action="store_true",
-                            help="Сразу включить на карте центры регионов и крупные города (только для тестовых стендов)")
 
     def handle(self, *args, **opts):
         countries = [c.strip().upper() for c in opts["countries"].split(",") if c.strip()]
@@ -104,8 +102,8 @@ class Command(BaseCommand):
                 city.save()  # отметки продаж, видимость и подписи не трогаем
                 updated += 1
         self.stdout.write(self.style.SUCCESS(f"Добавлено: {created}, обновлено: {updated}, пропущено (ручные правки): {skipped}."))
-        # По умолчанию отметки продаж выключены: на карте только подтверждённые продажи (аудит F-10).
-        marked = apply_major_cities(City.objects.filter(source_id__in=new_ids)) if opts.get("mark_major") else 0
+        # Новые центры регионов и крупные города сразу появляются на карте; у существующих отметки не меняем.
+        marked = apply_major_cities(City.objects.filter(source_id__in=new_ids))
         if marked:
             self.stdout.write(f"На карте включены города по умолчанию: {marked} (центры регионов и крупные города, см. geo/major_cities.py).")
 

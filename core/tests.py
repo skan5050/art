@@ -197,17 +197,14 @@ class SiteTests(TestCase):
         data = {k: v for k, v in data.items() if v is not None}
         return self.client.post("/lead/", data, HTTP_X_REQUESTED_WITH="fetch")
 
-    def test_import_cities_marks_nothing_unless_asked(self):
+    def test_import_cities_enables_regional_centers_and_major_cities(self):
         from geo.major_cities import MAJOR_CITIES, THRESHOLD
         from geo.models import City
 
         call_command("import_cities", stdout=io.StringIO())
-        self.assertFalse(City.objects.filter(sale_confirmed=True).exists())  # без подтверждения продаж карта пуста
-        City.objects.all().delete()
-        call_command("import_cities", mark_major=True, stdout=io.StringIO())
         shown = City.objects.filter(sale_confirmed=True, visible=True)
         abroad = shown.exclude(country_code="RU")
-        self.assertEqual(abroad.count(), 10)
+        self.assertEqual(abroad.count(), 12)  # 10 ближнего зарубежья + Пекин и Шэньчжэнь
         self.assertTrue(all(c.population > THRESHOLD for c in abroad))
         # все центры субъектов РФ из справочника, включая добавленные вручную
         self.assertEqual(shown.filter(country_code="RU").count(), City.objects.filter(country_code="RU", is_admin_center=True).count())
