@@ -115,6 +115,15 @@ class SiteSettings(TranslatableMixin, models.Model):
     ga4_id = models.CharField("Идентификатор GA4", max_length=20, blank=True, help_text="Вида G-XXXXXXX")
     analytics_enabled = models.BooleanField("Включить счетчики", default=False)
     sitemap_generated_at = models.DateTimeField("Последняя генерация sitemap.xml", null=True, blank=True, editable=False)
+    indexnow_enabled = models.BooleanField(
+        "Сообщать Яндексу об изменениях (IndexNow)", default=False,
+        help_text="При публикации, обновлении и удалении страницы адрес автоматически отправляется в IndexNow. "
+                  "Это ускоряет уведомление робота, но не гарантирует индексацию. Включайте на рабочем домене.",
+    )
+    indexnow_key = models.CharField(
+        "Ключ IndexNow", max_length=64, blank=True,
+        help_text="Пусто — ключ будет создан при включении. Файл ключа доступен по адресу «адрес сайта/ключ.txt».",
+    )
 
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -135,11 +144,19 @@ class SiteSettings(TranslatableMixin, models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1
         self.base_url = (self.base_url or "").rstrip("/")
+        if self.indexnow_enabled and not self.indexnow_key:
+            import secrets
+
+            self.indexnow_key = secrets.token_hex(16)
         super().save(*args, **kwargs)
 
     def clean(self):
         import re
 
+        if self.indexnow_key and not re.fullmatch(r"[A-Za-z0-9-]{8,64}", self.indexnow_key):
+            raise ValidationError({"indexnow_key": "Ключ — от 8 до 64 латинских букв, цифр или дефисов."})
+        if self.indexnow_enabled and not self.base_url:
+            raise ValidationError({"indexnow_enabled": "IndexNow работает только с адресом сайта: сначала заполните «Адрес сайта»."})
         if self.yandex_verification and not re.fullmatch(r"[A-Za-z0-9_-]+", self.yandex_verification):
             raise ValidationError({"yandex_verification": "Укажите только код из content=\"…\", без HTML."})
         if self.google_verification and not re.fullmatch(r"[A-Za-z0-9_-]+", self.google_verification):
@@ -397,6 +414,9 @@ class Routable(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.refresh_paths()
+        from . import indexnow
+
+        indexnow.object_saved(self)  # адреса уже вычислены; выключено по умолчанию
 
 
 class SeoFields(models.Model):

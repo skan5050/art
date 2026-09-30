@@ -2,6 +2,7 @@
 import hashlib
 import io
 import logging
+import re
 from pathlib import Path
 
 from django.conf import settings
@@ -43,8 +44,10 @@ def thumbnail_url(field_file, width):
     path = _source_path(field_file)
     if path is None or not path.exists():
         return ""
-    stamp = hashlib.sha1(f"{field_file.name}:{path.stat().st_mtime_ns}:{width}".encode()).hexdigest()[:20]
-    rel = f"{THUMB_DIR}/{stamp}-{width}.webp"
+    stamp = hashlib.sha1(f"{field_file.name}:{path.stat().st_mtime_ns}:{width}".encode()).hexdigest()[:12]
+    # В адресе сохраняем осмысленное имя исходного файла (ТЗ 1.3, Е1); хеш нужен только для обновления версий.
+    stem = re.sub(r"[^A-Za-z0-9_-]+", "-", path.stem).strip("-_")[:48] or "image"
+    rel = f"{THUMB_DIR}/{stem}-{stamp}-{width}.webp"
     target = Path(settings.MEDIA_ROOT) / rel
     if not target.exists():
         try:

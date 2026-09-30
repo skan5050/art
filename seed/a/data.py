@@ -12,6 +12,7 @@ SETTINGS = {
     "slogan_ru": "Картины, в которых есть вы.",
     "slogan_en": "Paintings with a bit of you in them.",
     "logo": "logo.png",
+    "certificate_image": "mirame_gift_certificate.jpg",
     "logo_alt_ru": "МираМе — картины, в которых есть вы",
     "logo_alt_en": "MiraMe — paintings with a bit of you in them",
     "logo_contains_slogan": True,
@@ -194,7 +195,7 @@ PAGES = [
         "title_ru": "Картины, с которыми дома еще уютнее",
         "title_en": "Paintings that make home even cosier",
         "nav_title_ru": "Главная", "nav_title_en": "Home",
-        "banner_image": "banner.jpg", "banner_image_mobile": "banner-mobile.jpg",
+        "banner_image": "mirame_home_hero_desktop.jpg", "banner_image_mobile": "mirame_home_hero_mobile.jpg", "banner_focus_x": 50, "banner_focus_y": 15,
         "banner_title_ru": "", "banner_title_en": "",
         "banner_text_ru": "У стены уже есть цвет. Осталось добавить настроение. Выберите картину из наличия или расскажите, о какой мечтаете, — начнем с вашей идеи.",
         "banner_text_en": "The wall already has a colour. All it needs now is a mood. Choose a painting that is ready or tell us about the one you dream of — we will start with your idea.",
@@ -205,7 +206,7 @@ PAGES = [
         "seo_description_en": "Choose a painting for your home or tell us about your idea. Ready works and paintings made to order: favourite subjects, clear details and a little cosiness.",
     },
     {
-        "kind": "about", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Обсудить заказ", "cta_button_en": "Discuss an order", "slug_ru": "о-нас", "slug_en": "about",
+        "kind": "about", "image": "mirame_about_studio.jpg", "image_alt_ru": "Светлая комната: морской пейзаж на стене, оливковое деревце и рабочий стол", "image_alt_en": "A bright room: a seascape on the wall, an olive plant and a work table", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Обсудить заказ", "cta_button_en": "Discuss an order", "slug_ru": "о-нас", "slug_en": "about",
         "title_ru": "Чтобы дома было чуть больше вас", "title_en": "A little more of you at home",
         "nav_title_ru": "О нас", "nav_title_en": "About",
         "body_ru": (
@@ -258,7 +259,7 @@ PAGES = [
         "seo_description_en": "Customers’ impressions of paintings and orders. Once reviews are published, you can read here how a work became part of someone’s home.",
     },
     {
-        "kind": "delivery", "cta_text_ru": "Уточнить доставку в ваш город", "cta_text_en": "Check delivery to your city", "cta_button_ru": "Обсудить доставку", "cta_button_en": "Discuss delivery", "slug_ru": "доставка", "slug_en": "delivery",
+        "kind": "delivery", "image": "mirame_delivery.jpg", "image_alt_ru": "Картина, упакованная для отправки: защитная плёнка, уголки и крафт-бумага", "image_alt_en": "A painting packed for shipping: protective wrap, corner guards and kraft paper", "cta_text_ru": "Уточнить доставку в ваш город", "cta_text_en": "Check delivery to your city", "cta_button_ru": "Обсудить доставку", "cta_button_en": "Discuss delivery", "slug_ru": "доставка", "slug_en": "delivery",
         "title_ru": "Картина собирается к вам в гости", "title_en": "A painting is coming to visit",
         "nav_title_ru": "Доставка", "nav_title_en": "Delivery",
         "intro_ru": "Чемодан ей не нужен. А подходящая упаковка и согласованный маршрут — очень даже.",
@@ -307,7 +308,7 @@ PAGES = [
         "seo_description_en": "Let’s start with “Hello”. Write to us about a painting you like, your idea or delivery — one convenient way to reach you is enough.",
     },
     {
-        "kind": "certificate", "slug_ru": "подарочный-сертификат", "slug_en": "gift-certificate",
+        "kind": "certificate", "image_alt_ru": "Подарочная коробка с розовой лентой и открытка с сердечком", "image_alt_en": "A gift box with a pink ribbon and a card with a heart", "slug_ru": "подарочный-сертификат", "slug_en": "gift-certificate",
         "title_ru": "Подарите выбор. Он тоже бывает красивым", "title_en": "Give the gift of choice. It can be beautiful too",
         "nav_title_ru": "Подарочный сертификат", "nav_title_en": "Gift certificate",
         "body_ru": (
@@ -324,7 +325,7 @@ PAGES = [
         "seo_description_en": "Give someone a pleasant decision to make: choosing their own painting. We will discuss the amount, format and terms before issuing the certificate.",
     },
     {
-        "kind": "custom", "cta_text_ru": "А можно такую, но немного другую?", "cta_text_en": "Could I have one like this, but a little different?", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
+        "kind": "custom", "image": "mirame_custom_order.jpg", "image_alt_ru": "Кисти в керамической банке и картина с пионами на рабочем столе", "image_alt_en": "Brushes in a ceramic jar and a painting of peonies on a work table", "cta_text_ru": "А можно такую, но немного другую?", "cta_text_en": "Could I have one like this, but a little different?", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "картины-на-заказ", "slug_en": "custom-paintings",
         "title_ru": "Сначала ваша идея. Потом — картина", "title_en": "Your idea first. Then the painting",
         "nav_title_ru": "Картины на заказ", "nav_title_en": "Paintings to order",
         "body_ru": (
@@ -343,18 +344,18 @@ PAGES = [
         "seo_description_en": "Have an idea for a painting but no exact plan yet? Send an example, a size or a few words about the mood — we will start from there.",
     },
     {
-        "kind": "studio", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "студия", "slug_en": "studio",
+        "kind": "studio", "image": "mirame_studio_main.jpg", "image_alt_ru": "Мастерская: мольберт с картиной, кисти и палитра на рабочем столе", "image_alt_en": "A studio: an easel with a painting, brushes and a palette on the work table", "cta_text_ru": "Расскажите, какую картину вы ищете", "cta_text_en": "Tell us what painting you are looking for", "cta_button_ru": "Рассказать об идее", "cta_button_en": "Tell us your idea", "slug_ru": "студия", "slug_en": "studio",
         "title_ru": "Немного о нашей мастерской", "title_en": "A little about our studio",
         "nav_title_ru": "О студии", "nav_title_en": "The studio",
         "body_ru": (
             "Мастерская — место, где идеи становятся картинами: здесь пахнет краской, сохнут холсты и лежат эскизы будущих работ. Обсудить заказ удобно онлайн, а адрес и способ встречи для вашего города указаны на его странице и в контактах.\n\n"
             "Как проходит работа: вы рассказываете об идее или выбираете готовую картину, мы уточняем детали — размер, оформление, стоимость и доставку. Для работы на заказ согласуем сюжет и сроки до начала. Если нужно что-то показать — пришлите фото комнаты или пример, это лучше тысячи слов.\n\n"
-            "Изображения в этом разделе — иллюстрации настроения мастерской, а не фотографии конкретного помещения."
+            "Изображение в этом разделе — иллюстрация настроения мастерской, а не фотография конкретного помещения."
         ),
         "body_en": (
             "The studio is where ideas turn into paintings: it smells of paint, canvases are drying and sketches of future works lie on the table. An order is easy to discuss online, and the address and way to meet in your city are listed on its page and in the contacts.\n\n"
             "How it works: you tell us your idea or choose a ready painting, and we agree the details — size, framing, price and delivery. For a work made to order, we agree the subject and timing before starting. If you want to show us something, send a photo of the room or an example — it says more than a thousand words.\n\n"
-            "The images in this section are illustrations of the studio’s mood, not photographs of a specific room."
+            "The image in this section is an illustration of the studio’s mood, not a photograph of a specific room."
         ),
         "button_ru": "Рассказать об идее", "button_en": "Tell us your idea",
         "seo_title_ru": "О студии", "seo_title_en": "About the studio",
@@ -374,7 +375,13 @@ PAGES = [
 ]
 
 # Порядок пунктов верхнего меню (SOLD можно включить в админке).
-MENU = ["about", "catalog", "sold", "reviews", "delivery", "contacts"]
+# Пункт «Полезные статьи» включён на период согласования (ТЗ 1.3, Е2): владелец скрывает его в админке
+# снятием галочки «Показывать», статьи и их адреса при этом не меняются. В футере ссылка уже есть.
+MENU = [
+    "about", "catalog", "sold", "reviews", "delivery",
+    {"page": "guides", "label_ru": "Полезные статьи", "label_en": "Useful articles", "visible": True, "in_footer": False},
+    "contacts",
+]
 
 HOME_SECTIONS = [
     {
@@ -411,13 +418,29 @@ CTA = {
 }
 
 
-def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, cover=None, children=None):
+
+def _covers(prefix):
+    """Обложки рубрик из комплекта заказчика: подписи выводятся HTML-текстом, в файлах текста нет."""
+    files = {
+        "женщины": "01_women", "пары": "02_couples", "дети": "03_children", "пейзажи": "04_landscape",
+        "абстракция": "05_abstract", "цветы-и-ботаника": "06_flowers", "животные": "07_animals",
+        "птицы": "08_birds", "рыбы": "09_fish", "морские-животные": "10_marine_animals", "море": "11_sea",
+        "город-и-архитектура": "12_city", "натюрморт": "13_still_life", "интерьер-и-бытовые-сцены": "14_interior",
+        "прочее": "15_other", "портрет-и-фигура": "01_women", "животные-и-птицы": "07_animals",
+    }
+    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items()}
+
+
+COVERS = _covers("mirame")
+
+
+def _cat(name_ru, slug_ru, name_en, slug_en, intro_ru, intro_en, seo_title_ru, seo_desc_ru, seo_title_en, seo_desc_en, children=None):
     return {
         "name_ru": name_ru, "slug_ru": slug_ru, "name_en": name_en, "slug_en": slug_en,
         "intro_ru": intro_ru, "intro_en": intro_en,
         "seo_title_ru": seo_title_ru, "seo_description_ru": seo_desc_ru,
         "seo_title_en": seo_title_en, "seo_description_en": seo_desc_en,
-        "cover": cover, "children": children or [],
+        "cover": COVERS.get(slug_ru), "children": children or [],
         "cover_alt_ru": "", "cover_alt_en": "",
         "cta_text_ru": CTA.get(slug_ru, CTA_DEFAULT)[0], "cta_text_en": CTA.get(slug_ru, CTA_DEFAULT)[1],
         "cta_button_ru": CTA.get(slug_ru, CTA_DEFAULT)[2], "cta_button_en": CTA.get(slug_ru, CTA_DEFAULT)[3],
@@ -429,14 +452,12 @@ CATEGORIES = [
          "Окно в любимое место — без ремонта и сквозняков. Найдите пейзаж, к которому хочется возвращаться взглядом.",
          "A window onto a favourite place — no renovation or draughts involved. Find a landscape your eyes will keep returning to.",
          "Картины-пейзажи", "Лес, горы и любимые горизонты — без сквозняков из открытого окна. Посмотрите пейзажи, уточните параметры или обсудите свою картину.",
-         "Landscape paintings", "Forests, mountains and favourite horizons — without the draught from an open window. Browse landscapes, check the details or discuss your own painting.",
-         cover="cover-landscape.jpg"),
+         "Landscape paintings", "Forests, mountains and favourite horizons — without the draught from an open window. Browse landscapes, check the details or discuss your own painting."),
     _cat("Абстракция", "абстракция", "Abstract Art", "abstract-art",
          "Не обязательно искать, на что это похоже. Иногда достаточно того, как цвет и форма звучат именно для вас.",
          "No need to work out what it looks like. Sometimes it is enough how colour and shape sound to you.",
          "Абстрактные картины", "Цвет, форма и настроение без обязательного «на что похоже». Найдите свою абстракцию или расскажите, какие оттенки хочется видеть дома.",
-         "Abstract paintings", "Colour, shape and mood without the obligatory “what is it?”. Find your abstract piece or tell us which shades you would like at home.",
-         cover="cover-abstract.jpg"),
+         "Abstract paintings", "Colour, shape and mood without the obligatory “what is it?”. Find your abstract piece or tell us which shades you would like at home."),
     _cat("Животные и птицы", "животные-и-птицы", "Animals & Birds", "animals-and-birds",
          "Те, кто делает мир живее. Домашние любимцы, птицы и дикие животные — со своим характером, даже на холсте.",
          "The ones who make the world livelier. Pets, birds and wild animals — each with its own character, even on canvas.",
@@ -464,20 +485,17 @@ CATEGORIES = [
          "Немного моря для тех дней, когда отпуск еще не скоро. Выбирайте спокойный горизонт или волны с характером.",
          "A little sea for the days when your holiday is still far away. Choose a calm horizon or waves with character.",
          "Картины с морем", "Когда отпуск еще впереди, море может быть рядом. Спокойные горизонты, волны и береговые сюжеты — выбирайте настроение своей картины.",
-         "Seascape paintings", "While your holiday is still ahead, the sea can be close by. Calm horizons, waves and coastal scenes — choose the mood of your painting.",
-         cover="cover-sea.jpg"),
+         "Seascape paintings", "While your holiday is still ahead, the sea can be close by. Calm horizons, waves and coastal scenes — choose the mood of your painting."),
     _cat("Цветы и ботаника", "цветы-и-ботаника", "Flowers & Botanicals", "flowers-and-botanicals",
          "Букет, которому не нужно менять воду. Цветы и растения для своего уголка хорошего настроения.",
          "A bouquet that never needs fresh water. Flowers and plants for your own corner of good mood.",
          "Картины с цветами", "Букет, которому не нужна ваза. Посмотрите картины с цветами и растениями, выберите оттенки или обсудите собственную композицию.",
-         "Flower paintings", "A bouquet that needs no vase. Browse paintings of flowers and plants, choose the shades or discuss your own composition.",
-         cover="cover-flowers.jpg"),
+         "Flower paintings", "A bouquet that needs no vase. Browse paintings of flowers and plants, choose the shades or discuss your own composition."),
     _cat("Портрет и фигура", "портрет-и-фигура", "Portraits & Figures", "portraits-and-figures",
          "Взгляд, жест, знакомый образ. Картины о людях и том, что делает каждый образ особенным.",
          "A look, a gesture, a familiar image. Paintings about people and what makes each of them special.",
          "Портреты и картины с людьми", "Знакомый взгляд, выразительный жест, особенный образ. Посмотрите портреты и фигуративные сюжеты или расскажите о своей идее.",
          "Portraits and paintings of people", "A familiar look, an expressive gesture, a special image. Browse portraits and figurative scenes or tell us your idea.",
-         cover="cover-women.jpg",
          children=[
              _cat("Женщины", "женщины", "Women", "women",
                   "Женские образы: нежные, смелые, задумчивые — разные, как и сами героини.",
@@ -517,14 +535,5 @@ CATEGORIES = [
          "Other painting subjects", "For stories that feel cramped in a single category. Browse other subjects — your painting may be waiting to meet you here."),
 ]
 
-# Иллюстрации мастерской (tools/studio_illustrations.py). Замените фотографиями в админке.
-STUDIO_IMAGES = [
-    {"image": "studio-window.jpg", "alt_ru": "Мастерская у окна: мольберт с картиной", "alt_en": "Studio by the window: an easel with a painting",
-     "caption_ru": "Мастерская у окна", "caption_en": "The studio by the window", "is_illustration": True},
-    {"image": "studio-table.jpg", "alt_ru": "Рабочий стол художника: палитра, кисти и эскизы", "alt_en": "The artist’s desk: palette, brushes and sketches",
-     "caption_ru": "Рабочий стол", "caption_en": "The work desk", "is_illustration": True},
-    {"image": "studio-wall.jpg", "alt_ru": "Стена с работами под светом софитов", "alt_en": "A wall of works under spotlights",
-     "caption_ru": "Работы на стене", "caption_en": "Works on the wall", "is_illustration": True},
-    {"image": "studio-shelf.jpg", "alt_ru": "Стеллаж с материалами: кисти, краски и подрамники", "alt_en": "Shelves with materials: brushes, paints and stretchers",
-     "caption_ru": "Материалы", "caption_en": "Materials", "is_illustration": True},
-]
+# У МираМе отдельной галереи мастерской нет: изображение страницы «О студии» задано в PAGES.
+STUDIO_IMAGES = []

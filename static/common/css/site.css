@@ -373,7 +373,7 @@ body.modal-open .cert-fab, body.form-focus .cert-fab { opacity: 0; pointer-event
 .footer-links a { display: inline-flex; align-items: center; gap: 8px; }
 .footer-links .icon { width: 18px; height: 18px; }
 .footer-links .muted { color: var(--footer-ink); opacity: .7; }
-.footer-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.footer-actions { grid-column: -2 / -1; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 .footer-actions .btn { width: 100%; max-width: 300px; white-space: nowrap; }
 .footer-actions .btn-light { color: var(--primary-dark); }
 .footer-actions .btn-gold { color: var(--accent-ink); }

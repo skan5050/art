@@ -115,6 +115,7 @@ class SiteSettingsAdmin(ModelAdmin):
         ("Поисковые панели и счетчики", {"fields": (
             "yandex_verification", "google_verification", "analytics_enabled", "yandex_metrika_id", "ga4_id",
         )}),
+        ("Быстрое уведомление Яндекса (IndexNow)", {"fields": ("indexnow_enabled", "indexnow_key")}),
     )
 
     def has_add_permission(self, request):

@@ -13,6 +13,7 @@
         {% for item in footer_menu %}<li><a href="{{ item.href }}">{{ item.label }}</a></li>{% endfor %}
       </ul>
     </div>
+    {% if site.phone or site.email or messengers or site.t.hours or site.t.address or site.t.geography %}
     <div class="footer-col">
       <p class="footer-title">{% t "footer.contacts" %}</p>
       <ul class="footer-links footer-contacts">
@@ -22,10 +23,9 @@
         {% if site.t.hours %}<li class="muted">{{ site.t.hours }}</li>{% endif %}
         {% if site.t.address %}<li class="muted">{{ site.t.address }}</li>{% endif %}
         {% if site.t.geography %}<li class="muted">{{ site.t.geography }}</li>{% endif %}
-        {% if site_pages.contacts %}<li><a href="{{ site_pages.contacts.url }}">{% t "footer.all_contacts" %} →</a></li>{% endif %}
-        {% if site_pages.cities %}<li><a href="{{ site_pages.cities.url }}">{{ site_pages.cities.nav_title }} →</a></li>{% endif %}
       </ul>
     </div>
+    {% endif %}
     <div class="footer-col footer-actions">
       {% if footer_cta and footer_cta.t.text %}<p class="footer-cta-text">{{ footer_cta.t.text|brandify }}</p>{% endif %}
       <a class="btn btn-light" href="{% page_url 'contacts' %}#order" data-order data-kind="general">{% t "btn.order" %}</a>

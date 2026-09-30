@@ -93,6 +93,32 @@ def robots_txt(request):
 
 
 @require_GET
+def favicon_ico(request):
+    """/favicon.ico для роботов и старых браузеров: загруженная владельцем иконка или иконка бренда темы."""
+    import mimetypes
+
+    from django.contrib.staticfiles import finders
+
+    uploaded = SiteSettings.get().favicon
+    if uploaded:
+        content_type = mimetypes.guess_type(uploaded.name)[0] or "image/png"
+        return FileResponse(uploaded.open("rb"), content_type=content_type)
+    path = finders.find("img/favicon.ico")
+    if not path:
+        raise Http404
+    return FileResponse(open(path, "rb"), content_type="image/x-icon")
+
+
+@require_GET
+def indexnow_key(request, key):
+    """Файл ключа IndexNow: «адрес сайта/ключ.txt» с самим ключом внутри."""
+    stored = SiteSettings.get().indexnow_key
+    if not stored or key != stored:
+        raise Http404
+    return HttpResponse(stored, content_type="text/plain; charset=utf-8")
+
+
+@require_GET
 def sitemap_xml(request):
     from .sitemap import sitemap_entries
 

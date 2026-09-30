@@ -9,8 +9,8 @@ from .articles_more import ARTICLES_MORE
 ARTICLES = [
     {
         "slug_ru": "картина-в-интерьере", "slug_en": "choosing-a-painting-for-an-interior",
-        "title_ru": "Выбор картины для интерьера: пространство, формат и композиция",
-        "title_en": "Choosing a painting for an interior: space, format and composition",
+        "title_ru": "Как выбрать картину для интерьера: пространство, формат и композиция",
+        "title_en": "How to choose a painting for an interior: space, format and composition",
         "excerpt_ru": "Последовательная оценка места размещения и характеристик работы помогает сопоставить несколько вариантов до покупки или заказа.",
         "excerpt_en": "A step-by-step assessment of the placement and the work’s characteristics helps compare several options before buying or ordering.",
         "body_ru": (
@@ -21,9 +21,9 @@ ARTICLES = [
             "## Сопоставьте цвет и характер изображения\n"
             "Для согласованного решения можно опираться на существующую палитру помещения. Для акцентного — рассмотреть новый цвет или контраст. Сравнивайте не только отдельный оттенок, но и плотность композиции, распределение светлых и темных участков, общее настроение. Точное совпадение с мебелью не является обязательным условием.\n\n"
             "## Сформируйте перечень подходящих работ\n"
-            "Выберите несколько изображений и кратко зафиксируйте, что подходит в каждом: сюжет, цветовая гамма, формат или характер исполнения. Отделите параметры, которые обязательны, от предпочтений. Такой список пригодится как для выбора готовой картины, так и для обсуждения индивидуальной работы.\n\n"
+            "Выберите несколько изображений [в каталоге](/каталог/) и кратко зафиксируйте, что подходит в каждом: сюжет, цветовая гамма, формат или характер исполнения. Отделите параметры, которые обязательны, от предпочтений. Такой список пригодится как для выбора готовой картины, так и для обсуждения [индивидуальной работы](/картины-на-заказ/).\n\n"
             "## Проверьте предмет заказа\n"
-            "Уточните статус произведения, фактические размеры, технику, основу и наличие рамы. Изображение может относиться к готовой работе, примеру для заказа или проданному оригиналу — эти сценарии различаются. Стоимость картины и стоимость доставки рассматриваются отдельно. Если сведений в карточке недостаточно, запросите их до принятия решения."
+            "Уточните статус произведения, фактические размеры, технику, основу и наличие рамы. Изображение может относиться к готовой работе, примеру для заказа или [проданному оригиналу](/проданные-картины/) — эти сценарии различаются. Стоимость картины и стоимость [доставки](/доставка/) рассматриваются отдельно. Если сведений в карточке недостаточно, запросите их до принятия решения."
         ),
         "body_en": (
             "## Define the task\n"
@@ -33,9 +33,9 @@ ARTICLES = [
             "## Compare colour and character\n"
             "For a coordinated result you can build on the room’s existing palette. For an accent, consider a new colour or contrast. Compare not just individual shades but the density of the composition, the distribution of light and dark areas and the overall mood. An exact match with the furniture is not required.\n\n"
             "## Draw up a shortlist\n"
-            "Choose several images and briefly note what works in each: subject, colour range, format or style. Separate mandatory parameters from preferences. Such a list is useful both for choosing a ready painting and for discussing a custom work.\n\n"
+            "Choose several images [in the catalogue](/en/catalog/) and briefly note what works in each: subject, colour range, format or style. Separate mandatory parameters from preferences. Such a list is useful both for choosing a ready painting and for discussing a [custom work](/en/custom-paintings/).\n\n"
             "## Check what you are ordering\n"
-            "Confirm the work’s status, actual dimensions, technique, support and whether it is framed. An image may show a ready work, an example for an order or a sold original — these are different cases. The price of the painting and the cost of delivery are considered separately. If the page lacks information, ask for it before deciding."
+            "Confirm the work’s status, actual dimensions, technique, support and whether it is framed. An image may show a ready work, an example for an order or a [sold original](/en/sold/) — these are different cases. The price of the painting and the cost of [delivery](/en/delivery/) are considered separately. If the page lacks information, ask for it before deciding."
         ),
         "button_ru": "Обсудить выбор картины", "button_en": "Discuss your choice",
         "seo_title_ru": "Как выбрать картину для интерьера", "seo_title_en": "How to choose a painting for an interior",
@@ -50,25 +50,25 @@ ARTICLES = [
         "excerpt_en": "The catalogue uses three statuses. They define what an inquiry is about and help keep buying an existing work separate from discussing a new one.",
         "body_ru": (
             "## Покупка работы из наличия\n"
-            "В этом случае обсуждается конкретная готовая картина, представленная в карточке. До оформления уточняются актуальность наличия, характеристики, оформление и условия получения. Выбор готовой работы позволяет оценить существующий результат, но не означает автоматического резервирования после просмотра или отправки формы.\n\n"
+            "В этом случае обсуждается конкретная [готовая картина](/каталог/), представленная в карточке. До оформления уточняются актуальность наличия, характеристики, оформление и условия получения. Выбор готовой работы позволяет оценить существующий результат, но не означает автоматического резервирования после просмотра или отправки формы.\n\n"
             "## Заказ новой работы\n"
-            "Индивидуальное исполнение рассматривается, когда нужны определенный сюжет, другой размер или согласованная цветовая гамма. На первом этапе передаются пожелания и изображения-ориентиры. Затем уточняются возможность выполнения, техника, основа, композиция, оформление, стоимость и сроки. Предварительный пример не заменяет согласование параметров новой картины.\n\n"
+            "[Индивидуальное исполнение](/картины-на-заказ/) рассматривается, когда нужны определенный сюжет, другой размер или согласованная цветовая гамма. На первом этапе передаются пожелания и изображения-ориентиры. Затем уточняются возможность выполнения, техника, основа, композиция, оформление, стоимость и сроки. Предварительный пример не заменяет согласование параметров новой картины.\n\n"
             "## Использование проданной картины как ориентира\n"
-            "Статус «Продана» означает, что представленный оригинал не предлагается как находящийся в наличии. Действие «Заказать похожую» относится к новой работе. Возможность близкого исполнения, допустимые изменения и цена рассматриваются отдельно. Ссылка на исходный пример сохраняется в обращении, чтобы предмет обсуждения был однозначным.\n\n"
+            "Статус «[Продана](/проданные-картины/)» означает, что представленный оригинал не предлагается как находящийся в наличии. Действие «Заказать похожую» относится к новой работе. Возможность близкого исполнения, допустимые изменения и цена рассматриваются отдельно. Ссылка на исходный пример сохраняется в обращении, чтобы предмет обсуждения был однозначным.\n\n"
             "## Общие вопросы перед оформлением\n"
-            "Для обоих сценариев следует уточнить состав заказа и характеристики работы, условия оформления и способ получения. Для индивидуального исполнения дополнительно фиксируются сюжет и срок изготовления. Доставка оплачивается отдельно; транспортная компания и маршрут согласуются с Заказчиком. Дату получения необходимо отличать от даты готовности картины.\n\n"
+            "Для обоих сценариев следует уточнить состав заказа и характеристики работы, условия оформления и способ получения. Для индивидуального исполнения дополнительно фиксируются сюжет и срок изготовления. [Доставка](/доставка/) оплачивается отдельно; транспортная компания и маршрут согласуются с Заказчиком. Дату получения необходимо отличать от даты готовности картины.\n\n"
             "## Роль заявки на сайте\n"
             "Форма используется для передачи запроса и контактных данных. Она не является оплатой, подтверждением изготовления или автоматическим резервом. После обращения стороны уточняют условия применительно к выбранной работе. Один удобный способ связи позволяет начать этот процесс без регистрации личного кабинета."
         ),
         "body_en": (
             "## Buying a work from stock\n"
-            "Here the subject is a specific ready painting shown on its page. Before purchase we confirm it is still available, its details, framing and how it will be received. Choosing a ready work lets you assess an existing result, but viewing it or sending the form does not reserve it automatically.\n\n"
+            "Here the subject is a specific [ready painting](/en/catalog/) shown on its page. Before purchase we confirm it is still available, its details, framing and how it will be received. Choosing a ready work lets you assess an existing result, but viewing it or sending the form does not reserve it automatically.\n\n"
             "## Ordering a new work\n"
-            "A custom commission is considered when you need a particular subject, a different size or an agreed colour range. First you send your requirements and reference images. Then we clarify feasibility, technique, support, composition, framing, price and timing. A preliminary example does not replace agreement on the new painting’s parameters.\n\n"
+            "A [custom commission](/en/custom-paintings/) is considered when you need a particular subject, a different size or an agreed colour range. First you send your requirements and reference images. Then we clarify feasibility, technique, support, composition, framing, price and timing. A preliminary example does not replace agreement on the new painting’s parameters.\n\n"
             "## Using a sold painting as a reference\n"
-            "The “Sold” status means the original shown is not offered as available. “Order a similar one” refers to a new work. Whether a close execution is possible, acceptable changes and the price are considered separately. The link to the original example is kept in the request so that the subject of discussion is unambiguous.\n\n"
+            "The “[Sold](/en/sold/)” status means the original shown is not offered as available. “Order a similar one” refers to a new work. Whether a close execution is possible, acceptable changes and the price are considered separately. The link to the original example is kept in the request so that the subject of discussion is unambiguous.\n\n"
             "## Questions to settle before ordering\n"
-            "In both cases, clarify what the order includes and the work’s details, framing and how you will receive it. For a commission, the subject and production time are also recorded. Delivery is paid separately; the carrier and route are agreed with the customer. The delivery date should be distinguished from the date the painting is finished.\n\n"
+            "In both cases, clarify what the order includes and the work’s details, framing and how you will receive it. For a commission, the subject and production time are also recorded. [Delivery](/en/delivery/) is paid separately; the carrier and route are agreed with the customer. The delivery date should be distinguished from the date the painting is finished.\n\n"
             "## What the site request does\n"
             "The form is used to send your request and contact details. It is not a payment, a production confirmation or an automatic reservation. After the inquiry, both sides clarify the terms for the selected work. One convenient contact method is enough to start, with no account registration."
         ),
@@ -79,33 +79,33 @@ ARTICLES = [
     },
     {
         "slug_ru": "что-подготовить-для-заказа", "slug_en": "preparing-a-painting-commission",
-        "title_ru": "Какие сведения подготовить для заказа картины",
-        "title_en": "What information to prepare when commissioning a painting",
+        "title_ru": "Какие сведения подготовить для заказа картины: сюжет, размер и срок",
+        "title_en": "What information to prepare when commissioning a painting: subject, size and timing",
         "excerpt_ru": "Для предварительного обсуждения достаточно основных ориентиров. Подробные параметры уточняются после оценки задачи.",
         "excerpt_en": "Basic pointers are enough for a preliminary discussion. Detailed parameters are clarified after the task has been assessed.",
         "body_ru": (
             "## Назначение и сюжет\n"
             "Укажите, для какого пространства или события предназначена работа. Опишите сюжет в одной-двух фразах: природный вид, городской мотив, абстрактная композиция, портрет или другой вариант. Если изображение связано с конкретным местом или человеком, обозначьте это сразу.\n\n"
             "## Изображения-ориентиры\n"
-            "Приложите подходящие примеры и поясните назначение каждого. Один может иллюстрировать палитру, другой — композицию, третий — характер исполнения. Фотография помещения помогает оценить окружение и предполагаемый размер. Сам факт передачи примера не означает согласие на точное воспроизведение или окончательное утверждение результата.\n\n"
+            "Приложите подходящие примеры — например, из раздела [«Проданные картины»](/проданные-картины/) — и поясните назначение каждого. Один может иллюстрировать палитру, другой — композицию, третий — характер исполнения. Фотография помещения помогает оценить окружение и предполагаемый размер. Сам факт передачи примера не означает согласие на точное воспроизведение или окончательное утверждение результата.\n\n"
             "## Обязательные параметры\n"
             "Отдельно перечислите ограничения: допустимый формат, конкретные объекты, нужные оттенки и элементы, которые не должны присутствовать. Укажите, какие решения допускают обсуждение. Это позволяет отличить требования к результату от предварительных предпочтений.\n\n"
             "## Размер, сроки и бюджетный ориентир\n"
-            "Если точный размер не выбран, укажите диапазон или размеры доступного места. Для заказа к событию важна дата получения, а не только окончания работы. Изготовление и перевозка согласуются раздельно. Бюджетный ориентир можно передать в комментарии; он не заменяет согласованную стоимость и не является обязательным условием первого запроса.\n\n"
+            "Если точный размер не выбран, укажите диапазон или размеры доступного места. Для [заказа](/картины-на-заказ/) к событию важна дата получения, а не только окончания работы. Изготовление и [перевозка](/доставка/) согласуются раздельно. Бюджетный ориентир можно передать в комментарии; он не заменяет согласованную стоимость и не является обязательным условием первого запроса.\n\n"
             "## Контакт и дальнейшее согласование\n"
-            "Оставьте имя и один доступный способ связи. При обращении из карточки выбранная работа уже включается в контекст заявки. После рассмотрения уточняются возможность исполнения, параметры, оформление, стоимость и сроки. До их согласования исходные пожелания остаются предварительными."
+            "Оставьте имя и один доступный способ связи. При обращении из [карточки работы](/каталог/) выбранная работа уже включается в контекст заявки. После рассмотрения уточняются возможность исполнения, параметры, оформление, стоимость и сроки. До их согласования исходные пожелания остаются предварительными."
         ),
         "body_en": (
             "## Purpose and subject\n"
             "State the space or occasion the work is for. Describe the subject in one or two sentences: a natural view, a city motif, an abstract composition, a portrait or something else. If the image relates to a particular place or person, say so from the start.\n\n"
             "## Reference images\n"
-            "Attach suitable examples and explain the purpose of each. One may illustrate the palette, another the composition, a third the style of execution. A photo of the room helps assess the surroundings and the likely size. Sending an example does not in itself mean agreement to an exact reproduction or final approval of the result.\n\n"
+            "Attach suitable examples — for instance, from the [“Sold paintings”](/en/sold/) section — and explain the purpose of each. One may illustrate the palette, another the composition, a third the style of execution. A photo of the room helps assess the surroundings and the likely size. Sending an example does not in itself mean agreement to an exact reproduction or final approval of the result.\n\n"
             "## Mandatory parameters\n"
             "List the constraints separately: acceptable format, specific objects, required colours and elements that must not appear. Indicate which decisions are open to discussion. This distinguishes requirements for the result from preliminary preferences.\n\n"
             "## Size, timing and budget guide\n"
-            "If the exact size is not chosen, give a range or the dimensions of the available space. For an order tied to an event, the date of receipt matters, not just the completion date. Production and shipping are agreed separately. A budget guide can be given in the comment; it does not replace the agreed price and is not required for a first request.\n\n"
+            "If the exact size is not chosen, give a range or the dimensions of the available space. For an [order](/en/custom-paintings/) tied to an event, the date of receipt matters, not just the completion date. Production and [shipping](/en/delivery/) are agreed separately. A budget guide can be given in the comment; it does not replace the agreed price and is not required for a first request.\n\n"
             "## Contact and further agreement\n"
-            "Leave your name and one available contact method. When you write from a work’s page, that work is already included in the request. After review we clarify feasibility, parameters, framing, price and timing. Until these are agreed, your initial wishes remain preliminary."
+            "Leave your name and one available contact method. When you write from a [work’s page](/en/catalog/), that work is already included in the request. After review we clarify feasibility, parameters, framing, price and timing. Until these are agreed, your initial wishes remain preliminary."
         ),
         "button_ru": "Направить пожелания к заказу", "button_en": "Send your order requirements",
         "seo_title_ru": "Что подготовить для заказа картины", "seo_title_en": "What to prepare for a painting commission",

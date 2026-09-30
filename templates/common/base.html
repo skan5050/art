@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 {% if site.yandex_verification %}<meta name="yandex-verification" content="{{ site.yandex_verification }}">{% endif %}
 {% if site.google_verification %}<meta name="google-site-verification" content="{{ site.google_verification }}">{% endif %}
-{% if site.favicon %}<link rel="icon" type="image/png" href="{{ site.favicon.url }}"><link rel="apple-touch-icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">{% endif %}
+{% if site.favicon %}<link rel="icon" type="image/png" href="{{ site.favicon.url }}"><link rel="apple-touch-icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml"><link rel="icon" href="{% static 'img/favicon-32.png' %}" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">{% endif %}
 <link rel="preload" href="{% static 'fonts/'|add:theme_font_preload %}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{% static 'css/site.css' %}">
 <link rel="stylesheet" href="{% static 'css/theme.css' %}">

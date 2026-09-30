@@ -17,8 +17,6 @@
     </div>
   </div>
   {% include "partials/steps.html" with block_key="about-steps" numbered=True %}
-  {% if page.image %}{% if studio_images %}{% include "partials/studio_gallery.html" %}{% endif %}
-  {% elif studio_images|length > 1 %}{% include "partials/studio_gallery.html" with studio_images=studio_images|slice:"1:" %}{% endif %}
 </div>
 {% include "partials/order_cta.html" with cta_kind="custom" cta_text=page.t.cta_text cta_label=page.t.cta_button|default:page.t.button %}
 {% endblock %}

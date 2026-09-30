@@ -10,8 +10,9 @@ from .articles_more import ARTICLES_MORE
 ARTICLES = [
     {
         "slug_ru": "картина-в-интерьере", "slug_en": "painting-for-your-room",
-        "title_ru": "Как подружить картину с комнатой — и не спрашивать разрешения у дивана",
-        "title_en": "How to make friends between a painting and a room — without asking the sofa’s permission",
+        "cover": "mirame_article_01_interer.jpg", "cover_alt_ru": "Картина с морским пейзажем на столе рядом с цветами, книгами и чашкой", "cover_alt_en": "A seascape painting on a table beside flowers, books and a cup",
+        "title_ru": "Как выбрать картину для интерьера — и не спрашивать разрешения у дивана",
+        "title_en": "How to choose a painting for your interior — without asking the sofa’s permission",
         "excerpt_ru": "Картине не обязательно быть точной родственницей штор. Начните с места, размера и собственного ощущения: хочется ли видеть эту работу рядом каждый день?",
         "excerpt_en": "A painting doesn’t have to be a close relative of your curtains. Start with the place, the size and your own feeling: would you like to see this work every day?",
         "body_ru": (
@@ -22,9 +23,9 @@ ARTICLES = [
             "## Цвет может соглашаться, а может спорить\n"
             "Один путь — поддержать оттенки, которые уже есть в комнате. Другой — добавить новый акцент. Попробуйте оба. Не отказывайтесь от понравившейся работы только потому, что в ней нет цвета подушки: у подушки уже есть важная работа — быть удобной. Оцените общее настроение, свет и сочетание крупных цветовых пятен.\n\n"
             "## Выбирайте сюжет, к которому хочется возвращаться\n"
-            "Сохраните несколько работ и посмотрите на них спустя время. Что по-прежнему нравится: тихий горизонт, яркая линия, знакомый город или выразительный портрет? Запишите пару слов. «Спокойно», «воздушно» или «напоминает наш отпуск» помогают объяснить выбор не хуже специальных терминов.\n\n"
+            "Сохраните несколько работ [из каталога](/каталог/) и посмотрите на них спустя время. Что по-прежнему нравится: [тихий горизонт](/каталог/море/), яркая линия, знакомый город или выразительный портрет? Запишите пару слов. «Спокойно», «воздушно» или «напоминает наш отпуск» помогают объяснить выбор не хуже специальных терминов.\n\n"
             "## Перед решением — немного практики\n"
-            "Проверьте статус, размер, технику и оформление в карточке. Уточните, показана готовая работа или пример для заказа. Если параметры не указаны, задайте вопрос. Отдельно обсудите раму и доставку: фотография не заменяет эти сведения. Можно начать с изображения комнаты и короткого сообщения — большой художественный совет созывать не нужно."
+            "Проверьте статус, размер, технику и оформление в карточке. Уточните, показана готовая работа или пример для заказа. Если параметры не указаны, задайте вопрос. Отдельно обсудите раму и [доставку](/доставка/): фотография не заменяет эти сведения. Если подходящей работы не нашлось, можно [заказать картину](/картины-на-заказ/). Начать можно с изображения комнаты и короткого сообщения — большой художественный совет созывать не нужно."
         ),
         "body_en": (
             "## First, find it a place\n"
@@ -34,9 +35,9 @@ ARTICLES = [
             "## Colour can agree or it can argue\n"
             "One way is to support the shades already in the room. Another is to add a new accent. Try both. Don’t give up on a work you love just because it lacks the colour of your cushion: the cushion already has an important job — being comfortable. Judge the overall mood, the light and how the large areas of colour work together.\n\n"
             "## Choose a subject you want to come back to\n"
-            "Save a few works and look at them again after a while. What do you still like: a quiet horizon, a bold line, a familiar city or an expressive portrait? Write down a couple of words. “Calm”, “airy” or “reminds us of our holiday” explain a choice as well as any technical term.\n\n"
+            "Save a few works [from the catalogue](/en/catalog/) and look at them again after a while. What do you still like: [a quiet horizon](/en/catalog/seascapes/), a bold line, a familiar city or an expressive portrait? Write down a couple of words. “Calm”, “airy” or “reminds us of our holiday” explain a choice as well as any technical term.\n\n"
             "## A little practicality before deciding\n"
-            "Check the status, size, technique and framing on the work’s page. Make sure whether it is a ready work or an example for an order. If details are missing, ask. Discuss the frame and delivery separately: a photo doesn’t replace that information. You can start with a picture of your room and a short message — no need to convene a grand art council."
+            "Check the status, size, technique and framing on the work’s page. Make sure whether it is a ready work or an example for an order. If details are missing, ask. Discuss the frame and [delivery](/en/delivery/) separately: a photo doesn’t replace that information. If you don’t find the right work, you can [order a painting](/en/custom-paintings/). You can start with a picture of your room and a short message — no need to convene a grand art council."
         ),
         "button_ru": "Подобрать картину для моей комнаты", "button_en": "Find a painting for my room",
         "seo_title_ru": "Как выбрать картину для комнаты", "seo_title_en": "How to choose a painting for a room",
@@ -45,31 +46,32 @@ ARTICLES = [
     },
     {
         "slug_ru": "готовая-или-на-заказ", "slug_en": "ready-made-or-commissioned",
-        "title_ru": "Забрать готовую картину или придумать свою?",
-        "title_en": "Take a ready painting home or dream up your own?",
+        "cover": "mirame_article_02_gotovaya_ili_zakaz.jpg", "cover_alt_ru": "Две картины в рамах у окна: готовая работа и рядом вторая", "cover_alt_en": "Two framed paintings by the window: a finished work and a second one beside it",
+        "title_ru": "Готовая картина или картина на заказ: что выбрать?",
+        "title_en": "A ready painting or a painting made to order: which to choose?",
         "excerpt_ru": "Иногда все понятно с первого взгляда. А иногда нравится почти все, кроме размера, оттенка и еще одной маленькой детали. Для этих случаев есть два разных пути.",
         "excerpt_en": "Sometimes it is clear at first sight. And sometimes you like almost everything except the size, the shade and one more little detail. There are two different paths for these cases.",
         "body_ru": (
             "## Готовая работа: нравится именно она\n"
-            "Картина из наличия подходит, когда вы выбираете конкретную представленную работу. Посмотрите размеры, технику, оформление и задайте вопросы, которые остались. Не нужно придумывать новый сюжет, если нужный уже нашелся. Но слово «в наличии» не означает «завтра у двери»: способ и срок получения согласуются отдельно.\n\n"
+            "Картина [из наличия](/каталог/) подходит, когда вы выбираете конкретную представленную работу. Посмотрите размеры, технику, оформление и задайте вопросы, которые остались. Не нужно придумывать новый сюжет, если нужный уже нашелся. Но слово «в наличии» не означает «завтра у двери»: способ и срок получения согласуются отдельно.\n\n"
             "## Под заказ: хочется сделать по-своему\n"
-            "Другой размер для узкой стены, спокойнее оттенки, важное место или личный сюжет — повод обсудить новую работу. Можно прийти с фотографией комнаты, снимком из поездки или примером из каталога. Хорошее начало — сказать, что именно нравится и что хотелось бы изменить. Готовое профессиональное задание не требуется.\n\n"
+            "Другой размер для узкой стены, спокойнее оттенки, важное место или личный сюжет — повод [обсудить новую работу](/картины-на-заказ/). Можно прийти с фотографией комнаты, снимком из поездки или примером из каталога. Хорошее начало — сказать, что именно нравится и что хотелось бы изменить. Готовое профессиональное задание не требуется.\n\n"
             "## А если на карточке написано SOLD?\n"
-            "Значит, эта конкретная картина уже продана. Ее нельзя заказать как свободный оригинал, зато можно обсудить новую работу по мотивам выбранного примера. Кнопка «Заказать похожую» сохранит его в заявке. Размер, цвет, возможность исполнения и стоимость новой картины уточняются заново: SOLD — вдохновение, а не кнопка копирования.\n\n"
+            "Значит, эта конкретная картина уже [продана](/проданные-картины/). Ее нельзя заказать как свободный оригинал, зато можно обсудить новую работу по мотивам выбранного примера. Кнопка «Заказать похожую» сохранит его в заявке. Размер, цвет, возможность исполнения и стоимость новой картины уточняются заново: SOLD — вдохновение, а не кнопка копирования.\n\n"
             "## Четыре вопроса, которые полезно задать\n"
-            "Подходит ли размер? Что входит в оформление? Какова стоимость картины? Как организовать доставку? Для индивидуального заказа добавятся сюжет и срок изготовления. Если работа нужна в подарок, назовите дату получения сразу. Это помогает обсуждать весь путь — от идеи до вашей двери.\n\n"
+            "Подходит ли размер? Что входит в оформление? Какова стоимость картины? Как организовать [доставку](/доставка/)? Для индивидуального заказа добавятся сюжет и срок изготовления. Если работа нужна в подарок, назовите дату получения сразу. Это помогает обсуждать весь путь — от идеи до вашей двери.\n\n"
             "## Первое сообщение ни к чему не привязывает\n"
             "Заявка нужна, чтобы начать разговор. Она не является оплатой и не бронирует картину автоматически. Можно сначала спросить о готовой работе, а потом решить, что вашему пространству нужен другой вариант. Главное — рассказать, что вы ищете. Остальные подробности обсудим без спешки."
         ),
         "body_en": (
             "## A ready work: you love this one\n"
-            "A painting from stock suits you when you are choosing a specific work shown on the site. Check the size, technique and framing and ask any remaining questions. There is no need to invent a new subject if the right one is already here. But “available” doesn’t mean “at your door tomorrow”: how and when you receive it are agreed separately.\n\n"
+            "A painting [from stock](/en/catalog/) suits you when you are choosing a specific work shown on the site. Check the size, technique and framing and ask any remaining questions. There is no need to invent a new subject if the right one is already here. But “available” doesn’t mean “at your door tomorrow”: how and when you receive it are agreed separately.\n\n"
             "## Made to order: you want it your way\n"
-            "A different size for a narrow wall, calmer shades, a place that matters to you or a personal subject — all good reasons to discuss a new work. You can come with a photo of your room, a snapshot from a trip or an example from the catalogue. A good start is to say what exactly you like and what you would change. No professional brief is needed.\n\n"
+            "A different size for a narrow wall, calmer shades, a place that matters to you or a personal subject — all good reasons to [discuss a new work](/en/custom-paintings/). You can come with a photo of your room, a snapshot from a trip or an example from the catalogue. A good start is to say what exactly you like and what you would change. No professional brief is needed.\n\n"
             "## What if the card says SOLD?\n"
-            "It means that particular painting has been sold. It can’t be ordered as an available original, but you can discuss a new work inspired by it. The “Order a similar one” button keeps it in your request. Size, colours, feasibility and price of the new painting are agreed afresh: SOLD is inspiration, not a copy button.\n\n"
+            "It means that particular painting has been [sold](/en/sold/). It can’t be ordered as an available original, but you can discuss a new work inspired by it. The “Order a similar one” button keeps it in your request. Size, colours, feasibility and price of the new painting are agreed afresh: SOLD is inspiration, not a copy button.\n\n"
             "## Four questions worth asking\n"
-            "Does the size fit? What does the framing include? What does the painting cost? How will delivery work? For a custom order, add the subject and how long it will take. If the work is a gift, mention the date you need it by straight away. That helps discuss the whole journey — from the idea to your door.\n\n"
+            "Does the size fit? What does the framing include? What does the painting cost? How will [delivery](/en/delivery/) work? For a custom order, add the subject and how long it will take. If the work is a gift, mention the date you need it by straight away. That helps discuss the whole journey — from the idea to your door.\n\n"
             "## A first message commits you to nothing\n"
             "A request is there to start a conversation. It isn’t a payment and doesn’t automatically reserve a painting. You can ask about a ready work first and then decide your space needs something else. The main thing is to tell us what you are looking for. We will go through the rest without hurry."
         ),
@@ -80,33 +82,34 @@ ARTICLES = [
     },
     {
         "slug_ru": "как-заказать-картину", "slug_en": "how-to-order-a-painting",
-        "title_ru": "Хочу картину, но пока не знаю какую. С чего начать?",
-        "title_en": "I want a painting but don’t know which one yet. Where do I start?",
+        "cover": "mirame_article_03_kak_zakazat.jpg", "cover_alt_ru": "Мастерская: мольберт с картиной, кисти и палитра на рабочем столе", "cover_alt_en": "A studio: an easel with a painting, brushes and a palette on the work table",
+        "title_ru": "Как заказать картину, если пока не знаете, какую хотите",
+        "title_en": "How to order a painting if you don’t yet know which one you want",
         "excerpt_ru": "Не нужно приходить с дипломом искусствоведа и папкой на сорок страниц. Несколько понятных ориентиров помогут превратить «что-нибудь красивое» в предметный разговор.",
         "excerpt_en": "You don’t need an art history degree and a forty-page folder. A few simple pointers will turn “something beautiful” into a real conversation.",
         "body_ru": (
             "## Опишите чувство или сюжет\n"
-            "Начните с одной фразы: «Спокойное море для спальни», «Яркая абстракция в гостиную», «Наш любимый город» или «Портрет в подарок». Добавьте, для кого и для какого места нужна работа. Пока этого достаточно: важнее найти направление, чем сразу решить судьбу каждого мазка.\n\n"
+            "Начните с одной фразы: [«Спокойное море для спальни»](/каталог/море/), «Яркая абстракция в гостиную», «Наш любимый город» или «Портрет в подарок». Добавьте, для кого и для какого места нужна работа. Пока этого достаточно: важнее найти направление, чем сразу решить судьбу каждого мазка.\n\n"
             "## Покажите пример — и расскажите, что в нем нравится\n"
-            "У одной картины может нравиться цвет, у другой — композиция, у третьей — настроение. Напишите это рядом с изображениями. Комментарий «Хочу этот свет, но без лодки» понятнее, чем несколько картинок без пояснений. Пример служит ориентиром, а не автоматически согласованным требованием точного повторения.\n\n"
+            "У одной картины из [каталога](/каталог/) может нравиться цвет, у другой — композиция, у третьей — настроение. Напишите это рядом с изображениями. Комментарий «Хочу этот свет, но без лодки» понятнее, чем несколько картинок без пояснений. Пример служит ориентиром, а не автоматически согласованным требованием точного повторения.\n\n"
             "## Разделите «обязательно» и «можно обсудить»\n"
             "Если работа должна поместиться в определенное место, назовите допустимые размеры. Если нужен конкретный объект или важно избежать какого-то цвета, тоже скажите сразу. А там, где вы открыты предложениям, так и напишите. Это оставляет пространство для идеи, не теряя ваших пожеланий.\n\n"
             "## Сообщите размер, дату и удобный ориентир по бюджету\n"
-            "Размер пока может быть приблизительным. Если картина нужна к событию, укажите день получения: создание и доставка требуют отдельного согласования. Бюджетный ориентир можно написать в комментарии, но это не обязательное поле для первого обращения. Стоимость и параметры подтвердим после обсуждения задачи.\n\n"
+            "Размер пока может быть приблизительным. Если картина нужна к событию, укажите день получения: создание и [доставка](/доставка/) требуют отдельного согласования. Бюджетный ориентир можно написать в комментарии, но это не обязательное поле для первого обращения. Стоимость и параметры подтвердим после обсуждения задачи.\n\n"
             "## Оставьте один контакт — этого достаточно\n"
-            "Имя и удобный способ связи помогут продолжить разговор. Необязательно заполнять все дополнительные поля формы. Если начали со страницы картины, выбранный пример уже попадет в заявку. Дальше обсудим возможность выполнения и детали. Хорошая идея имеет право начинаться с простого «А можно?..»"
+            "Имя и удобный способ связи помогут продолжить разговор. Подробнее об индивидуальных работах — на странице [«Картины на заказ»](/картины-на-заказ/). Необязательно заполнять все дополнительные поля формы. Если начали со страницы картины, выбранный пример уже попадет в заявку. Дальше обсудим возможность выполнения и детали. Хорошая идея имеет право начинаться с простого «А можно?..»"
         ),
         "body_en": (
             "## Describe a feeling or a subject\n"
-            "Start with one phrase: “A calm sea for the bedroom”, “A bright abstract for the living room”, “Our favourite city” or “A portrait as a gift”. Add who the work is for and where it will go. That is enough for now: finding a direction matters more than deciding the fate of every brushstroke.\n\n"
+            "Start with one phrase: [“A calm sea for the bedroom”](/en/catalog/seascapes/), “A bright abstract for the living room”, “Our favourite city” or “A portrait as a gift”. Add who the work is for and where it will go. That is enough for now: finding a direction matters more than deciding the fate of every brushstroke.\n\n"
             "## Show an example — and say what you like about it\n"
-            "You might like the colour of one painting, the composition of another and the mood of a third. Write that next to the images. A note like “I want this light, but without the boat” is clearer than a few pictures with no explanation. An example is a reference, not an automatically agreed demand for an exact copy.\n\n"
+            "You might like the colour of one painting from the [catalogue](/en/catalog/), the composition of another and the mood of a third. Write that next to the images. A note like “I want this light, but without the boat” is clearer than a few pictures with no explanation. An example is a reference, not an automatically agreed demand for an exact copy.\n\n"
             "## Separate “must have” from “open to discussion”\n"
             "If the work has to fit a particular spot, give the acceptable sizes. If you need a specific object or want to avoid a colour, say so right away. And where you are open to suggestions, say that too. It leaves room for the idea without losing your wishes.\n\n"
             "## Mention the size, the date and a rough budget\n"
-            "The size can be approximate for now. If the painting is for an occasion, give the date you need it by: creating it and delivering it need to be agreed separately. You can put a budget guide in the comment, but it isn’t required for a first request. We will confirm the price and details after discussing the task.\n\n"
+            "The size can be approximate for now. If the painting is for an occasion, give the date you need it by: creating it and [delivering](/en/delivery/) it need to be agreed separately. You can put a budget guide in the comment, but it isn’t required for a first request. We will confirm the price and details after discussing the task.\n\n"
             "## Leave one contact — that’s enough\n"
-            "A name and a convenient way to reach you are all we need to continue. You don’t have to fill in every optional field. If you started from a painting’s page, that example will already be in the request. Then we will discuss whether it can be done and the details. A good idea is allowed to start with a simple “Could you…?”"
+            "A name and a convenient way to reach you are all we need to continue. You can read more about individual works on the [“Paintings to order”](/en/custom-paintings/) page. You don’t have to fill in every optional field. If you started from a painting’s page, that example will already be in the request. Then we will discuss whether it can be done and the details. A good idea is allowed to start with a simple “Could you…?”"
         ),
         "button_ru": "Обсудить мою идею", "button_en": "Discuss my idea",
         "seo_title_ru": "Как начать заказ своей картины", "seo_title_en": "How to start ordering your own painting",

@@ -369,3 +369,189 @@ class SiteTests(TestCase):
     def test_api_rejects_other_site_or_garbage_token(self):
         self.assertEqual(self.api("get", "/api/v1/import/categories", "imp_deadbeef_xxx").status_code, 401)
         self.assertEqual(self.client.get("/api/v1/import/categories", secure=True).status_code, 401)
+
+
+@override_settings(MEDIA_ROOT=TMP + "/media-map", PRIVATE_MEDIA_ROOT=TMP + "/private-map", ALLOWED_HOSTS=["testserver"])
+class ContentMapTests(TestCase):
+    """ТЗ 1.3, приложение Е: карта наполнения, заголовки статей, временное меню, IndexNow, фавикон."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_site", site="a", verbosity=0, stdout=io.StringIO())
+
+    def page(self, kind):
+        return Page.objects.get(kind=kind)
+
+    def test_images_follow_content_map_without_baked_text(self):
+        from content.models import StudioImage
+
+        home = self.page("home")
+        self.assertTrue(home.banner_image.name.endswith("mirame_home_hero_desktop.jpg"))
+        self.assertTrue(home.banner_image_mobile.name.endswith("mirame_home_hero_mobile.jpg"))
+        self.assertTrue(self.page("about").image.name.endswith("mirame_about_studio.jpg"))
+        self.assertTrue(self.page("custom").image.name.endswith("mirame_custom_order.jpg"))
+        self.assertTrue(self.page("delivery").image.name.endswith("mirame_delivery.jpg"))
+        self.assertTrue(SiteSettings.get().certificate_image.name.endswith("mirame_gift_certificate.jpg"))
+        self.assertFalse(StudioImage.objects.exists())  # у МираМе отдельной галереи мастерской нет
+        covers = {"картина-в-интерьере": "mirame_article_01_interer", "готовая-или-на-заказ": "mirame_article_02_gotovaya_ili_zakaz",
+                  "как-заказать-картину": "mirame_article_03_kak_zakazat"}
+        for slug, name in covers.items():
+            article = Article.objects.get(slug_ru=slug)
+            self.assertIn(name, article.cover.name)
+            self.assertTrue(article.cover_alt_ru and article.cover_alt_en)
+            width, height = Image.open(article.cover.path).size
+            self.assertAlmostEqual(width / height, 16 / 9, delta=0.02)
+        self.assertEqual(Category.objects.filter(cover="").count(), 0)
+        # главный hero грузится приоритетно и без alt-набивки; у обложек рубрик подпись — текст HTML
+        html = self.client.get("/").content.decode()
+        self.assertIn('fetchpriority="high"', html)
+        self.assertIn("mirame_category_", html)
+        self.assertTrue(all(page.t.image_alt for page in (self.page("about"), self.page("custom"), self.page("delivery"))))
+
+    def test_delivery_image_sits_inside_article_block(self):
+        html = self.client.get(q(self.page("delivery").url("ru"))).content.decode()
+        self.assertIn('class="text-page delivery-article has-aside"', html)
+        self.assertIn('class="text-aside"', html)
+        self.assertIn("mirame_delivery", html)
+
+    def test_about_has_single_figure_and_footer_has_no_extra_links(self):
+        about = self.client.get(q("/о-нас/")).content.decode()
+        self.assertNotIn("studio-grid", about)
+        self.assertEqual(about.count('class="about-media"'), 1)
+        home = self.client.get("/").content.decode()
+        self.assertNotIn("Все контакты", home)
+        # пустая колонка контактов не выводится
+        self.assertNotIn("footer-contacts", home)
+
+    def test_article_headings_and_internal_links(self):
+        import re
+
+        import seed.a.articles as a
+        import seed.d.articles as d
+
+        expected = {
+            "картина-в-интерьере": "Как выбрать картину для интерьера — и не спрашивать разрешения у дивана",
+            "готовая-или-на-заказ": "Готовая картина или картина на заказ: что выбрать?",
+            "как-заказать-картину": "Как заказать картину, если пока не знаете, какую хотите",
+        }
+        for slug, title in expected.items():
+            article = Article.objects.get(slug_ru=slug)
+            self.assertEqual(article.title_ru, title)
+            html = self.client.get(q(article.url("ru"))).content.decode()
+            self.assertEqual(html.count("<h1"), 1)
+            self.assertIn(f">{title}</h1>", html)
+        d_titles = {art["slug_ru"]: art["title_ru"] for art in d.ARTICLES[:3]}
+        self.assertEqual(d_titles["картина-в-интерьере"], "Как выбрать картину для интерьера: пространство, формат и композиция")
+        self.assertEqual(d_titles["что-подготовить-для-заказа"], "Какие сведения подготовить для заказа картины: сюжет, размер и срок")
+        # 2–4 внутренние ссылки по смыслу в каждой из трех статей обоих сайтов, RU и EN
+        for module in (a, d):
+            for art in module.ARTICLES[:3]:
+                for lang in ("ru", "en"):
+                    links = re.findall(r"\]\((/[^)]*)\)", art[f"body_{lang}"])
+                    self.assertTrue(2 <= len(links) <= 4, (art["slug_ru"], lang, links))
+                    if lang == "en":
+                        self.assertTrue(all(link.startswith("/en/") for link in links), links)
+
+    def test_article_jsonld_and_open_graph(self):
+        article = Article.objects.get(slug_ru="картина-в-интерьере")
+        html = self.client.get(q(article.url("ru"))).content.decode()
+        self.assertIn('"@type": "Article"', html)
+        self.assertIn('"author": {"@type": "Organization"', html)
+        for key in ('"headline"', '"image"', '"datePublished"', '"dateModified"'):
+            self.assertIn(key, html)
+        self.assertIn('property="og:image" content="http', html)
+        self.assertIn("mirame_article_01_interer", html)
+        self.assertIn('"@type": "BreadcrumbList"', html)
+        self.assertIn('"@type": "Organization"', self.client.get("/").content.decode())
+
+    def test_temporary_guides_menu_item_can_be_hidden(self):
+        from content.models import MenuItem
+
+        item = MenuItem.objects.get(page__kind="guides")
+        self.assertTrue(item.visible)
+        self.assertEqual(item.label_ru, "Полезные статьи")
+        self.assertFalse(item.in_footer)  # в футере ссылка «Полезное» уже есть
+        html = self.client.get("/").content.decode()
+        self.assertEqual(html.count("Полезные статьи"), 1)
+        guides = self.page("guides")
+        r = self.client.get(q(guides.url("ru")))
+        self.assertContains(r, "Как выбрать картину для интерьера")
+        item.visible = False
+        item.save()
+        self.assertNotIn("Полезные статьи", self.client.get("/").content.decode())
+        self.assertEqual(self.client.get(q(guides.url("ru"))).status_code, 200)  # страницы и адреса не меняются
+
+    def test_public_map_has_no_service_labels(self):
+        import re
+
+        html = self.client.get(q(self.page("delivery").url("ru"))).content.decode()
+        visible = re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", html, flags=re.S).lower()
+        self.assertIsNone(re.search(r"\b(debug|demo|test)\b|демо|тестов|координат", visible))
+        self.assertIn("leaflet", html.lower())  # атрибуция провайдера карты сохраняется
+
+    def test_brand_favicon_is_served(self):
+        r = self.client.get("/favicon.ico")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r["Content-Type"], "image/x-icon")
+        html = self.client.get("/").content.decode()
+        self.assertIn("favicon.svg", html)
+        self.assertIn("apple-touch-icon", html)
+
+    def test_indexnow_is_off_by_default_and_sends_on_publish_and_delete(self):
+        from unittest import mock
+
+        from core import indexnow
+
+        sent = []
+
+        class Inline:
+            def __init__(self, target, args=(), daemon=None):
+                self.target, self.args = target, args
+
+            def start(self):
+                self.target(*self.args)
+
+        settings = SiteSettings.get()
+        self.assertFalse(settings.indexnow_enabled)
+        with mock.patch.object(indexnow, "send", side_effect=sent.append), mock.patch.object(indexnow.threading, "Thread", Inline):
+            with self.captureOnCommitCallbacks(execute=True):
+                Article.objects.create(slug_ru="проверка-indexnow-0", slug_en="indexnow-check-0", title_ru="Проверка", title_en="Check", published=True)
+            self.assertEqual(sent, [])  # выключено — ничего не уходит
+            settings.base_url = "https://mirame.example"
+            settings.indexnow_enabled = True
+            settings.clean()
+            settings.save()
+            key = SiteSettings.get().indexnow_key
+            self.assertRegex(key, r"^[0-9a-f]{32}$")
+            r = self.client.get(f"/{key}.txt")
+            self.assertEqual((r.status_code, r.content.decode()), (200, key))
+            self.assertEqual(self.client.get("/" + "a" * 32 + ".txt").status_code, 404)
+            indexnow._recent.clear()
+            with self.captureOnCommitCallbacks(execute=True):
+                art = Article.objects.create(slug_ru="проверка-indexnow", slug_en="indexnow-check", title_ru="Проверка", title_en="Check", published=True)
+            self.assertEqual(len(sent), 1)
+            data = sent[0]
+            self.assertEqual((data["host"], data["key"], data["keyLocation"]), ("mirame.example", key, f"https://mirame.example/{key}.txt"))
+            self.assertIn("https://mirame.example" + art.url("ru"), data["urlList"])
+            self.assertIn("https://mirame.example" + art.url("en"), data["urlList"])
+            # черновик не отправляется
+            indexnow._recent.clear()
+            with self.captureOnCommitCallbacks(execute=True):
+                Article.objects.create(slug_ru="черновик-indexnow", slug_en="indexnow-draft", title_ru="Черновик", title_en="Draft", published=False)
+            self.assertEqual(len(sent), 1)
+            # удаление тоже сообщается
+            indexnow._recent.clear()
+            path = art.url("ru")
+            with self.captureOnCommitCallbacks(execute=True):
+                art.delete()
+            self.assertEqual(len(sent), 2)
+            self.assertIn("https://mirame.example" + path, sent[1]["urlList"])
+
+    def test_indexnow_requires_site_address(self):
+        from django.core.exceptions import ValidationError
+
+        settings = SiteSettings.get()
+        settings.indexnow_enabled = True
+        settings.base_url = ""
+        with self.assertRaises(ValidationError):
+            settings.clean()

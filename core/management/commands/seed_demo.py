@@ -38,7 +38,7 @@ class Command(BaseCommand):
         if opts["remove"]:
             self.stdout.write("Демо-работы удалены.")
             return
-        media = Path(settings.BASE_DIR) / "seed" / settings.SITE_THEME / "media"
+        media = Path(settings.BASE_DIR) / "seed" / settings.SITE_THEME / "demo"
         tech = Technique.objects.first()
         for i, (cat_slug, ru, en, status, image, size) in enumerate(DEMO, 1):
             category = Category.objects.filter(slug_ru=cat_slug).first()

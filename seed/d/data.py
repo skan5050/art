@@ -200,7 +200,7 @@ PAGES = [
         "seo_description_en": "A catalogue of ready paintings and custom orders. Images, details, work statuses, portfolio and inquiries about a selected work.",
     },
     {
-        "kind": "about", "image": "banner.jpg", "image_alt_ru": "Иллюстрация: большая абстрактная картина в светлом помещении", "image_alt_en": "Illustration: a large abstract painting in a bright room", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "о-нас", "slug_en": "about",
+        "kind": "about", "image": "holstori_studio_03_space.jpg", "image_alt_ru": "Мастерская с мольбертом, кистями и рабочим столом в мягком свете", "image_alt_en": "A studio with an easel, brushes and a work table in soft light", "cta_text_ru": "Картина по вашей идее", "cta_text_en": "A painting based on your idea", "cta_button_ru": "Связаться с нами", "cta_button_en": "Contact us", "slug_ru": "о-нас", "slug_en": "about",
         "title_ru": "Выбор и заказ картин", "title_en": "Choosing and ordering paintings",
         "nav_title_ru": "О нас", "nav_title_en": "About",
         "body_ru": (
@@ -378,7 +378,13 @@ PAGES = [
     },
 ]
 
-MENU = ["about", "catalog", "sold", "reviews", "delivery", "contacts"]
+# Пункт «Полезные статьи» включён на период согласования (ТЗ 1.3, Е2): владелец скрывает его в админке
+# снятием галочки «Показывать», статьи и их адреса при этом не меняются. В футере ссылка уже есть.
+MENU = [
+    "about", "catalog", "sold", "reviews", "delivery",
+    {"page": "guides", "label_ru": "Полезные статьи", "label_en": "Useful articles", "visible": True, "in_footer": False},
+    "contacts",
+]
 
 HOME_SECTIONS = [
     {
@@ -405,7 +411,19 @@ HOME_SECTIONS = [
 ]
 
 
-COVERS = {"абстракция": "cover-abstract.jpg", "море": "cover-sea.jpg", "цветы-и-ботаника": "cover-flowers.jpg", "пейзажи": "cover-landscape.jpg"}
+def _covers(prefix):
+    """Обложки рубрик из комплекта заказчика: подписи выводятся HTML-текстом, в файлах текста нет."""
+    files = {
+        "женщины": "01_women", "пары": "02_couples", "дети": "03_children", "пейзажи": "04_landscape",
+        "абстракция": "05_abstract", "цветы-и-ботаника": "06_flowers", "животные": "07_animals",
+        "птицы": "08_birds", "рыбы": "09_fish", "морские-животные": "10_marine_animals", "море": "11_sea",
+        "город-и-архитектура": "12_city", "натюрморт": "13_still_life", "интерьер-и-бытовые-сцены": "14_interior",
+        "прочее": "15_other", "портрет-и-фигура": "01_women", "животные-и-птицы": "07_animals",
+    }
+    return {slug: f"{prefix}_category_{name}.jpg" for slug, name in files.items()}
+
+
+COVERS = _covers("holstori")
 
 
 CAPTIONS = {
@@ -531,14 +549,16 @@ CATEGORIES = [
 
 
 STUDIO_IMAGES = [
-    {"image": "banner.jpg", "alt_ru": "Большая абстрактная картина в светлом помещении", "alt_en": "A large abstract painting in a bright room",
-     "caption_ru": "", "caption_en": "", "is_illustration": True},
-    {"image": "studio-window.jpg", "alt_ru": "Мастерская у окна: мольберт с картиной", "alt_en": "Studio by the window: an easel with a painting",
-     "caption_ru": "Мастерская у окна", "caption_en": "The studio by the window", "is_illustration": True},
-    {"image": "studio-table.jpg", "alt_ru": "Рабочий стол художника: палитра, кисти и эскизы", "alt_en": "The artist’s desk: palette, brushes and sketches",
-     "caption_ru": "Рабочий стол", "caption_en": "The work desk", "is_illustration": True},
-    {"image": "studio-wall.jpg", "alt_ru": "Стена с работами под светом софитов", "alt_en": "A wall of works under spotlights",
-     "caption_ru": "Работы на стене", "caption_en": "Works on the wall", "is_illustration": True},
-    {"image": "studio-shelf.jpg", "alt_ru": "Стеллаж с материалами: кисти, краски и подрамники", "alt_en": "Shelves with materials: brushes, paints and stretchers",
+    {"image": "holstori_studio_01_brushes.jpg", "alt_ru": "Кисти в керамической банке и палитра с красками", "alt_en": "Brushes in a ceramic jar and a palette with paints",
+     "caption_ru": "Творческий подход", "caption_en": "A creative approach", "is_illustration": True},
+    {"image": "holstori_studio_02_handmade.jpg", "alt_ru": "Рука художника с кистью у холста", "alt_en": "An artist’s hand with a brush at the canvas",
+     "caption_ru": "Ручная работа", "caption_en": "Handmade", "is_illustration": True},
+    {"image": "holstori_studio_03_space.jpg", "alt_ru": "Мастерская с мольбертом, кистями и рабочим столом", "alt_en": "A studio with an easel, brushes and a work table",
+     "caption_ru": "Пространство", "caption_en": "The space", "is_illustration": True},
+    {"image": "holstori_studio_04_signature.jpg", "alt_ru": "Рабочий стол с блокнотом и картиной в раме на стене", "alt_en": "A desk with a notebook and a framed painting on the wall",
+     "caption_ru": "Уникальность", "caption_en": "Uniqueness", "is_illustration": True},
+    {"image": "holstori_studio_05_materials.jpg", "alt_ru": "Кисти, палитра и краски рядом с картиной в раме", "alt_en": "Brushes, a palette and paints beside a framed painting",
      "caption_ru": "Материалы", "caption_en": "Materials", "is_illustration": True},
+    {"image": "holstori_studio_06_frame_detail.jpg", "alt_ru": "Картины в рамах над столом со стулом и сухоцветами", "alt_en": "Framed paintings above a table with a chair and dried flowers",
+     "caption_ru": "Оформление и детали", "caption_en": "Framing and details", "is_illustration": True},
 ]

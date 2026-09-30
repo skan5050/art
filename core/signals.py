@@ -11,11 +11,18 @@ def _drop_redirects(sender, instance, **kwargs):
         Redirect.objects.filter(new_path__in=paths).delete()
 
 
+def _indexnow_deleted(sender, instance, **kwargs):
+    from . import indexnow
+
+    indexnow.notify([p for p in (getattr(instance, "path_ru", ""), getattr(instance, "path_en", "")) if p])
+
+
 def connect_routables():
     from .routing import routable_models
 
     for model in routable_models():
         post_delete.connect(_drop_redirects, sender=model, dispatch_uid=f"drop-redirects-{model.__name__}")
+        post_delete.connect(_indexnow_deleted, sender=model, dispatch_uid=f"indexnow-delete-{model.__name__}")
 
 
 @receiver(pre_save, sender=SiteSettings)

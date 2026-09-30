@@ -65,6 +65,8 @@ class Command(BaseCommand):
             return
         path = self.media_dir / filename
         if path.exists():
+            if current:
+                current.delete(save=False)  # прежний файл убираем, чтобы у нового не появлялся случайный суффикс в имени
             with path.open("rb") as fh:
                 getattr(obj, field).save(filename, File(fh), save=False)
 
@@ -85,7 +87,7 @@ class Command(BaseCommand):
     # --- разделы ---
     def settings(self, values):
         values = dict(values)
-        files = {k: values.pop(k) for k in ("logo", "logo_on_dark", "favicon") if k in values}
+        files = {k: values.pop(k) for k in ("logo", "logo_on_dark", "favicon", "certificate_image") if k in values}
         obj = SiteSettings.get()
         fresh = not obj.logo and obj.brand_name_en == ""
         if fresh or self.update:
@@ -150,10 +152,15 @@ class Command(BaseCommand):
             return
         MenuItem.objects.all().delete()
         for i, spec in enumerate(items):
-            kind, visible = spec if isinstance(spec, tuple) else (spec, True)
+            if isinstance(spec, dict):
+                spec = dict(spec)
+                kind = spec.pop("page")
+            else:
+                kind, visible = spec if isinstance(spec, tuple) else (spec, True)
+                spec = {"visible": visible}
             page = pages.get(kind)
             if page:
-                MenuItem.objects.create(page=page, order=i * 10, visible=visible)
+                MenuItem.objects.create(page=page, order=i * 10, **spec)
 
     def home_sections(self, sections):
         for i, item in enumerate(sections):

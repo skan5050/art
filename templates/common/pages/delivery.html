@@ -10,7 +10,7 @@
 {% include "partials/sales_map.html" with map_id="dm" map_json_id="dm-cities" map_caption=page.t.note map_empty=page.t.empty cta_button=page.t.button %}
 <div class="container">
   {% if theme == "d" %}{% include "partials/steps.html" with block_key="delivery-steps" numbered=True %}{% endif %}
-  <article class="text-page delivery-article">
+  <article class="text-page delivery-article{% if page.image %} has-aside{% endif %}">
     <div class="text-main">
       <div class="prose">{{ page.t.body|rich }}</div>
       {% if delivery_short %}<aside class="note-box note-conditions">{% if delivery_short.t.title %}<p class="note-title">{{ delivery_short.t.title }}</p>{% endif %}{{ delivery_short.t.text|rich }}</aside>{% endif %}
@@ -26,6 +26,7 @@
       </aside>
       {% endif %}
     </div>
+    {% if page.image %}<figure class="text-aside">{% picture page.image widths="480,960" sizes="(min-width: 960px) 40vw, 100vw" alt=page.t.image_alt %}</figure>{% endif %}
   </article>
 </div>
 {% include "partials/order_cta.html" with cta_kind="delivery" cta_text=page.t.cta_text cta_label=page.t.cta_button|default:page.t.button %}

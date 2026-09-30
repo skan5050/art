@@ -9,4 +9,3 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
-seed/*/media/studio-*.svg

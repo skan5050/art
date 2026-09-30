@@ -247,6 +247,7 @@ a:hover { color: var(--terracotta); }
 /* О нас */
 .about-layout { margin-top: 0; }
 .about-media img { border-radius: 0; aspect-ratio: 16 / 10; }
+@media (min-width: 900px) { .about-media { order: 2; } }  /* макет D: текст слева, изображение справа */
 .media-placeholder { background-color: var(--surface); }
 .step { border-top: 1px solid var(--text); padding-top: 14px; }
 .step-num { font-weight: 800; color: var(--text); font-size: 20px; }
@@ -356,3 +357,9 @@ a:hover { color: var(--terracotta); }
 .city-card-more { color: var(--text); }
 .city-box { border-radius: 0; }
 .city-box:first-child { background: var(--accent); }
+
+/* Очень узкие телефоны (320 px): длинные слова заголовков не выходят за экран */
+@media (max-width: 420px) {
+  .d-order-title { font-size: clamp(26px, 8.6vw, 34px); }
+  .page-head .page-title { font-size: clamp(28px, 9vw, 36px); }
+}
