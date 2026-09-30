@@ -24,6 +24,17 @@
 <link rel="stylesheet" href="{% static 'css/site.css' %}">
 <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 {% block head_extra %}{% endblock %}
+<script>
+/* Каждая страница открывается сверху, а не с прежней позиции просмотра (если в адресе нет якоря). */
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+(function () {
+  var top = function () { if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" }); };
+  top();
+  document.addEventListener("DOMContentLoaded", top);
+  window.addEventListener("load", top);
+  window.addEventListener("pageshow", function (e) { if (e.persisted) top(); });
+})();
+</script>
 {% for block in meta.jsonld %}<script type="application/ld+json">{{ block }}</script>
 {% endfor %}
 </head>
