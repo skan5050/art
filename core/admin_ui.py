@@ -214,5 +214,9 @@ def admin_styles(request):
     return static("admin-ui/admin.css")
 
 
+def admin_skin(request):
+    return static("admin-skin.css")
+
+
 def admin_scripts(request):
     return static("admin-ui/admin.js")

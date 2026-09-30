@@ -1,0 +1,14 @@
+/* Оболочка админки D по макету: чёрная верхняя полоса, лимонный акцент, тёплый белый фон, прямые углы. */
+body { background: #f5f3ea; font-family: "Liberation Sans", Arial, sans-serif; }
+#main { background: #f5f3ea !important; }
+#main > div:first-child { background: #171a17 !important; color: #f5f3ea; border-bottom: 0; }
+#main > div:first-child * { color: #f5f3ea; }
+#main > div:first-child button, #main > div:first-child a { color: #f5f3ea !important; }
+#nav-sidebar, #nav-sidebar-inner { background: #f5f3ea !important; border-color: #d6d2c3 !important; }
+#nav-sidebar a { color: #171a17; }
+#nav-sidebar a[aria-current="page"], #nav-sidebar li > a.font-semibold { background: #e7f36a !important; color: #171a17; border-radius: 0; }
+.dash-btn, .dash-stat.is-accent { background: #e7f36a; border-color: #e7f36a; color: #171a17 !important; border-radius: 0; }
+.dash-stat.is-accent .dash-stat-label { color: #171a17; }
+.dash-stat, .dash-card, .dash-action-row a { border-radius: 0; background: #fff; }
+.dash-title { font-family: "Liberation Sans", Arial, sans-serif; font-weight: 800; }
+#main > div:first-child [class*="bg-"] , #main > div:first-child [class*="bg-"] * { color: #171a17 !important; }

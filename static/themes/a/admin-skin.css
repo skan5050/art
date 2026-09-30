@@ -1,0 +1,11 @@
+/* Оболочка админки A по макету: тёмно-синяя верхняя полоса, светло-голубое левое меню. */
+body { background: #f3f8fc; font-family: "Montserrat", system-ui, sans-serif; }
+#main > div:first-child { background: #073662 !important; color: #fff; border-bottom: 0; }
+#main > div:first-child * { color: #fff; }
+#main > div:first-child button, #main > div:first-child a { color: #fff !important; }
+#nav-sidebar, #nav-sidebar-inner { background: #dcebf6 !important; border-color: #c4dcee !important; }
+#nav-sidebar a { color: #073662; }
+#nav-sidebar a[aria-current="page"], #nav-sidebar .bg-primary-50, #nav-sidebar li > a.font-semibold { background: #fff !important; color: #073662; border-radius: 8px; }
+.dash-stat.is-accent, .dash-btn { background: #1c497e; border-color: #1c497e; }
+.dash-stat, .dash-card { border-radius: 8px; background: #fff; }
+#main > div:first-child [class*="bg-"] , #main > div:first-child [class*="bg-"] * { color: #073662 !important; }

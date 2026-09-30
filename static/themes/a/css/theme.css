@@ -100,3 +100,6 @@
 .cert-visual-note { border-top-color: rgba(227, 191, 88, .7); }
 .order-cta-inner { background: #e8f2f9; }
 .order-cta .btn { min-width: 216px; }
+
+/* Макет A: белая форма заказа на тёмно-синем фоне */
+.modal::backdrop { background: rgba(22, 48, 79, .96); }
