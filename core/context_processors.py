@@ -28,7 +28,7 @@ def site(request):
     from content.models import CertificateNominal
 
     return {
-        "theme_font_preload": "montserrat-cyrillic-400-normal.woff2" if dj_settings.SITE_THEME == "a" else "manrope-cyrillic-400-normal.woff2",
+        "theme_font_preload": "montserrat-cyrillic-400-normal.woff2" if dj_settings.SITE_THEME == "a" else "liberation-sans-400.woff2",
         "contact_methods": ["phone", "telegram", "whatsapp", "max", "email"],
         "common_sizes": common_sizes(),
         "certificate_nominals": list(CertificateNominal.objects.filter(visible=True)),
