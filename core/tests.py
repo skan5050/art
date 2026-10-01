@@ -109,7 +109,11 @@ class SiteTests(TestCase):
     def test_sitemap_follows_publication_and_excludes_empty(self):
         xml = self.client.get("/sitemap.xml").content.decode()
         self.assertNotIn(q("/каталог/море/"), xml)  # пустая рубрика
-        self.assertNotIn(q("/отзывы/"), xml)  # пустой раздел отзывов
+        self.assertIn(q("/отзывы/"), xml)  # есть стартовые отзывы
+        from content.models import Review
+
+        Review.objects.all().delete()
+        self.assertNotIn(q("/отзывы/"), self.client.get("/sitemap.xml").content.decode())  # пустой раздел отзывов не попадает в карту
         p = self.painting()
         xml = self.client.get("/sitemap.xml").content.decode()
         self.assertIn(q(p.path_ru), xml)
@@ -577,6 +581,21 @@ class ApprovedPackageTests(TestCase):
                 self.assertNotIn(digest, seen)  # ни одна обложка не повторяется
                 seen.add(digest)
         self.assertEqual(len(seen), 6)
+
+
+class StarterReviewsTests(TestCase):
+    def test_starter_reviews_are_seeded_per_site(self):
+        from content.models import Review
+
+        call_command("seed_site", verbosity=0)
+        reviews = list(Review.objects.order_by("order"))
+        self.assertEqual(len(reviews), 10)
+        self.assertTrue(all(r.published and r.photo and r.text_en and r.city_ru for r in reviews))
+        call_command("seed_site", verbosity=0)  # повторный запуск не плодит дубли
+        self.assertEqual(Review.objects.count(), 10)
+        html = self.client.get(q("/отзывы/")).content.decode()
+        self.assertIn(reviews[0].text_ru[:30], html)
+        self.assertIn("review-photo" if "review-photo" in html else "review-featured", html)
 
 
 class AdminLayoutTests(TestCase):

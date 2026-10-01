@@ -15,7 +15,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from catalog.models import Category, Technique
-from content.models import Article, CityLanding, HomeSection, MenuItem, Page, StudioImage
+from content.models import Article, CityLanding, HomeSection, MenuItem, Page, Review, StudioImage
 from geo.models import City
 from core.labels import DEFAULT_LABELS
 from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize
@@ -54,6 +54,7 @@ class Command(BaseCommand):
             self.articles(articles.ARTICLES)
             self.studio(getattr(data, "STUDIO_IMAGES", []))
             self.city_pages(site)
+            self.reviews(site)
         self.stdout.write(self.style.SUCCESS(f"Наполнение сайта «{data.SETTINGS['brand_name_ru']}» загружено."))
 
     # --- помощники ---
@@ -199,6 +200,20 @@ class Command(BaseCommand):
             self.attach(obj, "image", filename)
             if obj.image:
                 obj.save()
+
+    def reviews(self, site):
+        """Стартовые отзывы из комплекта заказчика; отзывы, добавленные в админке, не затрагиваются."""
+        try:
+            data = importlib.import_module(f"seed.{site}.reviews")
+        except ImportError:
+            return
+        for i, item in enumerate(data.REVIEWS):
+            item = dict(item)
+            photo = item.pop("photo", "")
+            item.pop("painting_note", None)
+            lookup = {"author_ru": item.pop("author_ru"), "city_ru": item.pop("city_ru")}
+            item.update({"published": True, "order": i * 10, "featured": item.get("featured", False)})
+            self.upsert(Review, lookup, item, {"photo": photo})
 
     def city_pages(self, site):
         """Городские страницы: у каждой свой текст; адрес и координаты владелец вносит сам."""
