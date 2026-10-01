@@ -1,3 +1,4 @@
+from django.conf import settings as dj_settings
 from django.contrib import admin, messages
 from django.db import transaction
 from django.db.models import Q
@@ -50,7 +51,11 @@ class CityAdmin(ModelAdmin):
         q = (request.GET.get("q") or "").strip()
         if len(q) < 2:
             return JsonResponse({"results": []})
-        found = City.objects.filter(Q(name_ru__icontains=q) | Q(name_en__icontains=q)).order_by("-population")[:12]
+        # SQLite сравнивает кириллицу с учетом регистра — ищем по нескольким написаниям.
+        query = Q()
+        for variant in {q, q.lower(), q.capitalize(), q.title(), q.upper()}:
+            query |= Q(name_ru__icontains=variant) | Q(name_en__icontains=variant)
+        found = City.objects.filter(query).order_by("-population")[:12]
         return JsonResponse({"results": [self._row(c) for c in found]})
 
     def map_view(self, request):
@@ -72,7 +77,7 @@ class CityAdmin(ModelAdmin):
         rows = [self._row(c) for c in City.objects.filter(sale_confirmed=True).order_by("name_ru")]
         return render(request, "admin/geo/city/sales_map.html", {
             **self.admin_site.each_context(request),
-            "title": "Города продаж", "opts": self.model._meta, "rows": rows,
+            "title": "Города продаж", "opts": self.model._meta, "rows": rows, "theme_d": dj_settings.SITE_THEME == "d",
             "geo_url": static("geo/countries.json"), "table_url": reverse("admin:geo_city_changelist"),
             "search_url": reverse("admin:geo_city_map_search"), "add_url": reverse("admin:geo_city_add"),
         })

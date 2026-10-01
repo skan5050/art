@@ -45,7 +45,7 @@
 @media (max-width: 760px) {
   .pl-menu-cols { display: none; }
   .pl-menu-row { grid-template-columns: 24px 1fr auto; }
-  .pl-menu-url, .pl-menu-row .pl-check:nth-of-type(1) { display: none; }
+  .pl-menu-url { display: none; }
 }
 
 /* Рубрики: дерево + свойства */
@@ -103,8 +103,55 @@
 .pl-menu-grid > *, .pl-split > *, .pl-painting-grid > *, .pl-cities-grid > * { min-width: 0; }
 @media (max-width: 760px) {
   .pl-menu-label { flex-direction: column; } .pl-menu-label input { width: 100%; }
-  .pl-menu-row { grid-template-columns: 22px minmax(0, 1fr) auto 28px; }
+  .pl-menu-row { grid-template-columns: 22px minmax(0, 1fr) auto 28px; } .pl-menu-url { display: none; }
   .pl-menu-row .pl-menu-en { display: none; }
   .pl-split-main, .pl-split-main form { overflow-x: auto; }
   .pl-head-actions { flex-wrap: wrap; }
 }
+
+/* Меню: флажки A, инфоблок, подпись; в A предпросмотра нет */
+.pl-menu-flags { display: flex; gap: 28px; margin: 0 0 14px; }
+.pl-menu-cols, .pl-menu-row { grid-template-columns: 28px minmax(160px, 1.4fr) minmax(90px, 1fr) 130px 40px; }
+.pl-infobox { margin: 18px 0 0; padding: 18px 20px; background: var(--pl-head-bg, #e7f1f9); border-radius: var(--pl-radius, 8px); font-size: 13px; }
+.pl-foot { margin: 14px 0 0; font-size: 13px; color: var(--pl-muted, #64748b); }
+.pl-note-big { font-size: 16px; line-height: 1.4; }
+.pl-theme-a .pl-preview { display: none !important; }
+.pl-menu-label input { width: 100%; }
+
+/* Картина: заголовок, плитки фото (D), нижние кнопки (A) */
+.pl-painting-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.pl-painting-head .pl-head-actions { display: var(--pl-top-actions, none); }
+.pl-bottom-actions { display: var(--pl-bottom-actions, flex); gap: 12px; flex-wrap: wrap; }
+.pl-photo-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pl-tile { min-height: 64px; background: #fff; border: 1px solid var(--pl-line, #d6d2c3); font: inherit; font-size: 14px; cursor: pointer; text-align: left; padding: 0 14px; }
+.pl-common { display: grid; gap: 6px; margin: 4px 0; }
+.pl-common .pl-check { font-weight: 800; font-size: 15px; }
+.pl-photos .pl-cap { margin-top: 4px; }
+
+/* Рубрики: заголовок, обложка рядом с названием (D) */
+.pl-cats { padding-top: 0; }
+.pl-add-top { display: var(--pl-add-top, none); }
+.pl-tree > .pl-btn-ghost { display: var(--pl-add-bottom, inline-flex); }
+.pl-split-main > .pl-h2 { display: var(--pl-cat-h2, none); }
+.pl-cat-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) { .pl-cat-grid { grid-template-columns: var(--pl-cat-cols, minmax(0, 1fr)); } .pl-cat-1 { grid-column: var(--pl-cover-col, auto); grid-row: var(--pl-cover-row, auto); } .pl-cat-2 { grid-column: 1 / -1; } }
+.pl-cat-grid > fieldset { margin: 0; }
+.pl-cat-actions { margin-top: 16px; }
+.pl-cat-1 .pl-btn { margin-top: 10px; }
+
+/* Города: состав экрана по теме (A: список + карта; D: карта + выбранная точка) */
+.pl-cities-list { display: var(--pl-city-list-display, block); }
+.pl-cities-point { display: var(--pl-city-point-display, none); }
+.pl-cities-point[hidden], .pl-cities-list[hidden] { display: none; }
+.pl-map-actions { display: var(--pl-map-actions-display, block); margin-top: 16px; }
+.pl-add-city { margin-top: 14px; width: 100%; }
+.pl-field-en { display: var(--pl-field-en-display, none); }
+.pl-point-found { position: relative; margin-top: -10px; margin-bottom: 10px; }
+.pl-cities-point > .pl-btn { margin-top: 18px; }
+.pl-cat-1 .field-cover_preview, .pl-cat-1 > .leading-relaxed { display: none; }
+.pl-painting-head, .pl-cats .pl-head { padding-top: var(--pl-head-pad, 0px); }
+@media (max-width: 760px) {
+  .pl-menu-row { grid-template-columns: 22px minmax(0, 1fr) auto 28px; }
+  .pl-menu-flags { flex-wrap: wrap; gap: 12px 24px; }
+}
+.pl-theme-a .pl-menu-grid { grid-template-columns: minmax(0, 1fr) !important; }

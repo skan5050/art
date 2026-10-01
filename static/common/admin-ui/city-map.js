@@ -65,16 +65,26 @@
     paint(c);
     pointEl.hidden = false;
     pointEl.querySelector("[data-point-name]").value = c.name + (c.country ? ", " + c.country : "");
+    pointEl.querySelector("[data-point-name]").setAttribute("data-city-id", c.id);
     pointEl.querySelector("[data-point-caption-ru]").value = c.caption_ru || "";
     pointEl.querySelector("[data-point-caption-en]").value = c.caption_en || "";
-    pointEl.querySelector("[data-point-visible]").checked = !!c.visible;
+    pointEl.querySelector("[data-point-visible]").checked = !!(c.on && c.visible);
     if (markers[id]) { markers[id].bringToFront(); markers[id].unbindTooltip(); markers[id].bindTooltip(c.name, { permanent: true, direction: "right", offset: [8, 0], className: "pl-label" }).openTooltip(); }
   }
   function bindPoint() {
     var bind = function (sel, fn) { pointEl.querySelector(sel).addEventListener("input", fn); pointEl.querySelector(sel).addEventListener("change", fn); };
     bind("[data-point-caption-ru]", function (e) { var c = byId[selected]; if (c) { c.caption_ru = e.target.value; c.inputs.cru.value = c.caption_ru; } });
     bind("[data-point-caption-en]", function (e) { var c = byId[selected]; if (c) { c.caption_en = e.target.value; c.inputs.cen.value = c.caption_en; } });
-    bind("[data-point-visible]", function (e) { var c = byId[selected]; if (c) { c.visible = e.target.checked; c.inputs.vis.value = c.visible ? "1" : ""; paint(c); count(); } });
+    bind("[data-point-visible]", function (e) {
+      var c = byId[selected];
+      if (!c) return;
+      c.on = e.target.checked;
+      c.visible = true;
+      c.inputs.on.value = c.on ? "1" : "";
+      c.inputs.vis.value = "1";
+      c.cb.checked = c.on;
+      paint(c); count();
+    });
   }
   function addRow(c, isNew) {
     if (byId[c.id]) return byId[c.id];
@@ -96,8 +106,8 @@
     box.appendChild(hid("row", c.id));
     Object.keys(inputs).forEach(function (k) { box.appendChild(inputs[k]); });
     hiddenEl.appendChild(box);
-    c.li = li; c.inputs = inputs;
-    cb.addEventListener("change", function () { c.on = cb.checked; inputs.on.value = c.on ? "1" : ""; paint(c); count(); });
+    c.li = li; c.inputs = inputs; c.cb = cb;
+    cb.addEventListener("change", function () { c.on = cb.checked; if (c.on) { c.visible = true; inputs.vis.value = "1"; } inputs.on.value = c.on ? "1" : ""; paint(c); count(); if (selected === c.id) pointEl.querySelector("[data-point-visible]").checked = c.on; });
     pick.addEventListener("click", function () { select(c.id); if (markers[c.id]) map.setView(markers[c.id].getLatLng(), Math.max(map.getZoom(), 4)); });
     if (isNew) { c.on = true; cb.checked = true; inputs.on.value = "1"; cities.push(c); }
     addMarker(c);
@@ -120,11 +130,13 @@
   if (!pts.length) map.setView([58, 80], 2.5);
 
   /* Поиск города в справочнике: найденный город добавляется в список отмеченных */
-  var q = form.querySelector("[data-city-q]");
+  var modeD = form.getAttribute("data-mode") === "d";
+  var q = modeD ? pointEl.querySelector("[data-point-name]") : form.querySelector("[data-city-q]");
+  if (modeD) { pointEl.hidden = false; pointEl.querySelector(".pl-point-found").appendChild(foundEl); q.addEventListener("focus", function () { q.select(); }); }
   var timer = null;
   q.addEventListener("input", function () {
     var text = q.value.trim().toLowerCase();
-    listEl.querySelectorAll(".pl-city-row").forEach(function (li) { li.hidden = !!text && li.getAttribute("data-name").indexOf(text) === -1; });
+    if (!modeD) listEl.querySelectorAll(".pl-city-row").forEach(function (li) { li.hidden = !!text && li.getAttribute("data-name").indexOf(text) === -1; });
     clearTimeout(timer);
     if (text.length < 2) { foundEl.hidden = true; return; }
     timer = setTimeout(function () {
@@ -133,7 +145,7 @@
         data.results.filter(function (c) { return !byId[c.id]; }).forEach(function (c) {
           var li = el("li");
           var b = el("button", { type: "button" }, "+ " + c.name + (c.region ? ", " + c.region : "") + " — " + c.country);
-          b.addEventListener("click", function () { var row = addRow(c, true); foundEl.hidden = true; q.value = ""; q.dispatchEvent(new Event("input")); select(row.id); if (markers[row.id]) map.setView(markers[row.id].getLatLng(), Math.max(map.getZoom(), 4)); count(); });
+          b.addEventListener("click", function () { var row = addRow(c, true); foundEl.hidden = true; if (!modeD) { q.value = ""; q.dispatchEvent(new Event("input")); } select(row.id); if (markers[row.id]) map.setView(markers[row.id].getLatLng(), Math.max(map.getZoom(), 4)); count(); });
           li.appendChild(b); foundEl.appendChild(li);
         });
         foundEl.hidden = !foundEl.children.length;

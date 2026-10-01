@@ -607,6 +607,22 @@ class AdminLayoutTests(TestCase):
         self.assertFalse(first.visible)  # флажок снят — пункт скрыт
         self.assertFalse(MenuItem.objects.filter(pk=third.pk).exists())
 
+    def test_menu_flags_and_footer_flag_are_preserved(self):
+        from content.models import MenuItem
+
+        call_command("seed_site", verbosity=0)
+        item = MenuItem.objects.filter(in_footer=True).first()
+        before = (item.in_footer, item.label_en)
+        data = {"menu_editor": "1", "row": [item.pk], f"visible_{item.pk}": "on", f"footer_present_{item.pk}": "1", f"footer_{item.pk}": "on",
+                "flags": "1", "menu_in_header": "on"}  # «Повторять в подвале» снят
+        self.client.post("/admin/content/menuitem/", data)
+        item.refresh_from_db()
+        self.assertEqual((item.in_footer, item.label_en), before)  # скрытые поля строки не потеряны
+        settings_obj = SiteSettings.get()
+        self.assertTrue(settings_obj.menu_in_header)
+        self.assertFalse(settings_obj.menu_in_footer)
+        self.assertFalse(any(m for m in self.client.get("/").context["footer_menu"]))
+
     def test_category_tree_layout_and_table_fallback(self):
         call_command("seed_site", verbosity=0)
         cat = Category.objects.filter(parent=None).order_by("order").first()
@@ -625,7 +641,7 @@ class AdminLayoutTests(TestCase):
         city = City.objects.create(name_ru="Тестоград", name_en="Testgrad", country_code="RU", country_ru="Россия", country_en="Russia",
                                    latitude=Decimal("55.75"), longitude=Decimal("37.61"), sale_confirmed=False, visible=True)
         self.assertNotIn(f'"id": {city.pk},', self.client.get("/admin/geo/city/map/").content.decode())
-        found = self.client.get("/admin/geo/city/map/search/?q=Тестог").json()["results"]
+        found = self.client.get("/admin/geo/city/map/search/?q=тестог").json()["results"]
         self.assertEqual(found[0]["id"], city.pk)
         self.assertIsInstance(found[0]["lat"], float)
         data = {"row": [city.pk], f"on_{city.pk}": "1", f"visible_{city.pk}": "1", f"caption_ru_{city.pk}": "Картины в Тестограде"}

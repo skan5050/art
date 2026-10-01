@@ -13,4 +13,4 @@ body { background: #f3f8fc; font-family: "Montserrat", system-ui, sans-serif; }
 /* Раскладки рабочих экранов (макет A, стр. 16–19) */
 :root { --pl-main: #1c497e; --pl-main-ink: #fff; --pl-accent: #fff; --pl-accent-ink: #1c497e; --pl-title: #073662; --pl-muted: #5f7a93; --pl-line: #c4dcee;
   --pl-head-bg: #e7f1f9; --pl-current: #e7f1f9; --pl-radius: 8px; --pl-marker: #1c497e; --pl-marker-hot: #e3bf58; --pl-land: #dcebf6; --pl-stroke: #9fbfdc;
-  --pl-map-bg: #fff; --pl-menu-aside: 0px; --pl-cities-cols: minmax(280px, 360px) minmax(0, 1fr); }
+  --pl-map-bg: #fff;  --pl-cities-cols: minmax(280px, 360px) minmax(0, 1fr); }

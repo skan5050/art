@@ -91,9 +91,14 @@ class MenuItemAdmin(ModelAdmin):
             return self.save_menu(request)
         items = list(MenuItem.objects.select_related("page").order_by("order", "id"))
         rows = [{"item": it, "link": it.page.path_ru if it.page else it.url, "label": str(it)} for it in items]
+        from django.conf import settings as dj_settings
+
+        from core.models import SiteSettings
+
         return render(request, "admin/content/menuitem/menu_editor.html", {
             **self.admin_site.each_context(request),
-            "title": "Меню сайта", "rows": rows, "opts": self.model._meta,
+            "title": "Меню сайта", "rows": rows, "opts": self.model._meta, "site_settings": SiteSettings.get(),
+            "theme_d": dj_settings.SITE_THEME == "d",
             "add_url": reverse("admin:content_menuitem_add"), "table_url": "?table=1",
         })
 
@@ -102,6 +107,13 @@ class MenuItemAdmin(ModelAdmin):
             return HttpResponseRedirect(request.path)
         ids = [int(x) for x in request.POST.getlist("row") if x.isdigit()]
         with transaction.atomic():
+            from core.models import SiteSettings
+
+            flags = SiteSettings.get()
+            if "flags" in request.POST:
+                flags.menu_in_header = bool(request.POST.get("menu_in_header"))
+                flags.menu_in_footer = bool(request.POST.get("menu_in_footer"))
+                flags.save()
             for position, pk in enumerate(ids):
                 item = MenuItem.objects.filter(pk=pk).first()
                 if item is None:
@@ -113,7 +125,8 @@ class MenuItemAdmin(ModelAdmin):
                 item.label_ru = request.POST.get(f"label_ru_{pk}", item.label_ru).strip()[:60]
                 item.label_en = request.POST.get(f"label_en_{pk}", item.label_en).strip()[:60]
                 item.visible = bool(request.POST.get(f"visible_{pk}"))
-                item.in_footer = bool(request.POST.get(f"footer_{pk}"))
+                if f"footer_{pk}" in request.POST or f"footer_present_{pk}" in request.POST:
+                    item.in_footer = bool(request.POST.get(f"footer_{pk}"))
                 item.save()
         messages.success(request, "Меню сохранено.")
         return HttpResponseRedirect(request.path)

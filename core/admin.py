@@ -100,6 +100,7 @@ class SiteSettingsAdmin(ModelAdmin):
             "phone", "email", ("address_ru", "address_en"), ("address_lat", "address_lng"), ("hours_ru", "hours_en"), ("geography_ru", "geography_en"),
         ), "description": "Мессенджеры настраиваются в разделе «Мессенджеры и каналы связи»."}),
         ("Футер", {"fields": (("copyright_ru", "copyright_en"),)}),
+        ("Меню", {"fields": ("menu_in_header", "menu_in_footer"), "description": "Порядок и состав пунктов — в разделе «Меню»."}),
         ("Каталог", {"fields": ("show_sold_in_catalog", ("painting_prefix_ru", "painting_prefix_en"), "per_page", "currency")}),
         ("Подарочный сертификат", {"fields": (
             "certificate_image", "certificate_custom_amount", "certificate_electronic", "certificate_print",

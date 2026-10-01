@@ -3,35 +3,39 @@
 {% block breadcrumbs %}{% endblock %}
 {% block extrahead %}{{ block.super }}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
 {% block content %}
-<div class="pl-page pl-cities">
+<div class="pl-page pl-cities {% if theme_d %}pl-theme-d{% else %}pl-theme-a{% endif %}">
   <header class="pl-head">
-    <div><h1 class="pl-title">Города продаж</h1>
-      <p class="pl-lede">Выберите города, которые нужно отметить на странице «Доставка». Координаты подставляются по выбранному городу; данные покупателей сюда не попадают.</p></div>
-    <div class="pl-head-actions"><a class="pl-link" href="{{ table_url }}">Весь справочник городов</a><a class="pl-btn pl-btn-accent" href="{{ add_url }}">Добавить город</a></div>
+    <div><h1 class="pl-title">{% if theme_d %}География картин{% else %}Города продаж{% endif %}</h1>
+      {% if not theme_d %}<p class="pl-lede">Выберите города, которые нужно отметить на странице «Доставка».</p>{% endif %}</div>
+    <div class="pl-head-actions"><a class="pl-link" href="{{ table_url }}">Весь справочник городов</a>{% if theme_d %}<a class="pl-btn pl-btn-accent" href="{{ add_url }}">Добавить город <span aria-hidden="true">→</span></a>{% endif %}</div>
   </header>
-  <form method="post" data-city-editor data-search-url="{{ search_url }}" data-geo="{{ geo_url }}">{% csrf_token %}
+  <form method="post" data-city-editor data-search-url="{{ search_url }}" data-geo="{{ geo_url }}" data-mode="{% if theme_d %}d{% else %}a{% endif %}">{% csrf_token %}
     <div class="pl-cities-grid">
       <section class="pl-cities-list">
         <label class="pl-cap" for="city-q">Найти город</label>
         <input id="city-q" type="search" class="pl-input" placeholder="Введите название города" autocomplete="off" data-city-q>
         <ul class="pl-found" data-city-found hidden></ul>
         <ul class="pl-city-rows" data-city-rows></ul>
-        <p class="pl-note">Отметьте города, где продажи подтверждены. Неотмеченные города на карте не показываются.</p>
+        <a class="pl-btn pl-btn-ghost pl-add-city" href="{{ add_url }}">+ Добавить город</a>
       </section>
       <section class="pl-cities-map">
         <div class="pl-map-card"><p class="pl-cap">Предпросмотр карты</p><div class="pl-map" data-city-map></div>
           <p class="pl-note" data-city-count></p></div>
+        <div class="pl-map-actions"><button type="submit" class="pl-btn pl-btn-main">Сохранить отметки</button>
+          <p class="pl-note">Координаты определяются по выбранному городу. Точка открывает название города.</p></div>
       </section>
       <section class="pl-cities-point" data-city-point hidden>
         <h2 class="pl-h2">Выбранная точка</h2>
-        <label class="pl-field"><span>Город</span><input type="text" class="pl-input" data-point-name readonly></label>
-        <label class="pl-field"><span>Подпись (RU)</span><input type="text" class="pl-input" data-point-caption-ru></label>
-        <label class="pl-field"><span>Подпись (EN)</span><input type="text" class="pl-input" data-point-caption-en></label>
+        <label class="pl-field"><span>Город</span><input type="text" class="pl-input" data-point-name autocomplete="off"></label>
+        <div class="pl-point-found"></div>
+        <label class="pl-field"><span>Подпись</span><input type="text" class="pl-input" data-point-caption-ru></label>
+        <label class="pl-field pl-field-en"><span>Подпись (EN)</span><input type="text" class="pl-input" data-point-caption-en></label>
         <label class="pl-check"><input type="checkbox" data-point-visible><span>Показывать на карте</span></label>
-        <p class="pl-note">Координаты подставляются по выбранному городу.</p>
+        <p class="pl-note pl-note-big">Координаты подставляются по выбранному городу.</p>
+        <button type="submit" class="pl-btn pl-btn-main">Сохранить точку <span aria-hidden="true">→</span></button>
       </section>
     </div>
-    <div class="pl-actions"><span></span><button type="submit" class="pl-btn pl-btn-main">Сохранить отметки</button></div>
+    <p class="pl-foot">{% if theme_d %}Карта использует редактируемый список городов. Точки показывают внешний вид интерфейса и не подтверждают фактическую географию продаж.{% else %}Выбор города, подпись и видимость отметки. География продаж не содержит данных покупателей.{% endif %}</p>
     <div data-city-hidden></div>
   </form>
   {{ rows|json_script:"city-rows-data" }}

@@ -95,6 +95,28 @@ SIDEBAR = {
 }
 
 
+def _a_sidebar(sidebar):
+    """Левое меню A по макету: «Разделы» (Обзор … Города продаж), затем Отзывы, Сертификаты, Настройки; остальное — в «Ещё»."""
+    entries = {e["title"]: e for g in sidebar["navigation"] for e in g["items"]}
+    main = [("Сегодня в мастерской", "Обзор"), ("Картины", None), ("Рубрики", None), ("Меню", None), ("Города на карте", "Города продаж")]
+    second = [("Отзывы", None), ("Сертификаты: номиналы", "Сертификаты"), ("Настройки сайта", "Настройки")]
+    used = {t for t, _ in main + second}
+
+    def pick(pairs):
+        return [{**entries[t], "title": new or t} for t, new in pairs if t in entries]
+
+    rest = [e for g in sidebar["navigation"] for e in g["items"] if e["title"] not in used]
+    return {**sidebar, "navigation": [
+        {"title": "Разделы", "separator": False, "items": pick(main)},
+        {"title": " ", "separator": True, "items": pick(second)},
+        {"title": "Ещё", "separator": True, "collapsible": True, "items": rest},
+    ]}
+
+
+if settings.SITE_THEME == "a":
+    SIDEBAR = _a_sidebar(SIDEBAR)
+
+
 def _safe_reverse(name, *args):
     try:
         return reverse(name, args=args)

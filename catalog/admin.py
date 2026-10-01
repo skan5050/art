@@ -56,10 +56,12 @@ class CategoryAdmin(ModelAdmin):
     search_fields = ("name_ru", "name_en", "slug_ru")
     readonly_fields = ("cover_preview", "path_ru", "path_en")
     fieldsets = (
-        (None, {"fields": ("parent", ("name_ru", "name_en"), ("slug_ru", "slug_en"), ("path_ru", "path_en"), ("intro_ru", "intro_en"),
-                           ("caption_ru", "caption_en"), ("cta_text_ru", "cta_text_en"), ("cta_button_ru", "cta_button_en"), "order", "visible")}),
-        ("Обложка", {"fields": ("cover", "cover_preview", ("cover_alt_ru", "cover_alt_en"), ("focus_x", "focus_y")),
-                     "description": "Обложка заполняет плитку с обрезкой; точка фокуса задает, какая часть изображения остается видимой."}),
+        (None, {"fields": (("name_ru", "name_en"), "parent")}),
+        ("Обложка рубрики", {"fields": ("cover", "cover_preview", ("cover_alt_ru", "cover_alt_en"), ("focus_x", "focus_y")),
+                             "description": "Обложка заполняет плитку с обрезкой; точка фокуса задает, какая часть изображения остается видимой."}),
+        ("Краткое описание", {"fields": (("intro_ru", "intro_en"), "visible")}),
+        ("Адреса, подписи и порядок", {"fields": (("slug_ru", "slug_en"), ("path_ru", "path_en"), ("caption_ru", "caption_en"),
+                                                  ("cta_text_ru", "cta_text_en"), ("cta_button_ru", "cta_button_en"), "order"), "classes": ("collapse",)}),
         SEO_FIELDSET,
     )
 

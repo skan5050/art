@@ -16,6 +16,10 @@ def site(request):
     footer_menu = [
         r for r in (item.resolved(lang) for item in MenuItem.objects.filter(visible=True, in_footer=True).select_related("page")) if r
     ]
+    if not settings.menu_in_header:
+        menu = []
+    if not settings.menu_in_footer:
+        footer_menu = []
     pages = {p.kind: p for p in Page.objects.filter(published=True).exclude(kind="text")}
     service_pages = [p for p in Page.objects.filter(published=True, kind="text") if p.url(lang)]
 

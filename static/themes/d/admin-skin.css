@@ -18,6 +18,10 @@ body { background: #f5f3ea; font-family: "Liberation Sans", Arial, sans-serif; }
   --pl-line: #d6d2c3; --pl-head-bg: transparent; --pl-current: #e7f36a; --pl-radius: 0; --pl-check: #171a17; --pl-title-size: 34px; --pl-tree-weight: 700;
   --pl-marker: #e7f36a; --pl-marker-ring: #171a17; --pl-marker-hot: #fff; --pl-land: #d3d3c2; --pl-stroke: #d3d3c2; --pl-map-bg: #171a17; --pl-map-card: #171a17;
   --pl-label-bg: #171a17; --pl-label-ink: #fff; --pl-menu-aside: 340px; --pl-cities-cols: minmax(0, 1.6fr) minmax(280px, 1fr);
-  --pl-list-order: 3; --pl-map-order: 1; --pl-point-order: 2; }
+  }
 .pl-map-card .pl-cap, .pl-map-card .pl-note { color: #d3d3c2; }
 .pl-btn-ghost { border-color: var(--pl-line); }
+:root { --pl-photo-mode: d; --pl-top-actions: flex; --pl-bottom-actions: none; }
+:root { --pl-add-top: inline-flex; --pl-add-bottom: none; --pl-cat-h2: block; --pl-cat-cols: minmax(0, 1fr) 300px; --pl-cover-col: 2; --pl-cover-row: 1; }
+:root { --pl-city-list-display: none; --pl-city-point-display: block; --pl-map-actions-display: none; --pl-cities-cols: minmax(0, 1.6fr) minmax(280px, 1fr); --pl-map-order: 1; --pl-point-order: 2; }
+:root { --pl-head-pad: 22px; }

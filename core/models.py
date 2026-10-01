@@ -125,6 +125,9 @@ class SiteSettings(TranslatableMixin, models.Model):
         help_text="Пусто — ключ будет создан при включении. Файл ключа доступен по адресу «адрес сайта/ключ.txt».",
     )
 
+    menu_in_header = models.BooleanField("Верхнее меню", default=True, help_text="Показывать меню в шапке сайта.")
+    menu_in_footer = models.BooleanField("Повторять меню в подвале", default=True, help_text="Пункты, отмеченные «Повторять в футере», выводятся в подвале.")
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
