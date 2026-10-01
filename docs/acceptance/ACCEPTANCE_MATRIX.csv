@@ -6,11 +6,11 @@ MiraMe,A-04,Список картин,PDF A стр. 4,PASS,PASS,PASS,PASS,PASS,P
 MiraMe,A-05,Картина в наличии,PDF A стр. 5,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Две колонки, картина целиком."
 MiraMe,A-06,Картина под заказ,PDF A стр. 6,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Проверено рендером со статусом «Под заказ» (тот же шаблон, меняются статус и CTA); отдельной картины «Под заказ» в демо-наборе нет."
 MiraMe,A-07,Проданная картина,PDF A стр. 7,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,SOLD как статус записи; «Заказать похожую».
-MiraMe,A-08,Архив SOLD,PDF A стр. 8,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"4 в ряд; заголовок выполнен плакатной подачей слева, в PDF — по центру; ниже добавлен блок «География наших продаж»."
+MiraMe,A-08,Архив SOLD,PDF A стр. 8,PASS,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Заголовок по центру, вводный текст под ним слева, 4 в ряд как в PDF. Отличие: ниже добавлен блок «География наших продаж» (ТЗ 1.3)."
 MiraMe,A-09,О нас,PDF A стр. 9,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Одно изображение слева, текст справа, CTA."
 MiraMe,A-10,Отзывы,PDF A стр. 10,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,Вместо трёх карточек-заглушек — честное пустое состояние (по ТЗ v1.4).
 MiraMe,A-11,Доставка/карта,PDF A стр. 11,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"3 условия, интерактивная карта, статья доставки; атрибуция провайдера карты сохранена."
-MiraMe,A-12,Контакты,PDF A стр. 12,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,Справа полная форма заказа вместо короткой формы из PDF; контакты слева появятся после ввода данных владельцем.
+MiraMe,A-12,Контакты,PDF A стр. 12,PASS,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Короткая форма как в PDF (имя, способ связи, контакт, согласие, «Отправить заявку»); кнопка «Открыть мессенджер» показана без ссылки до ввода данных. Телефон и email слева появятся после ввода владельцем (демо-данные запрещены ТЗ v1.4); полная форма заказа остаётся в модальном окне."
 MiraMe,A-13,Сертификат,PDF A стр. 13,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Тёмно-синяя карточка сертификата слева, форма справа."
 MiraMe,A-14,Модальная форма,PDF A стр. 14,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,Фон вокруг формы тёмно-синий (исправлено).
 MiraMe,A-15,Админка обзор,PDF A стр. 15,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Левое меню по макету: «Разделы» (Обзор, Картины, Рубрики, Меню, Города продаж), затем Отзывы, Сертификаты, Настройки; остальные разделы — в свёрнутом «Ещё». Ярлык «ДЕМО МАКЕТ» не выводится намеренно."
@@ -31,7 +31,7 @@ HolStori,D-09,SOLD,PDF D стр. 13,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH
 HolStori,D-10,О нас / О студии,PDF D стр. 14,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Плакатный тезис слева, фото справа, 3 этапа; остальные 5 фото студии — только на странице «О студии»."
 HolStori,D-11,Отзывы,PDF D стр. 15,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,Вместо большого рассказа с изображением — пустое состояние (реальных отзывов нет).
 HolStori,D-12,Доставка,PDF D стр. 16,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Карта главным блоком, город справа; на карте добавлены Пекин и Шэньчжэнь."
-HolStori,D-13,Контакты,PDF D стр. 17,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,Кнопки мессенджеров появятся после ввода данных; страница содержит форму целиком.
+HolStori,D-13,Контакты,PDF D стр. 17,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Кнопки «Написать в Telegram» и «Написать в MAX» показаны как в PDF, пока без ссылок; активируются после ввода адресов мессенджеров. Страница содержит форму целиком."
 HolStori,D-14,Сертификат,PDF D стр. 18,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,Графический объект сертификата + форма.
 HolStori,D-15,Модальная форма,PDF D стр. 19,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Выбранная работа сверху, поля ниже, одно действие."
 HolStori,D-16,Админка обзор,PDF D стр. 20,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Чёрная полоса, лимонный акцент, горизонтальные вкладки; левое меню по умолчанию свёрнуто (открывается кнопкой в шапке) и содержит остальные разделы."

@@ -15,14 +15,16 @@
         {% if site.t.hours %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.hours }}</dd></div>{% endif %}
         {% if site.t.geography %}<div><dt>&nbsp;</dt><dd class="muted">{{ site.t.geography }}</dd></div>{% endif %}
       </dl>
-      {% if messengers %}<a class="btn btn-outline btn-block" href="{{ messengers.0.url }}" target="_blank" rel="noopener">{% t "contacts.open_messenger" %}</a>{% endif %}
+      {% if messengers %}<a class="btn btn-outline btn-block" href="{{ messengers.0.url }}" target="_blank" rel="noopener">{% t "contacts.open_messenger" %}</a>
+      {% else %}<span class="btn btn-outline btn-block is-pending" aria-disabled="true">{% t "contacts.open_messenger" %}</span>{% endif %}
       {% else %}
-      {% if messengers %}<div class="contact-buttons">{% for m in messengers|slice:":2" %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-primary{% endif %}" href="{{ m.url }}" target="_blank" rel="noopener">{% t "contacts.write_to" %} {{ m.name }}</a>{% endfor %}</div>{% endif %}
+      {% if messengers %}<div class="contact-buttons">{% for m in messengers|slice:":2" %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-primary{% endif %}" href="{{ m.url }}" target="_blank" rel="noopener">{% t "contacts.write_to" %} {{ m.name }}</a>{% endfor %}</div>
+      {% else %}<div class="contact-buttons"><span class="btn btn-accent is-pending" aria-disabled="true">{% t "contacts.write_to" %} Telegram</span><span class="btn btn-primary is-pending" aria-disabled="true">{% t "contacts.write_to" %} MAX</span></div>{% endif %}
       {% if site.t.geography %}<p class="muted contacts-geo">{{ site.t.geography }}</p>{% endif %}
       {% endif %}
     </div>
     {% if theme == "a" %}
-    <section class="form-card" id="order" aria-labelledby="inline-form-title">
+    <section class="form-card form-card-short" id="order" aria-labelledby="inline-form-title">
       <h2 class="form-card-title" id="inline-form-title">{{ inline_title }}</h2>
       {% include "partials/order_form.html" with fid="c" fkind=inline_kind fpainting=inline_painting fcategory=inline_category form_sizes=inline_sizes %}
     </section>

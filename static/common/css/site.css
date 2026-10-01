@@ -598,3 +598,6 @@ html { scroll-padding-top: 64px; }
 .city-box-title { margin: 0; font-weight: 700; font-size: 18px; color: var(--primary-dark); }
 .city-box-text p:last-child { margin: 0; }
 .city-contacts .contact-list { margin: 0; }
+
+/* Кнопки мессенджеров без ссылок: показываются, пока владелец не указал адреса */
+.btn.is-pending { cursor: default; pointer-events: none; }
