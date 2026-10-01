@@ -120,8 +120,8 @@ def _map_cities(lang):
     cities = []
     for city in City.objects.filter(sale_confirmed=True, visible=True):
         cities.append({
-            "name": (city.name_en or city.name_source) if lang == "en" else city.name_ru,
-            "country": (city.country_en or city.country_code) if lang == "en" else city.country_ru,
+            "name": (city.name_en or city.name_source) if lang == "en" else (tr(city, "name", "zh") or city.name_en or city.name_source) if lang == "zh" else city.name_ru,
+            "country": (city.country_en or city.country_code) if lang == "en" else (tr(city, "country", "zh") or city.country_en or city.country_code) if lang == "zh" else city.country_ru,
             "lat": float(city.latitude),
             "lng": float(city.longitude),
             "caption": tr(city, "caption", lang),

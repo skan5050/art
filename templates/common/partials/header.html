@@ -28,7 +28,7 @@
       {% if site.logo %}<img class="brand-logo" src="{{ site.logo.url }}" alt="{{ site.t.logo_alt|default:brand }}">{% else %}<span class="brand-text">{{ brand }}</span>{% endif %}
     </a>
     {% if site.t.header_note %}<p class="topbar-note">{{ site.t.header_note|brandify }}</p>{% elif slogan and not site.logo_contains_slogan %}<p class="topbar-note">{{ slogan }}</p>{% endif %}
-    {% if other_lang_url %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}
+    {% if other_lang_url %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}{% for l in extra_langs %}<a class="lang-switch" href="{{ l.url }}" hreflang="{{ l.code }}" lang="{{ l.code }}">{{ l.name }}</a>{% endfor %}
   </div>
 </header>
 {% endif %}

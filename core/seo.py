@@ -9,7 +9,7 @@ import re
 
 from django.utils.safestring import mark_safe
 
-from .i18n import LANGS, current_lang, tr
+from .i18n import ALL_LANGS, current_lang, tr
 from .models import SeoTemplate, SiteSettings
 from .text import plain_text
 
@@ -78,7 +78,7 @@ def build_meta(request, obj=None, *, h1="", fallback_description="", page_num=1,
             canonical = settings.absolute(override, request)
         else:
             canonical = settings.absolute(obj.url(lang) + suffix, request)
-        present = [code for code in LANGS if obj.has_lang(code)]
+        present = [code for code in ALL_LANGS if obj.has_lang(code)]
         if len(present) > 1:
             for code in present:
                 alternates.append({"lang": code, "href": settings.absolute(obj.url(code) + suffix, request)})
@@ -124,7 +124,7 @@ def build_meta(request, obj=None, *, h1="", fallback_description="", page_num=1,
 def organization_jsonld(request):
     settings = SiteSettings.get()
     lang = current_lang()
-    home = settings.absolute("/en/" if lang == "en" else "/", request)
+    home = settings.absolute({"en": "/en/", "zh": "/zh/"}.get(lang, "/"), request)
     org = {"@context": "https://schema.org", "@type": "Organization", "name": settings.brand(lang), "url": home}
     if settings.logo:
         org["logo"] = settings.absolute(settings.logo.url, request)

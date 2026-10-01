@@ -305,6 +305,18 @@ class MenuItem(TranslatableMixin, models.Model):
             raise ValidationError("Выберите страницу или укажите ссылку.")
 
     def resolved(self, lang):
+        if lang == "zh":
+            from core.i18n import tr
+
+            label = tr(self, "label", "zh")
+            if self.page:
+                if not self.page.published or not self.page.url("zh"):
+                    return None
+                label = label or tr(self.page, "nav_title", "zh") or tr(self.page, "title", "zh")
+                href = self.page.url("zh")
+            else:
+                href = self.url
+            return {"label": label, "href": href} if label else None
         label = getattr(self, f"label_{lang}", "")
         if self.page:
             if not self.page.published:

@@ -6,13 +6,13 @@
 <section class="section geo-section" id="geography-sales" aria-labelledby="geo-title-{{ map_id|default:'m' }}">
   <div class="container">
     <div class="geo-head">
-      <h2 class="section-title" id="geo-title-{{ map_id|default:'m' }}">{{ geo.t.title }}</h2>
-      {% if geo.t.text %}<div class="section-text">{{ geo.t.text|rich }}</div>{% endif %}
+      <h2 class="section-title" id="geo-title-{{ map_id|default:'m' }}">{{ map_title|default:geo.t.title }}</h2>
+      {% if map_title %}{% elif geo.t.text %}<div class="section-text">{{ geo.t.text|rich }}</div>{% endif %}
     </div>
     <div class="geo-layout">
       <div class="geo-map" data-sales-map data-geo="{% static 'geo/countries.json' %}" data-tiles="{{ site.map_tiles_url }}"
            data-attribution="{{ site.map_attribution }}" role="region" aria-label="{{ geo.t.title }}"
-           data-cities="{{ map_id|default:'m' }}-cities"
+           data-cities="{{ map_id|default:'m' }}-cities"{% if map_fit %} data-fit="{{ map_fit }}"{% endif %}
            data-t-hint-title="{% t 'map.delivery_title' %}" data-t-hint="{% t 'map.delivery_hint' %}"
            data-t-offices="{% t 'map.cdek_offices' %}" data-t-calc="{% t 'map.cdek_calc' %}" data-t-note="{% t 'map.cdek_note' %}"
            data-t-discuss="{% t 'map.discuss_city' %}" data-t-city-page="{% t 'map.city_page' %}" data-t-city-note="{% t 'map.city_note' %}"

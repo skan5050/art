@@ -601,3 +601,13 @@ html { scroll-padding-top: 64px; }
 
 /* Кнопки мессенджеров без ссылок: показываются, пока владелец не указал адреса */
 .btn.is-pending { cursor: default; pointer-events: none; }
+
+/* Китайская версия (/zh/): системные CJK-шрифты; русские и английские страницы не затрагиваются */
+html[lang="zh"] {
+  --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", "WenQuanYi Zen Hei", "WenQuanYi Micro Hei", sans-serif;
+  --font-display: var(--font);
+  --font-script: var(--font);
+  --font-serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", "Noto Sans CJK SC", "WenQuanYi Zen Hei", serif;
+}
+html[lang="zh"] body { line-height: 1.75; }
+html[lang="zh"] h1, html[lang="zh"] h2, html[lang="zh"] h3 { letter-spacing: 0; line-height: 1.35; }

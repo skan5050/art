@@ -76,6 +76,7 @@ SIDEBAR = {
             item("Медиатека", "perm_media", "content.mediaasset"),
             item("Надписи интерфейса", "translate", "core.label"),
             item("Общие блоки", "view_agenda", "core.sharedblock"),
+            item("Переводы (китайский)", "g_translate", "core.translation"),
         ]},
         {"title": "Карта и SEO", "separator": True, "collapsible": True, "items": [
             {**item("Города на карте", "map", "geo.city"), "link": reverse_lazy("admin:geo_city_map")},

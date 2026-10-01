@@ -28,7 +28,7 @@
       {% else %}
         <a class="messenger-btn" href="{% page_url 'contacts' %}" title="{% t 'nav.messengers' %}">{% icon "mail" %}<span class="visually-hidden">{% t "nav.messengers" %}</span></a>
       {% endif %}
-      {% if other_lang_url and page.kind == "home" or other_lang_url and nav_brand %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}
+      {% if other_lang_url and page.kind == "home" or other_lang_url and nav_brand %}<a class="lang-switch" href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a>{% endif %}{% if extra_langs and page.kind == "home" or extra_langs and nav_brand %}{% for l in extra_langs %}<a class="lang-switch" href="{{ l.url }}" hreflang="{{ l.code }}" lang="{{ l.code }}">{{ l.name }}</a>{% endfor %}{% endif %}
     </div>
   </div>
 </nav>

@@ -9,6 +9,9 @@ _local = threading.local()
 
 def reset():
     _local.labels = None
+    from . import zh
+
+    zh.reset()
 
 
 def _load():
@@ -23,6 +26,13 @@ def _load():
 
 def label(key, lang=None):
     lang = lang or current_lang()
+    if lang == "zh":
+        from .labels_zh import LABELS_ZH
+        from .zh import zh_get
+
+        value = zh_get(f"label:{key}", "value") or LABELS_ZH.get(key)
+        if value:
+            return value
     row = _load().get(key)
     if row is None:
         default = DEFAULT_LABELS.get(key)

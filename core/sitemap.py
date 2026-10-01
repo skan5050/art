@@ -1,5 +1,5 @@
 """Состав sitemap.xml: только опубликованные, индексируемые, канонические страницы."""
-from .i18n import LANGS
+from .i18n import ALL_LANGS
 from .routing import routable_models
 
 
@@ -36,7 +36,7 @@ def sitemap_entries():
         for obj in model.objects.all():
             if not getattr(obj, "indexable", True) or not is_public(obj) or is_empty_listing(obj):
                 continue
-            langs = [code for code in LANGS if obj.has_lang(code)]
+            langs = [code for code in ALL_LANGS if obj.has_lang(code)]
             alternates = [(code, obj.url(code)) for code in langs] if len(langs) > 1 else []
             if alternates:
                 alternates.append(("x-default", obj.url("ru")))
@@ -46,5 +46,8 @@ def sitemap_entries():
                     "alternates": alternates,
                     "lastmod": getattr(obj, "updated_at", None),
                 })
-    entries.sort(key=lambda e: (e["path"].startswith("/en/"), len(e["path"]), e["path"]))
+    from .china import PATH as CHINA_PATH
+
+    entries.append({"path": CHINA_PATH, "alternates": [], "lastmod": None})
+    entries.sort(key=lambda e: (e["path"].startswith("/zh/") * 2 + e["path"].startswith("/en/"), len(e["path"]), e["path"]))
     return entries

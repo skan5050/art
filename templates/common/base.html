@@ -10,7 +10,7 @@
 {% for alt in meta.alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}">
 {% endfor %}
 <meta property="og:site_name" content="{{ brand }}">
-<meta property="og:locale" content="{% if lang == 'en' %}en_US{% else %}ru_RU{% endif %}">
+<meta property="og:locale" content="{% if lang == 'en' %}en_US{% elif lang == 'zh' %}zh_CN{% else %}ru_RU{% endif %}">
 <meta property="og:type" content="{{ meta.og.type|default:'website' }}">
 <meta property="og:title" content="{{ meta.og.title|default:meta.title }}">
 {% if meta.og.description %}<meta property="og:description" content="{{ meta.og.description }}">{% endif %}

@@ -143,6 +143,9 @@
       var bounds = land.getBounds();
       map.fitBounds(bounds, { padding: [12, 12] });
       map.setMaxBounds(bounds.pad(0.4));
+      if (el.getAttribute("data-fit") === "cities" && cities.length) {  // опционально: приблизить к точкам (лэндинг Китая)
+        map.fitBounds(L.latLngBounds(cities.map(function (c) { return [c.lat, c.lng]; })), { padding: [28, 28] });
+      }
       drawCities();
     }).catch(function () {
       map.setView([58, 80], 2.5);

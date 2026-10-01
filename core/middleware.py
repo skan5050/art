@@ -18,7 +18,10 @@ class CanonicalHostMiddleware:
     def __call__(self, request):
         labels_runtime.reset()
         path = request.path_info
-        lang = "en" if path == "/en" or path.startswith("/en/") else "ru"
+        if path == "/zh" or path.startswith("/zh/"):
+            lang = "zh"
+        else:
+            lang = "en" if path == "/en" or path.startswith("/en/") else "ru"
         translation.activate(lang)
         request.LANGUAGE_CODE = lang
 

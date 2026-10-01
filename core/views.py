@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.http import require_GET
 
-from .i18n import LANGS, current_lang
+from .i18n import ALL_LANGS, current_lang
 from .labels_runtime import label
 from .models import Redirect, SiteSettings
 from .routing import resolve
@@ -55,7 +55,7 @@ def dispatch(request, path=""):
             raise Http404
         preview = True
 
-    request.alternate_urls = {code: obj.url(code) for code in LANGS if obj.has_lang(code)}
+    request.alternate_urls = {code: obj.url(code) for code in ALL_LANGS if obj.has_lang(code)}
     request.is_preview = preview
 
     name = obj.__class__.__name__

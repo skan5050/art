@@ -10,6 +10,17 @@ def routable_models():
 
 
 def resolve(path, lang):
+    if lang == "zh":
+        from .zh import en_path_from_zh, zh_has
+
+        en_path = en_path_from_zh(path)
+        if not en_path:
+            return None
+        for model in routable_models():
+            obj = model.objects.filter(path_en=en_path).first()
+            if obj is not None:
+                return obj if zh_has(obj) else None
+        return None
     field = f"path_{lang}"
     for model in routable_models():
         obj = model.objects.filter(**{field: path}).first()

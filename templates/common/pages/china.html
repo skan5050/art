@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_extra %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block content %}
+<div class="container">
+  {% include "partials/breadcrumbs.html" %}
+  {% include "partials/page_head.html" with h1=c.title kicker=c.kicker intro=c.intro head_class="page-head-center" %}
+  <article class="text-page china-article">
+    <div class="text-main">
+      <div class="prose">
+        {% for heading, body in c.sections %}<h2>{{ heading }}</h2>{{ body|rich }}{% endfor %}
+      </div>
+    </div>
+  </article>
+</div>
+{% shared "sales-map" as geo %}
+{% include "partials/sales_map.html" with map_id="cn" map_title=c.map_title map_fit="cities" map_json_id="cn-cities" map_caption=c.map_text map_empty="" cta_button=c.cta_button %}
+{% include "partials/order_cta.html" with cta_kind="delivery" cta_text=c.cta_text cta_label=c.cta_button %}
+{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/leaflet/leaflet.js' %}" defer></script><script src="{% static 'js/map.js' %}" defer></script>{% endblock %}

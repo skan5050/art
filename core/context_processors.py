@@ -1,7 +1,7 @@
 from django.conf import settings as dj_settings
 from django.utils import timezone
 
-from .i18n import current_lang
+from .i18n import LANG_NAMES, current_lang, tr
 from .models import Messenger, SiteSettings
 
 
@@ -23,11 +23,16 @@ def site(request):
     pages = {p.kind: p for p in Page.objects.filter(published=True).exclude(kind="text")}
     service_pages = [p for p in Page.objects.filter(published=True, kind="text") if p.url(lang)]
 
-    alternates = getattr(request, "alternate_urls", {}) or {}
+    alternates = getattr(request, "alternate_urls", {}) or getattr(request, "switch_urls", {}) or {}
     other = "ru" if lang == "en" else "en"
+    # Третий язык (китайский): ссылки «中文» / «Русский» рядом с прежним переключателем RU ⇄ EN.
+    extra_code = "zh" if lang in ("ru", "en") else "ru"
+    extra_langs = [{"code": extra_code, "name": LANG_NAMES[extra_code], "url": alternates[extra_code]}] if alternates.get(extra_code) else []
     brand = settings.brand(lang)
     year = timezone.localdate().year
     copyright_text = (settings.copyright_en if lang == "en" else settings.copyright_ru) or ""
+    if lang == "zh":
+        copyright_text = tr(settings, "copyright", "zh") or copyright_text
     from catalog.views import common_sizes
     from content.models import CertificateNominal
 
@@ -48,7 +53,8 @@ def site(request):
         "service_pages": service_pages,
         "other_lang": other,
         "other_lang_url": alternates.get(other, ""),
-        "home_url": "/en/" if lang == "en" else "/",
+        "extra_langs": extra_langs,
+        "home_url": {"en": "/en/", "zh": "/zh/"}.get(lang, "/"),
         "copyright_text": copyright_text.replace("{year}", str(year)).replace("{brand}", brand),
         "analytics": {
             "metrika": settings.yandex_metrika_id if settings.analytics_enabled else "",

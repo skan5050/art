@@ -96,7 +96,7 @@ def _respond(request, ok, payload, status=200):
 
 @require_POST
 def submit(request):
-    lang = "en" if request.POST.get("lang") == "en" else "ru"
+    lang = request.POST.get("lang") if request.POST.get("lang") in ("en", "zh") else "ru"
     translation.activate(lang)
     data = request.POST
     site = SiteSettings.get()

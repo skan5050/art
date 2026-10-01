@@ -19,7 +19,7 @@ from catalog.models import Category, Technique
 from content.models import Article, CityLanding, HomeSection, MenuItem, Page, Review, StudioImage
 from geo.models import City
 from core.labels import DEFAULT_LABELS
-from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize
+from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize, Translation
 
 SIZES = [
     ("rect", [(20, 30), (30, 40), (40, 50), (40, 60), (50, 60), (50, 70), (60, 80), (60, 90), (70, 100), (80, 100), (80, 120)]),
@@ -56,6 +56,7 @@ class Command(BaseCommand):
             self.studio(getattr(data, "STUDIO_IMAGES", []))
             self.city_pages(site)
             self.reviews(site)
+            self.chinese(site)
         self.stdout.write(self.style.SUCCESS(f"Наполнение сайта «{data.SETTINGS['brand_name_ru']}» загружено."))
 
     # --- помощники ---
@@ -217,6 +218,69 @@ class Command(BaseCommand):
             lookup = {"author_ru": item.pop("author_ru"), "city_ru": item.pop("city_ru")}
             item.update({"published": True, "order": i * 10, "featured": item.get("featured", False)})
             self.upsert(Review, lookup, item, {"photo": photo})
+
+    def put_zh(self, target, field, text):
+        """Один китайский перевод: существующие правки владельца без --update не перезаписываются."""
+        if not text:
+            return
+        row = Translation.objects.filter(lang="zh", target=target, field=field).first()
+        if row is None:
+            Translation.objects.create(lang="zh", target=target, field=field, text=text)
+        elif self.update and row.text != text:
+            row.text = text
+            row.save(update_fields=["text"])
+
+    def put_zh_fields(self, obj, fields):
+        if obj is None:
+            return
+        target = f"{obj._meta.label_lower}:{obj.pk}"
+        for field, text in fields.items():
+            self.put_zh(target, field, text)
+
+    def chinese(self, site):
+        """Китайская версия (/zh/): переводы надписей, страниц, рубрик, статей, городов и отзывов."""
+        from catalog.models import Painting
+        from content.models import Review
+
+        try:
+            data = importlib.import_module(f"seed.{site}.zh")
+        except ImportError:
+            return
+        common = importlib.import_module("seed.zh_common")
+        for key, text in {**common.LABELS, **getattr(data, "LABELS", {})}.items():
+            self.put_zh(f"label:{key}", "value", text)
+        self.put_zh_fields(SiteSettings.get(), getattr(data, "SETTINGS", {}))
+        for key, fields in getattr(data, "BLOCKS", {}).items():
+            self.put_zh_fields(SharedBlock.objects.filter(key=key).first(), fields)
+        for kind, fields in getattr(data, "SEO_TEMPLATES", {}).items():
+            self.put_zh_fields(SeoTemplate.objects.filter(kind=kind).first(), fields)
+        for name, text in getattr(data, "TECHNIQUES", {}).items():
+            self.put_zh_fields(Technique.objects.filter(name_ru=name).first(), {"name": text})
+        for kind, fields in getattr(data, "PAGES", {}).items():
+            self.put_zh_fields(Page.objects.filter(kind=kind).first(), fields)
+        for kind, fields in getattr(data, "HOME_SECTIONS", {}).items():
+            self.put_zh_fields(HomeSection.objects.filter(kind=kind).first(), fields)
+        for item in MenuItem.objects.select_related("page"):
+            key = item.label_ru or (item.page.kind if item.page else item.url)
+            text = getattr(data, "MENU", {}).get(key)
+            if text:
+                self.put_zh_fields(item, {"label": text})
+        for path, fields in getattr(data, "CATEGORIES", {}).items():
+            self.put_zh_fields(Category.objects.filter(path_ru=path).first(), fields)
+        for slug, fields in getattr(data, "ARTICLES", {}).items():
+            self.put_zh_fields(Article.objects.filter(slug_ru=slug).first(), fields)
+        cities = {**common.typical_landings(site), **getattr(data, "CITY_LANDINGS", {})}
+        for name, fields in cities.items():
+            self.put_zh_fields(CityLanding.objects.filter(name_ru=name).first(), fields)
+        for key, fields in getattr(data, "REVIEWS", {}).items():
+            author, _, city = key.partition("|")
+            self.put_zh_fields(Review.objects.filter(author_ru=author, city_ru=city).first(), fields)
+        for sku, fields in getattr(data, "PAINTINGS", {}).items():
+            self.put_zh_fields(Painting.objects.filter(sku=sku).first(), fields)
+        for position, fields in getattr(data, "STUDIO", {}).items():
+            self.put_zh_fields(StudioImage.objects.filter(alt_ru=position).first(), fields)
+        for source_id, (name, country) in common.CITY_NAMES.items():
+            self.put_zh_fields(City.objects.filter(source="GeoNames", source_id=source_id).first(), {"name": name, "country": country})
 
     def city_pages(self, site):
         """Городские страницы: у каждой свой текст; адрес и координаты владелец вносит сам."""

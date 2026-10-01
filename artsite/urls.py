@@ -11,6 +11,8 @@ admin.site.site_header = "Управление сайтом"
 admin.site.site_title = "Админка"
 admin.site.index_title = "Сегодня в мастерской"
 
+from core.china import china_view  # noqa: E402
+
 urlpatterns = [
     path(settings.ADMIN_PATH + "private/<path:path>", core_views.private_file, name="private-file"),
     path(settings.ADMIN_PATH, admin.site.urls),
@@ -18,6 +20,7 @@ urlpatterns = [
     path("sitemap.xml", core_views.sitemap_xml, name="sitemap"),
     path("favicon.ico", core_views.favicon_ico, name="favicon"),
     re_path(r"^(?P<key>[A-Za-z0-9-]{8,64})\.txt$", core_views.indexnow_key, name="indexnow-key"),
+    path("zh/china/", china_view, name="china"),
     path("lead/", lead_views.submit, name="lead-submit"),
     path("api/v1/import/categories", api_views.categories, name="api-categories"),
     path("api/v1/import/images", api_views.upload_image, name="api-upload"),

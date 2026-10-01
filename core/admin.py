@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 
-from .models import ROBOTS_DEFAULT, Label, Messenger, Redirect, SeoTemplate, SharedBlock, SiteSettings, StandardSize
+from .models import ROBOTS_DEFAULT, Label, Messenger, Redirect, SeoTemplate, SharedBlock, SiteSettings, StandardSize, Translation
 
 
 def thumb(image, size=64):
@@ -244,3 +244,17 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     pass
 
+
+@admin.register(Translation)
+class TranslationAdmin(ModelAdmin):
+    """Китайская версия: тексты материалов, надписи интерфейса и названия городов (объект + поле → перевод)."""
+
+    list_display = ("target", "field", "short_text")
+    list_filter = ("lang",)
+    search_fields = ("target", "field", "text")
+    list_per_page = 100
+    fields = ("lang", "target", "field", "text")
+
+    @admin.display(description="Перевод")
+    def short_text(self, obj):
+        return obj.text[:100]

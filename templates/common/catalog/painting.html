@@ -70,7 +70,7 @@
           <label for="page-size">{% t "size.title" %}</label>
           <select id="page-size" data-page-size>
             <option value="">{% t "size.none" %}</option>
-            {% for s in desired_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% else %}см{% endif %}</option>{% endfor %}
+            {% for s in desired_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% elif lang == "zh" %}厘米{% else %}см{% endif %}</option>{% endfor %}
             <option value="custom">{% t "size.custom" %}</option>
             <option value="undecided">{% t "size.undecided" %}</option>
           </select>

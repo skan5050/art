@@ -79,7 +79,7 @@
       <select id="{{ fid }}-size" name="size_select" data-size-select>
         <option value="">{% t "size.none" %}</option>
         <optgroup label="{% t 'size.standard_group' %}" data-size-options>
-          {% for s in form_sizes|default:common_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% else %}см{% endif %}</option>{% endfor %}
+          {% for s in form_sizes|default:common_sizes %}<option value="{{ s.id }}" data-square="{{ s.square|yesno:'1,0' }}">{{ s.label }} {% if lang == "en" %}cm{% elif lang == "zh" %}厘米{% else %}см{% endif %}</option>{% endfor %}
         </optgroup>
         <option value="custom">{% t "size.custom" %}</option>
         <option value="undecided">{% t "size.undecided" %}</option>

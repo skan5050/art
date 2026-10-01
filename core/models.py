@@ -388,6 +388,13 @@ class Routable(models.Model):
     def route_children(self):
         return []
 
+    @property
+    def path_zh(self):
+        """Адрес китайской версии: английский адрес с префиксом /zh/, если материал переведен."""
+        from .zh import zh_has, zh_path_from_en
+
+        return zh_path_from_en(self.path_en) if zh_has(self) else ""
+
     def has_lang(self, lang):
         return bool(getattr(self, f"path_{lang}", ""))
 
@@ -448,3 +455,25 @@ class SeoFields(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Translation(models.Model):
+    """Перевод поля материала на китайский (и другие языки): объект + поле → текст.
+
+    Ключ объекта — «приложение.модель:id», например «content.article:5». Правится в разделе
+    «Китайская версия → Переводы»; стартовые тексты загружает seed_site.
+    """
+
+    lang = models.CharField("Язык", max_length=5, default="zh")
+    target = models.CharField("Объект", max_length=80, db_index=True)
+    field = models.CharField("Поле", max_length=60)
+    text = models.TextField("Перевод", blank=True)
+
+    class Meta:
+        verbose_name = "Перевод"
+        verbose_name_plural = "Переводы (китайский)"
+        constraints = [models.UniqueConstraint(fields=["lang", "target", "field"], name="translation_unique")]
+        ordering = ["target", "field"]
+
+    def __str__(self):
+        return f"{self.target} · {self.field}: {self.text[:40]}"

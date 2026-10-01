@@ -16,7 +16,7 @@
     </div>
     <aside class="city-side">
       <section class="city-box">
-        <p class="city-box-title">{% t "cities.delivery_title" %} {% if lang == "en" %}in {{ landing.t.name }}{% else %}{{ landing.name_in_ru|default:landing.t.name }}{% endif %}</p>
+        <p class="city-box-title">{% t "cities.delivery_title" %} {% if lang == "en" %}in {{ landing.t.name }}{% elif lang == "zh" %}{{ landing.t.name }}{% else %}{{ landing.name_in_ru|default:landing.t.name }}{% endif %}</p>
         {% if landing.t.delivery %}<div class="city-box-text">{{ landing.t.delivery|rich }}</div>
         {% elif delivery_short %}<div class="city-box-text">{{ delivery_short.t.text|rich }}</div>{% endif %}
         <ul class="geo-hint-links">

@@ -711,3 +711,67 @@ class AdminLayoutTests(TestCase):
         r = self.client.get(f"/admin/catalog/painting/{painting.pk}/change/")
         self.assertContains(r, "data-painting-meta")
         self.assertContains(r, "Фото, состояние, рубрика, цена и описание")
+
+
+class ChineseVersionTests(TestCase):
+    """Китайская версия: аддитивный слой /zh/, прежние RU/EN-страницы не меняются."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_site", verbosity=0)
+
+    def test_zh_pages_are_chinese_and_have_switcher(self):
+        import re
+
+        r = self.client.get("/zh/")
+        self.assertEqual(r.status_code, 200)
+        html = r.content.decode()
+        self.assertIn('<html lang="zh"', html)
+        self.assertRegex(re.search(r"<h1[^>]*>([^<]*)", html).group(1), r"[一-鿿]")
+        self.assertIn('hreflang="ru"', html)
+        self.assertIn("English", html)
+
+    def test_ru_and_en_link_to_zh(self):
+        for path in ("/", "/en/"):
+            html = self.client.get(path).content.decode()
+            self.assertIn('hreflang="zh"', html)
+            self.assertIn("/zh/", html)
+
+    def test_articles_translated_and_cities_listed(self):
+        from content.models import Article
+        from core.zh import zh_has
+
+        articles = list(Article.objects.filter(published=True))
+        self.assertGreaterEqual(len(articles), 1)
+        self.assertTrue(all(zh_has(a) and a.url("zh").startswith("/zh/") for a in articles))
+        self.assertEqual(self.client.get(articles[0].url("zh")).status_code, 200)
+        self.assertEqual(self.client.get("/zh/cities/").status_code, 200)
+
+    def test_sitemap_and_labels(self):
+        sm = self.client.get("/sitemap.xml").content.decode()
+        self.assertIn("/zh/china/", sm)
+        self.assertIn('hreflang="zh"', sm)
+        from core.labels_zh import LABELS_ZH
+
+        self.assertGreater(len(LABELS_ZH), 150)
+
+    def test_china_landing(self):
+        import re
+
+        from core.models import Translation
+        from geo.models import City
+
+        city = City.objects.create(country_code="CN", country_ru="Китай", name_ru="Пекин", latitude=39.9, longitude=116.4,
+                                   sale_confirmed=True, visible=True)
+        Translation.objects.create(target=f"geo.city:{city.pk}", field="name", text="北京")
+        r = self.client.get("/zh/china/")
+        self.assertEqual(r.status_code, 200)
+        html = r.content.decode()
+        self.assertRegex(re.search(r"<h1[^>]*>([^<]*)", html).group(1), r"[\u4e00-\u9fff]")
+        self.assertEqual(html.count("data-geo-city"), 1)
+        self.assertIn("北京", html)
+        self.assertIn('rel="canonical" href="http://testserver/zh/china/"', html)
+        self.assertNotIn("/zh/china/", self.client.get("/").content.decode().replace("hreflang", ""))  # RU-страницы не ссылаются на лэндинг
+
+    def test_untranslated_zh_page_is_404(self):
+        self.assertEqual(self.client.get("/zh/no-such-page/").status_code, 404)

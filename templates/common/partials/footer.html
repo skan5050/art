@@ -40,7 +40,8 @@
       {% if site_pages.custom %}<li><a href="{{ site_pages.custom.url }}">{{ site_pages.custom.nav_title }}</a></li>{% endif %}
       {% if site_pages.cities %}<li><a href="{{ site_pages.cities.url }}">{{ site_pages.cities.nav_title }}</a></li>{% endif %}
       {% for p in service_pages %}<li><a href="{{ p.url }}">{{ p.nav_title }}</a></li>{% endfor %}
-      {% if other_lang_url %}<li><a href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a></li>{% endif %}
+      {% if lang == "zh" %}<li><a href="/zh/china/">中国专页</a></li>{% endif %}
+      {% if other_lang_url %}<li><a href="{{ other_lang_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{% t "nav.lang_switch" %}</a></li>{% endif %}{% for l in extra_langs %}<li><a href="{{ l.url }}" hreflang="{{ l.code }}" lang="{{ l.code }}">{{ l.name }}</a></li>{% endfor %}
     </ul>
   </div>
 </footer>

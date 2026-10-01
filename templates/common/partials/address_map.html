@@ -5,7 +5,7 @@
 {% if addr and lat and lng %}
 <section class="address-map" aria-label="{% t 'contacts.map_title' %}">
   <div class="address-map-frame">
-    <iframe src="https://yandex.ru/map-widget/v1/?ll={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}&amp;z=16&amp;pt={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}%2Cpm2rdm&amp;lang={% if lang == 'en' %}en_US{% else %}ru_RU{% endif %}"
+    <iframe src="https://yandex.ru/map-widget/v1/?ll={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}&amp;z=16&amp;pt={{ lng|stringformat:'s' }}%2C{{ lat|stringformat:'s' }}%2Cpm2rdm&amp;lang={% if lang == 'en' or lang == 'zh' %}en_US{% else %}ru_RU{% endif %}"
             title="{{ map_title|default:addr }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
   </div>
   <div class="address-map-info">
