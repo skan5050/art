@@ -847,3 +847,19 @@ class CityGeoTests(TestCase):
         self.landing.show_in_picker = False
         self.landing.save()
         self.assertEqual(len(geo_detect.picker_items()), total - 1)
+
+    def test_provider_is_replaceable(self):
+        from core import geo_detect
+
+        for name, cls in (("cloudflare", geo_detect.CloudflareProvider), ("headers", geo_detect.CustomHeadersProvider), ("sypex", geo_detect.SypexProvider)):
+            with override_settings(GEO_PROVIDER=name):
+                self.assertIsInstance(geo_detect.get_provider(), cls)
+        with override_settings(GEO_PROVIDER="sypex"):  # файл базы ещё не подключён — сайт работает, предложений нет
+            self.assertEqual(self.geo().json(), {})
+        with override_settings(GEO_PROVIDER=""):
+            self.assertIsNone(geo_detect.get_provider())
+
+    def test_city_form_script_only_on_ru_pages(self):
+        self.assertIn("city-form.js", self.client.get("/").content.decode())
+        self.assertNotIn("city-form.js", self.client.get("/en/").content.decode())
+        self.assertNotIn("city-form.js", self.client.get("/zh/").content.decode())

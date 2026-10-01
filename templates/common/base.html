@@ -51,6 +51,7 @@ if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 {% include "partials/order_modal.html" %}
 <script src="{% static 'js/site.js' %}" defer></script>
 {% if lang != "zh" %}<script src="{% static 'js/lang-hint.js' %}" defer></script>{% endif %}
+{% if lang == "ru" %}<script src="{% static 'js/city-form.js' %}" defer></script>{% endif %}
 {% block scripts %}{% endblock %}
 {% include "partials/analytics.html" %}
 </body>

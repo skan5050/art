@@ -13,13 +13,57 @@ from django.conf import settings
 BOT_RE = re.compile(r"bot|crawl|spider|slurp|yandex|google|bing|baidu|duckduck|facebookexternalhit|preview|lighthouse", re.I)
 
 
-def _headers():
-    provider = (settings.GEO_PROVIDER or "").lower()
-    if provider == "cloudflare":
-        return "CF-IPCountry", "CF-IPCity"
-    if provider == "headers":
-        return settings.GEO_COUNTRY_HEADER, settings.GEO_CITY_HEADER
-    return None
+class GeoProvider:
+    """Источник геоданных: по запросу возвращает (страна, город). Бизнес-логика от источника не зависит."""
+
+    def lookup(self, request):
+        return "", ""
+
+
+class HeadersProvider(GeoProvider):
+    """Страну и город передаёт прокси/CDN заголовками."""
+
+    country_header = ""
+    city_header = ""
+
+    def lookup(self, request):
+        country = request.headers.get(self.country_header, "").strip().upper()
+        city = request.headers.get(self.city_header, "").strip()
+        return country, city
+
+
+class CloudflareProvider(HeadersProvider):
+    country_header = "CF-IPCountry"
+    city_header = "CF-IPCity"  # приходит с включённой настройкой Cloudflare «Add visitor location headers»
+
+
+class CustomHeadersProvider(HeadersProvider):
+    @property
+    def country_header(self):
+        return settings.GEO_COUNTRY_HEADER
+
+    @property
+    def city_header(self):
+        return settings.GEO_CITY_HEADER
+
+
+class SypexProvider(GeoProvider):
+    """Место для Sypex Geo City (локальный файл SxGeoCity.dat, GEO_SYPEX_PATH).
+
+    Читатель файла подключается здесь, когда файл будет передан; пока источник ничего не определяет,
+    сайт работает как обычно. Остальной код (сопоставление, панель, форма) менять не нужно.
+    """
+
+    def lookup(self, request):
+        return "", ""
+
+
+PROVIDERS = {"cloudflare": CloudflareProvider, "headers": CustomHeadersProvider, "sypex": SypexProvider}
+
+
+def get_provider():
+    cls = PROVIDERS.get((settings.GEO_PROVIDER or "").lower())
+    return cls() if cls else None
 
 
 def norm(value):
@@ -28,13 +72,14 @@ def norm(value):
 
 
 def detect(request):
-    """(country, city) по заголовкам; (\"\", \"\") если источник не настроен или данных нет."""
-    names = _headers()
-    if not names or BOT_RE.search(request.META.get("HTTP_USER_AGENT", "")):
+    """(страна, город) от настроенного источника; (\"\", \"\") если источник не настроен, это робот или данных нет."""
+    provider = get_provider()
+    if provider is None or BOT_RE.search(request.META.get("HTTP_USER_AGENT", "")):
         return "", ""
-    country = request.headers.get(names[0], "").strip().upper()
-    city = request.headers.get(names[1], "").strip()
-    return country, city
+    try:
+        return provider.lookup(request)
+    except Exception:  # геоисточник не должен мешать работе сайта
+        return "", ""
 
 
 def landing_key(landing):

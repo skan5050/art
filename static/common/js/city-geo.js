@@ -1,6 +1,6 @@
 /* Автоопределение города для городских страниц (только посетители из РФ; решает сервер, /geo/city/).
    IP — лишь предложение: переход и запоминание города происходят после клика посетителя.
-   Приоритет города: выбранный вручную → сохранённый selected_city → город страницы → IP (только предложение). */
+   В форме заказа город страницы важнее сохранённого selected_city; IP — только предложение. */
 (function () {
   "use strict";
   var cfgEl = document.getElementById("city-geo");
@@ -16,14 +16,14 @@
     return m ? decodeURIComponent(m[1]) : "";
   }
   function saveCity(key) {
+    var c = byKey[key];
+    document.cookie = COOKIE + "_name=" + encodeURIComponent(c ? c.name : "") + "; max-age=" + DAYS * 86400 + "; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
     document.cookie = COOKIE + "=" + encodeURIComponent(key) + "; max-age=" + DAYS * 86400 + "; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
   }
 
-  // Город в форме заказа: сохранённый выбор важнее города страницы; поле остаётся редактируемым.
+  // Город в форме заказа на городской странице — всегда город этой страницы (его выставляет шаблон);
+  // выбранный ранее город сюда не вмешивается, ручной ввод в форме не меняет selected_city.
   var saved = byKey[readCookie()];
-  if (saved && saved.key !== current.key) {
-    Array.prototype.forEach.call(document.querySelectorAll("[data-order][data-city]"), function (el) { el.setAttribute("data-city", saved.name); });
-  }
   if (saved) return;  // город уже выбран или подтверждён — не спрашиваем
   try { if (sessionStorage.getItem("city-geo-closed")) return; } catch (e) {}
 

@@ -193,7 +193,7 @@ def city_view(request, landing):
             "cities": picker,
             "labels": {
                 "region": "Ваш город", "ask": "Ваш город — {city}?", "yes": "Да, верно", "yes_short": "Да", "other": "Выбрать другой",
-                "other_short": "Другой город", "go": "Перейти: {city}", "stay": ("Остаться " + landing.name_in_ru) if landing.name_in_ru else "Остаться: {city}", "close": "Закрыть",
+                "other_short": "Другой город", "go": "Перейти: {city}", "stay": "Остаться: {city}", "close": "Закрыть",
                 "search": "Поиск города",
             },
         }
