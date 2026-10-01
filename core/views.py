@@ -1,5 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import FileResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
+from django.http import JsonResponse, FileResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.encoding import iri_to_uri
@@ -158,3 +158,20 @@ def private_file(request, path):
     if root not in target.parents or not target.is_file():
         raise Http404
     return FileResponse(open(target, "rb"), as_attachment=request.GET.get("download") == "1")
+
+
+@require_GET
+def geo_city(request):
+    """Подсказка города для городских страниц: только страна RU и только активный лендинг; иначе пустой ответ."""
+    from . import geo_detect
+
+    payload = {}
+    country, city = geo_detect.detect(request)
+    if country == "RU" and city:
+        landing = geo_detect.match_landing(city)
+        if landing:
+            payload = {"key": geo_detect.landing_key(landing), "name": landing.name_ru, "url": landing.url("ru")}
+    response = JsonResponse(payload)
+    response["Cache-Control"] = "private, no-store"
+    response["Vary"] = "User-Agent"
+    return response

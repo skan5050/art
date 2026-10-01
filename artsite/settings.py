@@ -229,3 +229,10 @@ LOGGING = {
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "root": {"handlers": ["console"], "level": env("LOG_LEVEL", "INFO")},
 }
+
+# Автоопределение города посетителя из РФ для городских страниц (ТЗ «автоопределение города РФ»).
+# Пусто — функция выключена, сайт работает как обычно. «cloudflare» — заголовки CF-IPCountry/CF-IPCity;
+# «headers» — свои имена заголовков (GEO_COUNTRY_HEADER, GEO_CITY_HEADER), например от nginx с геобазой.
+GEO_PROVIDER = env("GEO_PROVIDER", "")
+GEO_COUNTRY_HEADER = env("GEO_COUNTRY_HEADER", "X-Geo-Country")
+GEO_CITY_HEADER = env("GEO_CITY_HEADER", "X-Geo-City")

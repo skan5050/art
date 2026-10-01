@@ -210,7 +210,7 @@ class CityLandingAdmin(ModelAdmin):
     autocomplete_fields = ("city",)
     readonly_fields = ("path_ru", "path_en")
     fieldsets = (
-        ("Город", {"fields": ("city", ("name_ru", "name_en"), "name_in_ru", "published", "order"),
+        ("Город", {"fields": ("city", ("name_ru", "name_en"), "name_in_ru", "published", "show_in_picker", "geo_aliases", "order"),
                    "description": "Каждая городская страница пишется отдельно: свой текст, реальный адрес. Однотипные клоны не создаются (ТЗ 12.6)."}),
         ("Текст", {"fields": (("title_ru", "title_en"), ("intro_ru", "intro_en"), ("body_ru", "body_en"),
                               ("delivery_ru", "delivery_en"), ("button_ru", "button_en"), "cover", ("cover_alt_ru", "cover_alt_en"))}),

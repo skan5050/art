@@ -182,6 +182,21 @@ def city_view(request, landing):
         "city_reviews": reviews,
         "other_landings": others,
     }
+    if lang == "ru":  # автоопределение города — только для русских городских страниц (ТЗ), только как предложение
+        from core import geo_detect
+        from django.urls import reverse
+
+        picker = geo_detect.picker_items()
+        context["city_geo"] = {
+            "endpoint": reverse("geo-city"), "days": 30,
+            "current": {"key": geo_detect.landing_key(landing), "name": landing.name_ru, "url": landing.url("ru")},
+            "cities": picker,
+            "labels": {
+                "region": "Ваш город", "ask": "Ваш город — {city}?", "yes": "Да, верно", "yes_short": "Да", "other": "Выбрать другой",
+                "other_short": "Другой город", "go": "Перейти: {city}", "stay": ("Остаться " + landing.name_in_ru) if landing.name_in_ru else "Остаться: {city}", "close": "Закрыть",
+                "search": "Поиск города",
+            },
+        }
     context["meta"] = build_meta(
         request, landing, h1=landing.t.title, fallback_description=landing.t.intro or landing.t.body,
         og_image_url=landing.cover.url if landing.cover else "", breadcrumbs=crumbs,

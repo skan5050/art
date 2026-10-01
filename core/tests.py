@@ -780,3 +780,70 @@ class ChineseVersionTests(TestCase):
         self.assertIn("lang-hint.js", self.client.get("/").content.decode())
         self.assertIn("lang-hint.js", self.client.get("/en/").content.decode())
         self.assertNotIn("lang-hint.js", self.client.get("/zh/").content.decode())
+
+
+class CityGeoTests(TestCase):
+    """Автоопределение города РФ: только RU, только активный лендинг, без редиректов и догадок."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_site", verbosity=0)
+        from content.models import CityLanding
+
+        cls.landing = CityLanding.objects.filter(published=True).first()
+        assert cls.landing is not None
+
+    def geo(self, country="RU", city=None, ua="Mozilla/5.0", **extra):
+        headers = {"HTTP_X_GEO_COUNTRY": country, "HTTP_X_GEO_CITY": city if city is not None else self.landing.name_ru, "HTTP_USER_AGENT": ua}
+        return self.client.get("/geo/city/", **headers, **extra)
+
+    def test_off_by_default(self):
+        self.assertEqual(self.geo().json(), {})
+
+    def test_ru_city_with_active_landing(self):
+        with override_settings(GEO_PROVIDER="headers"):
+            data = self.geo().json()
+            self.assertEqual(data["name"], self.landing.name_ru)
+            self.assertEqual(data["url"], self.landing.url("ru"))
+            self.assertNotIn("sale", data)
+            self.assertEqual(self.geo().headers["Cache-Control"], "private, no-store")
+
+    def test_other_country_unknown_city_bot_do_nothing(self):
+        with override_settings(GEO_PROVIDER="headers"):
+            self.assertEqual(self.geo(country="DE").json(), {})
+            self.assertEqual(self.geo(city="").json(), {})
+            self.assertEqual(self.geo(city="Бердск").json(), {})  # лендинга нет — ничего не предлагаем и не создаём
+            self.assertEqual(self.geo(ua="Mozilla/5.0 (compatible; YandexBot/3.0)").json(), {})
+
+    def test_english_name_and_explicit_alias(self):
+        with override_settings(GEO_PROVIDER="headers"):
+            self.assertEqual(self.geo(city=self.landing.name_en)["Content-Type"].split(";")[0], "application/json")
+            self.assertTrue(self.geo(city=self.landing.name_en).json())
+            self.assertEqual(self.geo(city="Neizvestny").json(), {})
+            self.landing.geo_aliases = "Alias Town"
+            self.landing.save()
+            self.assertTrue(self.geo(city="alias town").json())
+
+    def test_cloudflare_provider_headers(self):
+        with override_settings(GEO_PROVIDER="cloudflare"):
+            r = self.client.get("/geo/city/", HTTP_CF_IPCOUNTRY="RU", HTTP_CF_IPCITY=self.landing.name_en or self.landing.name_ru)
+            self.assertTrue(r.json())
+
+    def test_landing_has_config_and_no_redirect(self):
+        r = self.client.get(self.landing.url("ru"), HTTP_X_GEO_COUNTRY="RU", HTTP_X_GEO_CITY="Другой")
+        self.assertEqual(r.status_code, 200)
+        html = r.content.decode()
+        self.assertIn('id="city-geo"', html)
+        self.assertIn("city-geo.js", html)
+        self.assertNotIn("city-geo.js", self.client.get("/").content.decode())
+        en = self.landing.url("en")
+        if en:
+            self.assertNotIn("city-geo.js", self.client.get(en).content.decode())
+
+    def test_picker_lists_only_flagged_active(self):
+        from core import geo_detect
+
+        total = len(geo_detect.picker_items())
+        self.landing.show_in_picker = False
+        self.landing.save()
+        self.assertEqual(len(geo_detect.picker_items()), total - 1)

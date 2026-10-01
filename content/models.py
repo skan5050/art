@@ -233,6 +233,11 @@ class CityLanding(TranslatableMixin, SeoFields, Routable):
     cover_alt_en = models.CharField("Alt изображения (EN)", max_length=200, blank=True)
     button_ru = models.CharField("Кнопка (RU)", max_length=80, blank=True)
     button_en = models.CharField("Кнопка (EN)", max_length=80, blank=True)
+    show_in_picker = models.BooleanField("Показывать в выборе города", default=True,
+                                         help_text="Список «Выбрать другой» на городских страницах для посетителей из РФ.")
+    geo_aliases = models.TextField("Названия для автоопределения", blank=True,
+                                   help_text="Необязательно. По одному на строку: как геобаза может назвать этот город (например, «Yekaterinburg»). "
+                                             "Только явные правила, догадок «соседний город ≈ этот» нет.")
     published = models.BooleanField("Опубликовано", default=False)
     order = models.PositiveSmallIntegerField("Порядок", default=0)
     updated_at = models.DateTimeField("Изменено", auto_now=True)

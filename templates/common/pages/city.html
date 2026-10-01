@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 {% shared "delivery-short" as delivery_short %}
 <div class="container">
@@ -63,3 +64,4 @@
 </div>
 {% include "partials/order_cta.html" with cta_kind="general" cta_city=landing.name_ru %}
 {% endblock %}
+{% block scripts %}{% if city_geo %}{{ city_geo|json_script:"city-geo" }}<script src="{% static 'js/city-geo.js' %}" defer></script>{% endif %}{% endblock %}
