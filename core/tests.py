@@ -208,10 +208,16 @@ class SiteTests(TestCase):
         call_command("import_cities", stdout=io.StringIO())
         shown = City.objects.filter(sale_confirmed=True, visible=True)
         abroad = shown.exclude(country_code="RU")
-        self.assertEqual(abroad.count(), 12)  # 10 ближнего зарубежья + Пекин и Шэньчжэнь
+        self.assertEqual(abroad.count(), 20)  # 10 ближнего зарубежья + 10 городов Китая
         self.assertTrue(all(c.population > THRESHOLD for c in abroad))
         # все центры субъектов РФ из справочника, включая добавленные вручную
-        self.assertEqual(shown.filter(country_code="RU").count(), City.objects.filter(country_code="RU", is_admin_center=True).count())
+        from django.db.models import Q
+
+        expected = City.objects.filter(country_code="RU").filter(Q(is_admin_center=True) | Q(source_id__in=list(MAJOR_CITIES)))
+        self.assertEqual(shown.filter(country_code="RU").count(), expected.count())
+        # все города России с населением от 500 тыс. отмечены (в том числе не центры регионов: Тольятти, Новокузнецк, Набережные Челны, Балашиха)
+        self.assertFalse(City.objects.filter(country_code="RU", population__gte=500_000, sale_confirmed=False).exists())
+        self.assertTrue(shown.filter(name_ru__in=["Тольятти", "Новокузнецк", "Набережные Челны", "Балашиха", "Шанхай", "Гуанчжоу"]).count() == 6)
         self.assertTrue(shown.filter(name_ru="Гатчина").exists() and shown.filter(name_ru="Анадырь").exists())
         self.assertTrue(set(MAJOR_CITIES) <= set(shown.values_list("source_id", flat=True)))
         krasnodar = shown.get(name_ru="Краснодар")
