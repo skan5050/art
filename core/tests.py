@@ -775,3 +775,8 @@ class ChineseVersionTests(TestCase):
 
     def test_untranslated_zh_page_is_404(self):
         self.assertEqual(self.client.get("/zh/no-such-page/").status_code, 404)
+
+    def test_language_hint_script_only_on_ru_en(self):
+        self.assertIn("lang-hint.js", self.client.get("/").content.decode())
+        self.assertIn("lang-hint.js", self.client.get("/en/").content.decode())
+        self.assertNotIn("lang-hint.js", self.client.get("/zh/").content.decode())
