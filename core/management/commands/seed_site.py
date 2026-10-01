@@ -273,7 +273,7 @@ class Command(BaseCommand):
             files = {"cover": item.pop("cover")} if item.get("cover") else {}
             item.pop("cover", None)
             item.setdefault("order", i * 10)
-            item.setdefault("published", i < 3)  # для согласования открыты три статьи; остальные — черновики
+            item.setdefault("published", True)  # все стартовые статьи опубликованы; снять с публикации можно в админке
             obj = self.upsert(Article, {"slug_ru": item["slug_ru"]}, item, files)
             if categories:
                 obj.related_categories.set(Category.objects.filter(slug_ru__in=categories))
