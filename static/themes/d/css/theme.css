@@ -376,3 +376,11 @@ a:hover { color: var(--terracotta); }
 .coop-icon::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 58px; height: 4px; margin-left: -29px; background: var(--accent); }
 .coop-icon-svg, .coop-icon-img { width: 44px; height: 44px; }
 .coop-h1 { font-size: clamp(28px, 3.9vw, 56px); overflow-wrap: normal; }
+
+/* Узкие экраны (320–375px): ссылки языков в шапке сжимаются, чтобы не было горизонтальной прокрутки */
+@media (max-width: 379px) {
+  .nav-tools { gap: 0; }
+  .nav-tools .lang-switch { padding: 6px 5px; font-size: 13px; margin-left: 0; }
+  .nav-row { gap: 6px; }
+  .nav-toggle { padding-left: 10px; padding-right: 10px; }
+}
