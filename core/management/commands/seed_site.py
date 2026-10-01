@@ -6,6 +6,7 @@
 Команда повторяемая: существующие записи без --update не меняются,
 поэтому правки, сделанные в админке, сохраняются.
 """
+import datetime
 import importlib
 from pathlib import Path
 
@@ -211,6 +212,8 @@ class Command(BaseCommand):
             item = dict(item)
             photo = item.pop("photo", "")
             item.pop("painting_note", None)
+            if item.get("date"):
+                item["date"] = datetime.date.fromisoformat(item["date"])
             lookup = {"author_ru": item.pop("author_ru"), "city_ru": item.pop("city_ru")}
             item.update({"published": True, "order": i * 10, "featured": item.get("featured", False)})
             self.upsert(Review, lookup, item, {"photo": photo})

@@ -8,7 +8,7 @@ MiraMe,A-06,Картина под заказ,PDF A стр. 6,PASS,PASS,PASS,PASS
 MiraMe,A-07,Проданная картина,PDF A стр. 7,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,SOLD как статус записи; «Заказать похожую».
 MiraMe,A-08,Архив SOLD,PDF A стр. 8,PASS,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Заголовок по центру, вводный текст под ним слева, 4 в ряд как в PDF. Отличие: ниже добавлен блок «География наших продаж» (ТЗ 1.3)."
 MiraMe,A-09,О нас,PDF A стр. 9,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Одно изображение слева, текст справа, CTA."
-MiraMe,A-10,Отзывы,PDF A стр. 10,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Стартовые отзывы заказчика (10 шт., RU и EN) с фото, именем и городом; карточки с кавычкой как в PDF. Даты не выводятся (в комплекте их нет)."
+MiraMe,A-10,Отзывы,PDF A стр. 10,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Стартовые отзывы заказчика (10 шт., RU и EN) с фото, именем и городом; карточки с кавычкой как в PDF. Даты — демонстрационные (случайные за последние 3 года), правятся в админке."
 MiraMe,A-11,Доставка/карта,PDF A стр. 11,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"3 условия, интерактивная карта, статья доставки; атрибуция провайдера карты сохранена."
 MiraMe,A-12,Контакты,PDF A стр. 12,PASS,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Короткая форма как в PDF (имя, способ связи, контакт, согласие, «Отправить заявку»); кнопка «Открыть мессенджер» показана без ссылки до ввода данных. Телефон и email слева появятся после ввода владельцем (демо-данные запрещены ТЗ v1.4); полная форма заказа остаётся в модальном окне."
 MiraMe,A-13,Сертификат,PDF A стр. 13,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Тёмно-синяя карточка сертификата слева, форма справа."
@@ -29,7 +29,7 @@ HolStori,D-07,Картина под заказ,PDF D стр. 11,PASS,PASS,PASS,P
 HolStori,D-08,Проданная картина,PDF D стр. 12,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Композиция D; добавлен блок «Еще в рубрике», которого нет в PDF."
 HolStori,D-09,SOLD,PDF D стр. 13,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,Типографический SOLD + 4 работы; ниже добавлена карта «География наших продаж» (по ТЗ).
 HolStori,D-10,О нас / О студии,PDF D стр. 14,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Плакатный тезис слева, фото справа, 3 этапа; остальные 5 фото студии — только на странице «О студии»."
-HolStori,D-11,Отзывы,PDF D стр. 15,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Стартовые отзывы заказчика (10 шт., RU и EN) с фото, именем и городом; первый отзыв крупно на лимонном поле с фото, остальные ниже («Следующие истории»). Даты не выводятся (в комплекте их нет)."
+HolStori,D-11,Отзывы,PDF D стр. 15,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Стартовые отзывы заказчика (10 шт., RU и EN) с фото, именем и городом; первый отзыв крупно на лимонном поле с фото, остальные ниже («Следующие истории»). Даты — демонстрационные (случайные за последние 3 года), правятся в админке."
 HolStori,D-12,Доставка,PDF D стр. 16,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,"Карта главным блоком, город справа; на карте добавлены Пекин и Шэньчжэнь."
 HolStori,D-13,Контакты,PDF D стр. 17,DEVIATION,PASS,PASS,PASS,PASS,PASS,PASS_WITH_DEVIATION,VERIFIED,"Кнопки «Написать в Telegram» и «Написать в MAX» показаны как в PDF, пока без ссылок; активируются после ввода адресов мессенджеров. Страница содержит форму целиком."
 HolStori,D-14,Сертификат,PDF D стр. 18,PASS,PASS,PASS,PASS,PASS,PASS,PASS,VERIFIED,Графический объект сертификата + форма.

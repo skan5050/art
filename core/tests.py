@@ -593,6 +593,7 @@ class StarterReviewsTests(TestCase):
         self.assertTrue(all(r.published and r.photo and r.text_en and r.city_ru for r in reviews))
         call_command("seed_site", verbosity=0)  # повторный запуск не плодит дубли
         self.assertEqual(Review.objects.count(), 10)
+        self.assertTrue(all(r.date and r.date.year >= 2023 for r in reviews))
         html = self.client.get(q("/отзывы/")).content.decode()
         self.assertIn(reviews[0].text_ru[:30], html)
         self.assertIn("review-photo" if "review-photo" in html else "review-featured", html)
