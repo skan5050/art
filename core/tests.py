@@ -863,3 +863,17 @@ class CityGeoTests(TestCase):
         self.assertIn("city-form.js", self.client.get("/").content.decode())
         self.assertNotIn("city-form.js", self.client.get("/en/").content.decode())
         self.assertNotIn("city-form.js", self.client.get("/zh/").content.decode())
+
+    def test_language_by_ip_country(self):
+        def lang(country, ua="Mozilla/5.0"):
+            return self.client.get("/geo/lang/", HTTP_X_GEO_COUNTRY=country, HTTP_USER_AGENT=ua).json()["lang"]
+
+        with override_settings(GEO_PROVIDER="headers"):
+            self.assertEqual(lang("RU"), "")
+            self.assertEqual(lang("CN"), "zh")
+            self.assertEqual(lang("DE"), "en")
+            self.assertEqual(lang("KZ"), "en")
+            self.assertEqual(lang("XX"), "")
+            self.assertEqual(lang(""), "")
+            self.assertEqual(lang("DE", ua="Googlebot/2.1"), "")
+        self.assertEqual(lang("DE"), "")  # источник не настроен — предложений нет

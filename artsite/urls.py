@@ -20,6 +20,7 @@ urlpatterns = [
     path("sitemap.xml", core_views.sitemap_xml, name="sitemap"),
     path("favicon.ico", core_views.favicon_ico, name="favicon"),
     re_path(r"^(?P<key>[A-Za-z0-9-]{8,64})\.txt$", core_views.indexnow_key, name="indexnow-key"),
+    path("geo/lang/", core_views.geo_lang, name="geo-lang"),
     path("geo/city/", core_views.geo_city, name="geo-city"),
     path("zh/china/", china_view, name="china"),
     path("lead/", lead_views.submit, name="lead-submit"),

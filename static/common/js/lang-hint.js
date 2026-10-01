@@ -4,11 +4,24 @@
 (function () {
   "use strict";
   var page = (document.documentElement.lang || "ru").toLowerCase();
+  if (page === "zh") return;  // китайскую версию не предлагаем уходить
   var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
   var first = String(langs[0] || "").toLowerCase();
-  var target = first.indexOf("zh") === 0 ? "zh" : first.indexOf("en") === 0 ? "en" : "";  // основной язык браузера
-  if (!target || target === page) return;
-  if (page === "zh") return;  // китайскую версию не предлагаем уходить
+  var browser = first.indexOf("zh") === 0 ? "zh" : first.indexOf("en") === 0 ? "en" : first.indexOf("ru") === 0 ? "ru" : "";
+
+  if (browser) {
+    // Язык браузера (ru/en/zh) решает сам: работает как прежде, IP не вмешивается.
+    if (browser !== page) offer(browser);
+    return;
+  }
+  // Браузерная логика ничего не предложила (язык браузера другой): дополнительный источник — страна по IP.
+  // RU — ничего; CN — 中文; прочие страны — English. Только предложение, без автоперехода.
+  fetch("/geo/lang/", { credentials: "same-origin", headers: { Accept: "application/json" } })
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (d) { if (d && (d.lang === "zh" || d.lang === "en") && d.lang !== page) offer(d.lang); })
+    .catch(function () {});
+
+  function offer(target) {
   var link = document.querySelector('link[rel="alternate"][hreflang="' + target + '"]');
   if (!link) return;
   var KEY = "lang-hint-" + target + "-closed";
@@ -43,4 +56,5 @@
   go.style.cssText = "color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px";
   close.style.cssText = "position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:inherit;font-size:22px;line-height:1;cursor:pointer;padding:4px 10px";
   document.body.insertBefore(bar, document.body.firstChild);
+  }
 })();

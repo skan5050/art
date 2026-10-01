@@ -175,3 +175,14 @@ def geo_city(request):
     response["Cache-Control"] = "private, no-store"
     response["Vary"] = "User-Agent"
     return response
+
+
+@require_GET
+def geo_lang(request):
+    """Страна IP → язык для мягкого предложения (RU — пусто, CN — zh, прочие — en). Переключения языка не делает."""
+    from . import geo_detect
+
+    response = JsonResponse({"lang": geo_detect.language_by_country(request)})
+    response["Cache-Control"] = "private, no-store"
+    response["Vary"] = "User-Agent"
+    return response

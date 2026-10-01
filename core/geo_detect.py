@@ -119,3 +119,11 @@ def picker_items(landings=None):
         if landing.show_in_picker:
             items.append({"key": landing_key(landing), "name": landing.name_ru, "url": landing.url("ru")})
     return items
+
+
+def language_by_country(request):
+    """Язык для предложения по стране IP: RU — ничего, CN — zh, остальные известные страны — en."""
+    country, _ = detect(request)
+    if not re.fullmatch(r"[A-Z]{2}", country) or country in ("RU", "XX", "T1"):
+        return ""
+    return "zh" if country == "CN" else "en"
