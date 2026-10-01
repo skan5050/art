@@ -18,13 +18,10 @@
       land: v("--map-land", "#dcebf6"), landHot: v("--map-land-hot", "#c6ddf0"), stroke: v("--map-stroke", "#9fbfdc"),
     };
     var map = L.map(el, { scrollWheelZoom: false, worldCopyJump: false, zoomSnap: 0.25, attributionControl: true });
-    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
-    map.attributionControl.addAttribution('Города: <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0)');
+    map.attributionControl.setPrefix(false);  // в подписи — только источник подложки из настроек (OpenStreetMap)
     var tiles = el.getAttribute("data-tiles");
     if (tiles) {
       L.tileLayer(tiles, { maxZoom: 12, attribution: el.getAttribute("data-attribution") }).addTo(map);
-    } else {
-      map.attributionControl.addAttribution("Natural Earth");
     }
 
     var root = el.closest(".geo-section") || document;
@@ -134,10 +131,10 @@
 
     fetch(el.getAttribute("data-geo")).then(function (r) { return r.json(); }).then(function (geo) {
       var land = L.geoJSON(geo, {
-        style: { color: colors.stroke, weight: 1, fillColor: colors.land, fillOpacity: 1 },
+        style: { color: colors.stroke, weight: 1, fillColor: colors.land, fillOpacity: tiles ? 0 : 1 },  // с подложкой контуры прозрачные
         onEachFeature: function (feature, layer) {  // подсветка страны при наведении
-          layer.on("mouseover", function () { layer.setStyle({ fillColor: colors.landHot }); });
-          layer.on("mouseout", function () { layer.setStyle({ fillColor: colors.land }); });
+          layer.on("mouseover", function () { layer.setStyle({ fillColor: colors.landHot, fillOpacity: tiles ? 0.25 : 1 }); });
+          layer.on("mouseout", function () { layer.setStyle({ fillColor: colors.land, fillOpacity: tiles ? 0 : 1 }); });
         },
       }).addTo(map);
       var bounds = land.getBounds();
@@ -178,6 +175,9 @@
         var item = markers[li.getAttribute("data-lat") + "," + li.getAttribute("data-lng")];
         if (item) { item.hidden = !show; item.marker.setStyle({ opacity: show ? 1 : 0.25, fillOpacity: show ? 1 : 0.25 }); }
       });
+      var shown = {};
+      root.querySelectorAll("[data-geo-city]:not([hidden])").forEach(function (li) { shown[li.getAttribute("data-country")] = 1; });
+      root.querySelectorAll(".geo-group").forEach(function (h) { h.hidden = !shown[h.getAttribute("data-group")]; });  // заголовки стран без городов скрываются
       declutter();
     };
     if (search) search.addEventListener("input", filter);

@@ -22,7 +22,8 @@ SETTINGS = {
     "painting_prefix_en": "painting",
     "header_note_ru": "",
     "header_note_en": "",
-    "map_tiles_url": "",
+    "map_tiles_url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "map_attribution": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }
 
 LABELS = {

@@ -26,7 +26,8 @@ SETTINGS = {
     "painting_prefix_en": "painting",
     "header_note_ru": "Картины в наличии и на заказ",
     "header_note_en": "Paintings ready to hang and made to order",
-    "map_tiles_url": "",
+    "map_tiles_url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "map_attribution": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }
 
 # Надписи, которые на этом сайте звучат иначе, чем по умолчанию: ключ → (RU, EN).

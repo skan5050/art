@@ -667,3 +667,10 @@ html[lang="zh"] h1, html[lang="zh"] h2, html[lang="zh"] h3 { letter-spacing: 0; 
   .coop-adv-list { grid-template-columns: repeat(2, 1fr); }
   .coop-adv-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+
+/* Карта продаж: полный список городов по странам рядом с картой */
+.geo-list .geo-group { display: block; position: sticky; top: 0; z-index: 1; background: inherit; margin: 0 -6px; padding: 8px 6px 4px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--line); }
+.geo-list .geo-group[hidden] { display: none; }
+.geo-list { max-height: 360px; min-height: 240px; }
+.geo-layout .geo-map { height: 420px; min-height: 0; }
+@media (min-width: 960px) { .geo-layout { align-items: start; } .geo-layout .geo-map { height: 760px; } .geo-list { max-height: 380px; } }

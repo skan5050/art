@@ -45,7 +45,7 @@
           </select>
         </div>
         <ul class="geo-list" data-geo-list aria-label="{% t 'map.list' %}">
-          {% for c in cities %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-lat="{{ c.lat|stringformat:"s" }}" data-lng="{{ c.lng|stringformat:"s" }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}
+          {% for g in countries %}<li class="geo-group" data-group="{{ g.grouper }}">{{ g.grouper }} · {{ g.list|length }}</li>{% for c in g.list %}<li data-geo-city data-name="{{ c.name|lower }}" data-country="{{ c.country }}" data-lat="{{ c.lat|stringformat:"s" }}" data-lng="{{ c.lng|stringformat:"s" }}"><button type="button" data-geo-focus>{{ c.name }}</button><span class="muted">{{ c.country }}</span></li>{% endfor %}{% endfor %}
         </ul>
         {% endif %}
         <a class="btn btn-primary btn-block" href="{% page_url 'contacts' %}?order=delivery#order" data-order data-kind="delivery" data-geo-discuss
