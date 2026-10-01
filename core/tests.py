@@ -859,10 +859,27 @@ class CityGeoTests(TestCase):
         with override_settings(GEO_PROVIDER=""):
             self.assertIsNone(geo_detect.get_provider())
 
-    def test_city_form_script_only_on_ru_pages(self):
-        self.assertIn("city-form.js", self.client.get("/").content.decode())
-        self.assertNotIn("city-form.js", self.client.get("/en/").content.decode())
-        self.assertNotIn("city-form.js", self.client.get("/zh/").content.decode())
+    def test_no_city_autofill_script_on_ordinary_pages(self):
+        for path in ("/", "/en/", "/zh/", "/%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D1%8B/"):
+            html = self.client.get(path).content.decode()
+            self.assertNotIn("city-form.js", html)
+            self.assertNotIn("city-geo.js", html)
+
+    def test_missing_headers_and_unknown_city_are_silent(self):
+        with override_settings(GEO_PROVIDER="cloudflare"):
+            self.assertEqual(self.client.get("/geo/city/").json(), {})  # нет заголовков страны и города
+            self.assertEqual(self.client.get("/geo/city/", HTTP_CF_IPCOUNTRY="RU").json(), {})  # нет города
+            self.assertEqual(self.client.get("/geo/city/", HTTP_CF_IPCITY="Москва").json(), {})  # нет страны
+            self.assertEqual(self.client.get("/geo/city/", HTTP_CF_IPCOUNTRY="RU", HTTP_CF_IPCITY="Нигде").json(), {})
+            self.assertEqual(self.client.get("/geo/lang/").json(), {"lang": ""})
+
+    def test_provider_exception_does_not_break(self):
+        from unittest import mock
+
+        from core import geo_detect
+
+        with override_settings(GEO_PROVIDER="cloudflare"), mock.patch.object(geo_detect.CloudflareProvider, "lookup", side_effect=RuntimeError):
+            self.assertEqual(self.client.get("/geo/city/").json(), {})
 
     def test_language_by_ip_country(self):
         def lang(country, ua="Mozilla/5.0"):

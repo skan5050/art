@@ -16,13 +16,11 @@
     return m ? decodeURIComponent(m[1]) : "";
   }
   function saveCity(key) {
-    var c = byKey[key];
-    document.cookie = COOKIE + "_name=" + encodeURIComponent(c ? c.name : "") + "; max-age=" + DAYS * 86400 + "; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
     document.cookie = COOKIE + "=" + encodeURIComponent(key) + "; max-age=" + DAYS * 86400 + "; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
   }
 
-  // Город в форме заказа на городской странице — всегда город этой страницы (его выставляет шаблон);
-  // выбранный ранее город сюда не вмешивается, ручной ввод в форме не меняет selected_city.
+  // selected_city (ключ) — источник истины: название берётся из списка страницы (из БД), не из cookie.
+  // Город в форме заказа — всегда город этой страницы (его выставляет шаблон); сохранённый выбор и IP в форму не пишутся.
   var saved = byKey[readCookie()];
   if (saved) return;  // город уже выбран или подтверждён — не спрашиваем
   try { if (sessionStorage.getItem("city-geo-closed")) return; } catch (e) {}
