@@ -357,25 +357,33 @@ a:hover { color: var(--terracotta); }
   .page-head .page-title { font-size: clamp(28px, 9vw, 36px); }
 }
 
-/* ===== «Сотрудничество» — дизайн D ===== */
-.coop-hero { background: var(--bg); border-bottom: 1px solid var(--line); }
-.coop-hero--brand { background: var(--surface); }
-.coop-hero--brand::before, .coop-hero--text::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: clamp(8px, 1vw, 14px); background: var(--accent); z-index: 1; }
-.coop-kicker { color: var(--terracotta); letter-spacing: .06em; }
-.coop-h1 { font-size: clamp(34px, 5vw, 66px); text-transform: uppercase; letter-spacing: 0; color: var(--text); }
-.coop-subtitle { font-family: var(--font-serif); font-weight: 400; color: var(--text); max-width: 20em; }
-.coop-rule { background: var(--accent); }
-.coop-block-title, .coop-adv-title, .coop-adv-name { color: var(--text); }
+/* ===== «Сотрудничество» — дизайн D (тёплый белый, угольный, лимонный; шрифты — глобальные токены сайта) ===== */
+.coop-hero { background: var(--footer-bg); color: var(--footer-ink); }
+.coop-hero--none { background: var(--bg); color: var(--text); }
+.coop-hero--none .coop-h1, .coop-hero--none .coop-subtitle { color: var(--text); }
+.coop-hero--none .coop-kicker { color: var(--terracotta); }
+.coop-kicker { color: var(--accent); letter-spacing: .14em; }
+.coop-h1 { font-family: var(--font-serif); font-weight: 400; color: var(--footer-ink); font-size: clamp(30px, 4.2vw, 60px); }
+.coop-subtitle { font-weight: 500; color: var(--footer-ink); max-width: 20em; }
+.coop-lead { color: var(--footer-ink); }
+.coop-hero--photo_full:not(.is-dark) .coop-h1, .coop-hero--photo_full:not(.is-dark) .coop-subtitle, .coop-hero--photo_full:not(.is-dark) .coop-lead { color: var(--text); }
+.coop-hero--photo_full:not(.is-dark) .coop-kicker { color: var(--terracotta); }
+.coop-hero-media { margin-right: var(--coop-edge); }
 .coop-block { background: var(--bg); }
-.coop-block.is-photo-left { background: var(--bg); }
-.coop-cta { background: var(--footer-bg); color: var(--footer-ink); }
-.coop-cta-title { font-family: var(--font-serif); font-weight: 400; color: var(--footer-ink); font-size: clamp(26px, 2.8vw, 38px); }
-.coop-cta-body { color: var(--footer-ink); }
-.coop-adv-title { text-transform: uppercase; display: table; margin-left: auto; margin-right: auto; padding-bottom: 8px; border-bottom: 5px solid var(--accent); }
-.coop-icon { color: var(--terracotta); width: 72px; height: 64px; position: relative; margin-bottom: 18px; }
-.coop-icon::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 58px; height: 4px; margin-left: -29px; background: var(--accent); }
-.coop-icon-svg, .coop-icon-img { width: 44px; height: 44px; }
-.coop-h1 { font-size: clamp(28px, 3.9vw, 56px); overflow-wrap: normal; }
+.coop-rule { background: var(--accent); }
+.coop-block-title { font-family: var(--font-serif); font-weight: 400; color: var(--text); }
+.coop-adv { background: var(--footer-bg); }
+.coop-adv-title { font-family: var(--font-serif); font-weight: 400; color: var(--footer-ink); }
+.coop-adv-name { color: var(--footer-ink); }
+.coop-adv-text { color: rgba(245, 243, 234, .7); }
+.coop-cta { background: var(--footer-bg); }
+.coop-cta:not(.no-photo) { grid-template-columns: minmax(0, 36fr) minmax(0, 64fr); --coop-pad-l: clamp(20px, 3vw, 44px); }
+.coop-cta-band { background: var(--accent); color: var(--accent-ink); }
+.coop-cta-text { flex: 1 1 320px; }
+.coop-cta-title { font-family: var(--font-serif); font-weight: 700; color: var(--accent-ink); }
+.coop-cta-body { color: var(--accent-ink); }
+.coop-cta-body strong { font-weight: 700; }
+@media (max-width: 800px) { .coop-hero-media { margin-right: 0; } .coop-cta:not(.no-photo) { grid-template-columns: 1fr; } }
 
 /* Узкие экраны (320–375px): ссылки языков в шапке сжимаются, чтобы не было горизонтальной прокрутки */
 @media (max-width: 379px) {

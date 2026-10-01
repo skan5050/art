@@ -235,13 +235,13 @@ class CooperationBlockInline(StackedInline):
     model = CooperationBlock
     extra = 0
     max_num = 3
-    can_delete = False  # блок скрывается галочкой «Показывать блок»; три блока заданы макетом
+    can_delete = False  # блок скрывается галочкой «Показывать блок»; два блока заданы эталоном, третий можно добавить
     fields = ("order", "visible", ("title_ru", "title_en"), ("text_ru", "text_en"), "image", "image_asset", "preview",
               ("alt_ru", "alt_en"), ("show_image", "image_side"), ("focus_x", "focus_y"))
     readonly_fields = ("preview",)
     autocomplete_fields = ("image_asset",)
     verbose_name = "Блок «текст + фото»"
-    verbose_name_plural = "Три блока «текст + фото» (положение по умолчанию — как в утверждённом макете)"
+    verbose_name_plural = "Блоки «текст + фото» (по эталону два: фото слева, затем фото справа; можно добавить третий)"
 
     @admin.display(description="Сейчас на странице")
     def preview(self, obj):

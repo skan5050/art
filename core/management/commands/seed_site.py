@@ -171,11 +171,20 @@ class Command(BaseCommand):
             if page:
                 MenuItem.objects.create(page=page, order=i * 10, **spec)
 
+    def put_zh_set(self, obj, fields):
+        """Китайские тексты объекта «как в стартовом наборе»: при --update лишние старые переводы убираются."""
+        self.put_zh_fields(obj, fields)
+        if self.update and obj is not None:
+            target = f"{obj._meta.label_lower}:{obj.pk}"
+            Translation.objects.filter(lang="zh", target=target).exclude(field__in=list(fields)).delete()
+
     def cooperation(self, site):
-        """Страница «Сотрудничество»: страница, пункт меню, содержимое, блоки, преимущества и китайские тексты.
+        """Страница «Сотрудничество»: страница, пункт меню, содержимое, блоки, преимущества, медиатека и китайские тексты.
 
         Без --update существующее содержимое (правки владельца) не меняется; недостающее добавляется.
         """
+        from content.models import MediaAsset
+
         spec = importlib.import_module("seed.cooperation")
         page_spec = dict(spec.PAGE[site])
         zh_page = page_spec.pop("zh")
@@ -193,10 +202,15 @@ class Command(BaseCommand):
         if created or self.update:
             for key, value in data["scalars"].items():
                 setattr(content, key, value)
+            for field in ("hero_image", "cta_image"):  # изображения, которых нет в стартовом наборе, убираем (без пустых рамок)
+                current = getattr(content, field)
+                if field not in data["images"] and current:
+                    current.delete(save=False)
+                    setattr(content, field, "")
         for field, filename in data["images"].items():
             self.attach(content, field, filename)
         content.save()
-        self.put_zh_fields(content, data["zh"])
+        self.put_zh_set(content, data["zh"])
 
         for i, item in enumerate(data["blocks"]):
             block = content.blocks.filter(order=i * 10).first()
@@ -207,9 +221,16 @@ class Command(BaseCommand):
                 for key in ("title_ru", "title_en", "text_ru", "text_en", "alt_ru", "alt_en"):
                     setattr(block, key, item[key])
                 block.image_side = item["side"]
+                block.focus_x, block.focus_y = item.get("focus_x", 50), item.get("focus_y", 50)
             self.attach(block, "image", item["image"])
             block.save()
-            self.put_zh_fields(block, item["zh"])
+            self.put_zh_set(block, item["zh"])
+        if self.update:  # блоки сверх стартового набора (остатки прежнего макета) убираем
+            for extra in content.blocks.filter(order__gte=len(data["blocks"]) * 10):
+                Translation.objects.filter(lang="zh", target=f"{extra._meta.label_lower}:{extra.pk}").delete()
+                if extra.image:
+                    extra.image.delete(save=False)
+                extra.delete()
         for i, item in enumerate(data["advantages"]):
             adv = content.advantages.filter(order=i * 10).first()
             fresh = adv is None
@@ -217,10 +238,24 @@ class Command(BaseCommand):
                 adv = CooperationAdvantage(content=content, order=i * 10)
             if fresh or self.update:
                 adv.icon_key = item["icon"]
-                for key in ("title_ru", "title_en", "text_ru", "text_en"):
-                    setattr(adv, key, item[key])
+                if adv.icon_file:
+                    adv.icon_file.delete(save=False)
+                    adv.icon_file = ""
+                adv.title_ru, adv.title_en = item["title_ru"], item["title_en"]
+                adv.text_ru, adv.text_en = item.get("text_ru", ""), item.get("text_en", "")
+                adv.visible = True
                 adv.save()
-            self.put_zh_fields(adv, item["zh"])
+            self.put_zh_set(adv, item["zh"])
+
+        for item in data.get("library", []):  # дополнительный визуал: в медиатеке, на странице по умолчанию не используется
+            asset = MediaAsset.objects.filter(title=item["title"]).first()
+            fresh = asset is None
+            if fresh:
+                asset = MediaAsset(title=item["title"])
+            if fresh or self.update:
+                asset.alt_ru, asset.alt_en = item["alt_ru"], item["alt_en"]
+            self.attach(asset, "image", item["image"])
+            asset.save()
 
     def home_sections(self, sections):
         for i, item in enumerate(sections):

@@ -109,11 +109,18 @@
 /* Контакты по макету A: короткая форма (имя, способ связи, контакт, согласие); остальные поля остаются в форме обращения из модального окна */
 .form-card-short .f-city, .form-card-short .f-size, .form-card-short .f-deadline, .form-card-short .f-comment, .form-card-short .f-file { display: none; }
 
-/* ===== «Сотрудничество» — дизайн A ===== */
-.coop-hero-copy .btn-primary { background: var(--primary); }
-.coop-hero-copy .btn-primary:hover { background: var(--primary-dark); }
-.coop-cta-text .btn-primary { background: var(--primary); }
+/* ===== «Сотрудничество» — дизайн A (светлый фон, голубые секции, золотые акценты; шрифты — глобальные токены сайта) ===== */
+.coop-hero, .coop-adv, .coop-cta-band { background: linear-gradient(100deg, #dcebf6 0%, #eef5fb 70%); }
+.coop-lead, .coop-block-body, .coop-cta-body { color: var(--text); }
 .coop-hero--photo_full .coop-h1 { color: var(--primary-dark); }
-.coop-icon { border: 2px solid var(--accent); border-radius: 50%; background: #fff; }
-.coop-block-body, .coop-cta-body, .coop-lead { color: #385e7f; }
-.coop-h1 { font-size: clamp(30px, 3.6vw, 52px); overflow-wrap: normal; }
+.coop-hero .btn-primary, .coop-cta .btn-primary { background: var(--primary-dark); }
+.coop-hero .btn-primary:hover, .coop-cta .btn-primary:hover { background: var(--primary); }
+.coop-btn { gap: 14px; }
+.coop-btn::after { content: ""; width: 20px; height: 10px; flex: none; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 6h20M15 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 6h20M15 1l5 5-5 5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat; }
+.coop-cta { background: var(--bg); padding-top: 8px; }
+.coop-cta:not(.no-photo) { --coop-pad-r: clamp(20px, 3vw, 44px); }
+.coop-cta-text { flex: 0 1 460px; }
+.coop-cta-photo { order: 2; }
+.coop-adv-title { font-weight: 700; }

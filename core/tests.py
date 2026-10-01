@@ -897,7 +897,7 @@ class CityGeoTests(TestCase):
 
 
 class CooperationPageTests(TestCase):
-    """Страница «Сотрудничество»: всё редактируется, макет не ломается при удалении картинок и блоков."""
+    """Страница «Сотрудничество»: по эталону A / D, всё редактируется, макет не ломается при удалении картинок и блоков."""
 
     @classmethod
     def setUpTestData(cls):
@@ -912,19 +912,39 @@ class CooperationPageTests(TestCase):
     def html(self, path=None):
         return self.client.get(path or self.url).content.decode()
 
-    def test_page_menu_languages_and_default_layout(self):
+    def test_page_menu_languages_and_reference_layout(self):
         from content.models import MenuItem
 
         html = self.html()
-        self.assertEqual(html.count('<section class="coop-block'), 3)
+        self.assertEqual(html.count('<section class="coop-block'), 2)  # по эталону два блока: фото слева, затем фото справа
+        self.assertEqual(html.count("is-photo-left"), 1)
         self.assertIn("coop-hero--split", html)
         self.assertEqual(html.count('class="coop-adv-item"'), 5)
-        self.assertRegex(html, r"coop-block is-photo-left")  # второй блок: фото слева, как в макете
+        self.assertLess(html.index('class="coop-adv"'), html.index('<section class="coop-cta'))  # преимущества выше финального блока
         self.assertTrue(MenuItem.objects.filter(page__kind="cooperation").exists())
         self.assertIn("Cooperation", self.html(self.url.replace("/сотрудничество/", "/en/cooperation/")))
         zh = self.html("/zh/cooperation/")
         self.assertIn("合作", zh)
         self.assertIn("个性化", zh)
+
+    def test_theme_specific_defaults(self):
+        from django.conf import settings
+
+        html = self.html()
+        if settings.SITE_THEME == "a":
+            self.assertIn("coop-crumbs", html)  # хлебные крошки в постере — только у A
+            self.assertIn("coop-cta no-photo", html)  # финальный блок A — без фото
+        else:
+            self.assertNotIn("coop-crumbs", html)
+            self.assertIn("coop-cta-photo", html)  # у D слева фактурное фото
+        self.assertNotIn("coop_optional", html)  # дополнительный визуал по умолчанию на странице скрыт
+
+    def test_optional_visual_is_in_media_library(self):
+        from content.models import MediaAsset
+
+        asset = MediaAsset.objects.get(title__startswith="Сотрудничество")
+        self.assertTrue(asset.image)
+        self.assertTrue(asset.alt_ru)
 
     def test_hero_modes_and_photo_removal(self):
         self.c.hero_mode = "photo_full"
@@ -959,17 +979,23 @@ class CooperationPageTests(TestCase):
 
     def test_block_visibility_image_and_side(self):
         blocks = list(self.c.blocks.all())
-        blocks[0].image_side = "left"
+        self.assertEqual([b.image_side for b in blocks], ["left", "right"])  # положение по эталону
+        blocks[0].image_side = "right"
         blocks[0].save()
+        blocks[1].image_side = "left"
+        blocks[1].save()
+        html = self.html()
+        self.assertEqual(html.count("is-photo-left"), 1)
+        self.assertLess(html.index('<section class="coop-block"'), html.index("coop-block is-photo-left"))
         blocks[1].show_image = False
         blocks[1].save()
-        blocks[2].visible = False
-        blocks[2].save()
         html = self.html()
-        self.assertEqual(html.count('<section class="coop-block'), 2)
         self.assertIn("no-photo", html)  # изображение скрыто: без пустой рамки и placeholder
         self.assertEqual(html.count('class="coop-block-photo"'), 1)
-        self.assertEqual(html.count("is-photo-left"), 1)
+        blocks[0].visible = False
+        blocks[0].save()
+        self.assertEqual(self.html().count('<section class="coop-block'), 1)
+        blocks[0].visible = True
         blocks[0].image = ""
         blocks[0].save()
         self.assertEqual(self.html().count('class="coop-block-photo"'), 0)
@@ -994,8 +1020,9 @@ class CooperationPageTests(TestCase):
         from django.core.exceptions import ValidationError
         from django.core.files.uploadedfile import SimpleUploadedFile
 
-        from content.coop_icons import validate_icon_file
+        from content.coop_icons import ICONS, validate_icon_file
 
+        self.assertIn("partner", ICONS)
         with self.assertRaises(ValidationError):
             validate_icon_file(SimpleUploadedFile("x.svg", b"<svg><script>alert(1)</script></svg>"))
         self.c.hero_button_action = "url"
@@ -1009,6 +1036,44 @@ class CooperationPageTests(TestCase):
         self.assertIn('href="/каталог/"', html)
         self.assertIn("data-order", html)  # финальная кнопка по умолчанию открывает общую форму заявки
 
+    def test_page_sets_no_font_family_of_its_own(self):
+        """Шрифты — только глобальные токены сайта: у страницы нет собственных font-family (кроме токена --font-serif темы D)."""
+        import re
+        from pathlib import Path
+
+        from django.conf import settings
+
+        css = ""
+        for rel in ("static/common/css/site.css", f"static/themes/{settings.SITE_THEME}/css/theme.css"):
+            css += (Path(settings.BASE_DIR) / rel).read_text(encoding="utf-8")
+        found = 0
+        for selector, body in re.findall(r"([^{}]*\.coop-[^{}]*)\{([^{}]*)\}", css):
+            found += 1
+            for family in re.findall(r"font-family\s*:\s*([^;]+)", body):
+                self.assertEqual(family.strip(), "var(--font-serif)", selector)
+        self.assertGreater(found, 20)
+        template = (Path(settings.BASE_DIR) / "templates/common/pages/cooperation.html").read_text(encoding="utf-8")
+        self.assertNotIn("font-family", template)
+
+    def test_seed_cooperation_is_repeatable_and_restores_reference(self):
+        from content.models import CooperationBlock
+
+        call_command("seed_cooperation", verbosity=0)  # повтор без --update ничего не дублирует
+        self.assertEqual(self.c.blocks.count(), 2)
+        self.assertEqual(self.c.advantages.count(), 5)
+        extra = CooperationBlock.objects.create(content=self.c, order=20, title_ru="Лишний")
+        first = self.c.blocks.first()
+        first.title_ru = "Правка владельца"
+        first.save()
+        call_command("seed_cooperation", verbosity=0)
+        first.refresh_from_db()
+        self.assertEqual(first.title_ru, "Правка владельца")  # без --update правки сохраняются
+        call_command("seed_cooperation", "--update", verbosity=0)
+        first.refresh_from_db()
+        self.assertNotEqual(first.title_ru, "Правка владельца")
+        self.assertFalse(CooperationBlock.objects.filter(pk=extra.pk).exists())  # остаток прежнего макета убран
+        self.assertEqual(self.c.blocks.count(), 2)
+
     def test_admin_screen_and_media_independence(self):
         from django.conf import settings
         from django.contrib.auth.models import User
@@ -1018,4 +1083,5 @@ class CooperationPageTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, "hero_mode")
         self.assertContains(r, "advantages-0-icon_key")
+        self.assertContains(r, "A) Фирменный фон")
         self.assertIn(settings.SITE_THEME, str(settings.MEDIA_ROOT))  # хранилище каждого сайта своё
