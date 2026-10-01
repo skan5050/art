@@ -169,3 +169,8 @@ CITIES = [
      "seo_title_ru": "Картины в Тюмени", "seo_title_en": "Paintings in Tyumen",
      "seo_description_ru": "Картины в Тюмени для новых квартир: подбор формата и цвета, индивидуальные заказы, подарочные сертификаты. Доставка через СДЭК или другую ТК."},
 ]
+
+
+from seed.typical_cities import typical_cities  # noqa: E402
+
+CITIES += typical_cities("d")

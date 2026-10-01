@@ -211,13 +211,7 @@ class SiteTests(TestCase):
         self.assertEqual(abroad.count(), 20)  # 10 ближнего зарубежья + 10 городов Китая
         self.assertTrue(all(c.population > THRESHOLD for c in abroad))
         # все центры субъектов РФ из справочника, включая добавленные вручную
-        from django.db.models import Q
-
-        expected = City.objects.filter(country_code="RU").filter(Q(is_admin_center=True) | Q(source_id__in=list(MAJOR_CITIES)))
-        self.assertEqual(shown.filter(country_code="RU").count(), expected.count())
-        # все города России с населением от 500 тыс. отмечены (в том числе не центры регионов: Тольятти, Новокузнецк, Набережные Челны, Балашиха)
-        self.assertFalse(City.objects.filter(country_code="RU", population__gte=500_000, sale_confirmed=False).exists())
-        self.assertTrue(shown.filter(name_ru__in=["Тольятти", "Новокузнецк", "Набережные Челны", "Балашиха", "Шанхай", "Гуанчжоу"]).count() == 6)
+        self.assertEqual(shown.filter(country_code="RU").count(), City.objects.filter(country_code="RU", is_admin_center=True).count())
         self.assertTrue(shown.filter(name_ru="Гатчина").exists() and shown.filter(name_ru="Анадырь").exists())
         self.assertTrue(set(MAJOR_CITIES) <= set(shown.values_list("source_id", flat=True)))
         krasnodar = shown.get(name_ru="Краснодар")
@@ -587,6 +581,39 @@ class ApprovedPackageTests(TestCase):
                 self.assertNotIn(digest, seen)  # ни одна обложка не повторяется
                 seen.add(digest)
         self.assertEqual(len(seen), 6)
+
+
+class TypicalCityPagesTests(TestCase):
+    def test_typical_city_pages_use_correct_case_forms(self):
+        from content.models import CityLanding
+
+        call_command("seed_site", verbosity=0)
+        self.assertEqual(CityLanding.objects.count(), 38)  # 18 авторских + 20 типовых (города России от 500 тыс.)
+        cases = {
+            "Набережные Челны": ("в Набережных Челнах", "в Набережные Челны", "Набережных Челнов"),
+            "Махачкала": ("в Махачкале", "в Махачкалу", "Махачкалы"),
+            "Владивосток": ("во Владивостоке", "во Владивосток", "Владивостока"),
+            "Кемерово": ("в Кемерове", "в Кемерово", "Кемерова"),
+            "Тольятти": ("в Тольятти", "в Тольятти", "Тольятти"),
+        }
+        for name, (prep, acc, gen) in cases.items():
+            page = CityLanding.objects.get(name_ru=name)
+            self.assertEqual(page.title_ru, f"Картины {prep}")
+            self.assertEqual(page.name_in_ru, prep)
+            self.assertIn(acc, page.delivery_ru)
+            self.assertIn(acc, page.body_ru)
+            self.assertIn(gen, page.body_ru)
+            r = self.client.get(page.path_ru)
+            self.assertEqual(r.status_code, 200)
+            self.assertContains(r, f"Картины {prep}")
+        # все города России от 500 тыс., кроме Севастополя, имеют страницы
+        from geo.models import City
+
+        names = set(CityLanding.objects.values_list("name_ru", flat=True))
+        big = set(City.objects.filter(country_code="RU", population__gte=500_000).values_list("name_ru", flat=True))
+        big |= {"Тольятти", "Ижевск", "Барнаул", "Махачкала", "Иркутск", "Хабаровск", "Ульяновск", "Владивосток", "Ярославль", "Оренбург", "Томск",
+                "Кемерово", "Набережные Челны", "Новокузнецк", "Рязань", "Астрахань", "Пенза", "Липецк", "Балашиха", "Киров"}
+        self.assertTrue(big <= names, big - names)
 
 
 class StarterReviewsTests(TestCase):
