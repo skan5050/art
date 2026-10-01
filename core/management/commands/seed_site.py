@@ -55,6 +55,7 @@ class Command(BaseCommand):
             self.cooperation(site)
             self.home_sections(data.HOME_SECTIONS)
             self.articles(articles.ARTICLES)
+            self.article_covers(site)
             self.studio(getattr(data, "STUDIO_IMAGES", []))
             self.city_pages(site)
             self.reviews(site)
@@ -256,6 +257,20 @@ class Command(BaseCommand):
                 asset.alt_ru, asset.alt_en = item["alt_ru"], item["alt_en"]
             self.attach(asset, "image", item["image"])
             asset.save()
+
+    def article_covers(self, site):
+        """Обложки статей №4–20: по теме статьи (slug); утверждённые обложки первых трёх статей не затрагиваются."""
+        covers = importlib.import_module("seed.article_covers").COVERS.get(site, {})
+        for slug, (filename, alt_ru, alt_en, alt_zh) in covers.items():
+            article = Article.objects.filter(slug_ru=slug).first()
+            if article is None:
+                continue
+            fresh = not article.cover
+            self.attach(article, "cover", filename)
+            if fresh or self.update:
+                article.cover_alt_ru, article.cover_alt_en = alt_ru, alt_en
+            article.save()
+            self.put_zh_fields(article, {"cover_alt": alt_zh})
 
     def home_sections(self, sections):
         for i, item in enumerate(sections):

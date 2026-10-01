@@ -1085,3 +1085,35 @@ class CooperationPageTests(TestCase):
         self.assertContains(r, "advantages-0-icon_key")
         self.assertContains(r, "A) Фирменный фон")
         self.assertIn(settings.SITE_THEME, str(settings.MEDIA_ROOT))  # хранилище каждого сайта своё
+
+
+class ArticleCoversTests(TestCase):
+    """Обложки статей «Полезное»: у каждой опубликованной статьи своя обложка с ALT на трёх языках."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_site", verbosity=0)
+
+    def test_every_article_has_unique_cover_and_alt(self):
+        from core.zh import zh_value
+
+        articles = list(Article.objects.filter(published=True).order_by("order", "id"))
+        self.assertEqual(len(articles), 20)
+        covers = [a.cover.name for a in articles]
+        self.assertTrue(all(covers))
+        self.assertEqual(len(set(covers)), 20)  # одинаковых обложек нет
+        for a in articles:
+            self.assertTrue(a.cover_alt_ru and a.cover_alt_en and zh_value(a, "cover_alt"), a.slug_ru)
+
+    def test_first_three_covers_not_changed_and_command_repeatable(self):
+        first = list(Article.objects.order_by("order", "id")[:3])
+        before = [a.cover.name for a in first]
+        call_command("seed_article_covers", "--update", verbosity=0)
+        self.assertEqual([Article.objects.get(pk=a.pk).cover.name for a in first], before)
+        self.assertEqual(len({a.cover.name for a in Article.objects.all()}), 20)
+
+    def test_covers_on_pages(self):
+        listing = self.client.get("/%D0%BF%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B5/").content.decode()
+        self.assertGreaterEqual(listing.count("<img"), 20)
+        article = Article.objects.order_by("order", "id")[10]
+        self.assertIn("article-cover", self.client.get(article.url("ru")).content.decode())
