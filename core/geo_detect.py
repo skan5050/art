@@ -122,8 +122,10 @@ def picker_items(landings=None):
 
 
 def language_by_country(request):
-    """Язык для предложения по стране IP: RU — ничего, CN — zh, остальные известные страны — en."""
+    """Запасной язык по стране IP (когда язык браузера определить нельзя): RU — ru, CN — zh, прочие известные страны — en."""
     country, _ = detect(request)
-    if not re.fullmatch(r"[A-Z]{2}", country) or country in ("RU", "XX", "T1"):
+    if not re.fullmatch(r"[A-Z]{2}", country) or country in ("XX", "T1"):
         return ""
+    if country == "RU":
+        return "ru"
     return "zh" if country == "CN" else "en"

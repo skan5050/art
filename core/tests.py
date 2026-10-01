@@ -779,7 +779,7 @@ class ChineseVersionTests(TestCase):
     def test_language_hint_script_only_on_ru_en(self):
         self.assertIn("lang-hint.js", self.client.get("/").content.decode())
         self.assertIn("lang-hint.js", self.client.get("/en/").content.decode())
-        self.assertNotIn("lang-hint.js", self.client.get("/zh/").content.decode())
+        self.assertIn("lang-hint.js", self.client.get("/zh/").content.decode())  # на китайской версии — предложение русского/English
 
 
 class CityGeoTests(TestCase):
@@ -886,7 +886,7 @@ class CityGeoTests(TestCase):
             return self.client.get("/geo/lang/", HTTP_X_GEO_COUNTRY=country, HTTP_USER_AGENT=ua).json()["lang"]
 
         with override_settings(GEO_PROVIDER="headers"):
-            self.assertEqual(lang("RU"), "")
+            self.assertEqual(lang("RU"), "ru")
             self.assertEqual(lang("CN"), "zh")
             self.assertEqual(lang("DE"), "en")
             self.assertEqual(lang("KZ"), "en")

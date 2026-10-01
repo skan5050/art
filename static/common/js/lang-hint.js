@@ -1,24 +1,24 @@
-/* Мягкая подсказка языка: если основной язык браузера китайский или английский, а страница на другом языке,
-   сверху показывается плашка со ссылкой на нужную версию (если у страницы есть перевод). Язык сам не меняется;
-   закрытие запоминается. */
+/* Мягкая подсказка языка. Язык браузера всегда решает сам: ru → русский, en → English, zh → 中文, любой другой → English;
+   страна IP не учитывается. Только если язык браузера определить нельзя — запасной вариант по стране IP.
+   Показывается плашка со ссылкой на нужную версию (если у страницы есть перевод); язык сам не меняется, закрытие запоминается. */
 (function () {
   "use strict";
   var page = (document.documentElement.lang || "ru").toLowerCase();
-  if (page === "zh") return;  // китайскую версию не предлагаем уходить
   var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
-  var first = String(langs[0] || "").toLowerCase();
-  var browser = first.indexOf("zh") === 0 ? "zh" : first.indexOf("en") === 0 ? "en" : first.indexOf("ru") === 0 ? "ru" : "";
+  var first = String(langs[0] || "").trim().toLowerCase();
 
-  if (browser) {
-    // Язык браузера (ru/en/zh) решает сам: работает как прежде, IP не вмешивается.
-    if (browser !== page) offer(browser);
+  if (/^[a-z]{2,3}([-_]|$)/.test(first)) {
+    // Язык браузера всегда решает сам и полностью определяет предложение; страна IP не учитывается.
+    // ru → русский, en → English, zh → 中文, любой другой корректный язык → English.
+    var wanted = first.indexOf("zh") === 0 ? "zh" : first.indexOf("ru") === 0 ? "ru" : "en";
+    if (wanted !== page) offer(wanted);
     return;
   }
-  // Браузерная логика ничего не предложила (язык браузера другой): дополнительный источник — страна по IP.
-  // RU — ничего; CN — 中文; прочие страны — English. Только предложение, без автоперехода.
+  // Язык браузера определить невозможно (пусто или невалидно) — запасной вариант по стране IP:
+  // RU → русский, CN → 中文, другая известная страна → English, неизвестная — ничего. Только предложение.
   fetch("/geo/lang/", { credentials: "same-origin", headers: { Accept: "application/json" } })
     .then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (d) { if (d && (d.lang === "zh" || d.lang === "en") && d.lang !== page) offer(d.lang); })
+    .then(function (d) { if (d && (d.lang === "zh" || d.lang === "en" || d.lang === "ru") && d.lang !== page) offer(d.lang); })
     .catch(function () {});
 
   function offer(target) {
@@ -28,6 +28,7 @@
   try { if (localStorage.getItem(KEY)) return; } catch (e) {}
 
   var T = {
+    ru: { ask: "Открыть русскую версию? ", go: "Перейти на русский сайт", close: "Закрыть", label: "Язык" },
     zh: { ask: "切换到中文版？ ", go: "查看中文网站", close: "关闭 / Close", label: "语言 / Language" },
     en: { ask: "Prefer English? ", go: "View the English site", close: "Close", label: "Language" }
   }[target];
