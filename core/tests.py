@@ -894,3 +894,128 @@ class CityGeoTests(TestCase):
             self.assertEqual(lang(""), "")
             self.assertEqual(lang("DE", ua="Googlebot/2.1"), "")
         self.assertEqual(lang("DE"), "")  # источник не настроен — предложений нет
+
+
+class CooperationPageTests(TestCase):
+    """Страница «Сотрудничество»: всё редактируется, макет не ломается при удалении картинок и блоков."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_site", verbosity=0)
+
+    def setUp(self):
+        from content.models import CooperationContent
+
+        self.c = CooperationContent.get()
+        self.url = Page.objects.get(kind="cooperation").url("ru")
+
+    def html(self, path=None):
+        return self.client.get(path or self.url).content.decode()
+
+    def test_page_menu_languages_and_default_layout(self):
+        from content.models import MenuItem
+
+        html = self.html()
+        self.assertEqual(html.count('<section class="coop-block'), 3)
+        self.assertIn("coop-hero--split", html)
+        self.assertEqual(html.count('class="coop-adv-item"'), 5)
+        self.assertRegex(html, r"coop-block is-photo-left")  # второй блок: фото слева, как в макете
+        self.assertTrue(MenuItem.objects.filter(page__kind="cooperation").exists())
+        self.assertIn("Cooperation", self.html(self.url.replace("/сотрудничество/", "/en/cooperation/")))
+        zh = self.html("/zh/cooperation/")
+        self.assertIn("合作", zh)
+        self.assertIn("个性化", zh)
+
+    def test_hero_modes_and_photo_removal(self):
+        self.c.hero_mode = "photo_full"
+        self.c.hero_overlay = 40
+        self.c.save()
+        html = self.html()
+        self.assertIn("coop-hero--photo_full is-dark", html)
+        self.assertIn("rgba(0,0,0,0.40)", html)
+        self.assertIn("<h1", html)  # текст остаётся HTML-текстом
+        self.c.hero_overlay = -30
+        self.c.save()
+        self.assertIn("rgba(255,255,255,0.30)", self.html())
+        self.c.hero_image_mobile.save("m.jpg", __import__("django.core.files.base", fromlist=["ContentFile"]).ContentFile(png_bytes(fmt="JPEG")), save=True)
+        self.assertIn('media="(max-width: 720px)"', self.html())
+        # фото скрыто или удалено → штатный фирменный фон
+        self.c.hero_show_image = False
+        self.c.save()
+        self.assertIn("coop-hero--brand", self.html())
+        self.c.hero_show_image = True
+        self.c.hero_image = ""
+        self.c.save()
+        self.assertIn("coop-hero--brand", self.html())
+        # «фото справа» без фото — текст на всю ширину, без пустой рамки
+        self.c.hero_mode = "split"
+        self.c.save()
+        html = self.html()
+        self.assertIn("coop-hero--text", html)
+        self.assertNotIn("coop-hero-media", html)
+        self.c.hero_mode = "none"
+        self.c.save()
+        self.assertIn("coop-hero--none", self.html())
+
+    def test_block_visibility_image_and_side(self):
+        blocks = list(self.c.blocks.all())
+        blocks[0].image_side = "left"
+        blocks[0].save()
+        blocks[1].show_image = False
+        blocks[1].save()
+        blocks[2].visible = False
+        blocks[2].save()
+        html = self.html()
+        self.assertEqual(html.count('<section class="coop-block'), 2)
+        self.assertIn("no-photo", html)  # изображение скрыто: без пустой рамки и placeholder
+        self.assertEqual(html.count('class="coop-block-photo"'), 1)
+        self.assertEqual(html.count("is-photo-left"), 1)
+        blocks[0].image = ""
+        blocks[0].save()
+        self.assertEqual(self.html().count('class="coop-block-photo"'), 0)
+
+    def test_advantages_edit_hide_and_icons(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        advs = list(self.c.advantages.all())
+        advs[0].visible = False
+        advs[1].icon_key = ""
+        advs[1].save()
+        advs[0].save()
+        html = self.html()
+        self.assertEqual(html.count('class="coop-adv-item"'), 4)
+        self.assertEqual(html.count('class="coop-icon"'), 3)  # иконку удалили — пустой рамки нет
+        advs[1].icon_file.save("own.svg", SimpleUploadedFile("own.svg", b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><path d="M0 0h8"/></svg>'))
+        html = self.html()
+        self.assertIn("coop-icon-img", html)
+        self.assertEqual(html.count('class="coop-icon"'), 4)
+
+    def test_icon_validation_and_button_actions(self):
+        from django.core.exceptions import ValidationError
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        from content.coop_icons import validate_icon_file
+
+        with self.assertRaises(ValidationError):
+            validate_icon_file(SimpleUploadedFile("x.svg", b"<svg><script>alert(1)</script></svg>"))
+        self.c.hero_button_action = "url"
+        self.c.hero_button_url = ""
+        with self.assertRaises(ValidationError):
+            self.c.full_clean()
+        self.c.hero_button_url = "/каталог/"
+        self.c.cta_button_action = "form"
+        self.c.save()
+        html = self.html()
+        self.assertIn('href="/каталог/"', html)
+        self.assertIn("data-order", html)  # финальная кнопка по умолчанию открывает общую форму заявки
+
+    def test_admin_screen_and_media_independence(self):
+        from django.conf import settings
+        from django.contrib.auth.models import User
+
+        self.client.force_login(User.objects.create_superuser("coopboss", "c@example.com", "x"))
+        r = self.client.get("/admin/content/cooperationcontent/", follow=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "hero_mode")
+        self.assertContains(r, "advantages-0-icon_key")
+        self.assertIn(settings.SITE_THEME, str(settings.MEDIA_ROOT))  # хранилище каждого сайта своё

@@ -108,3 +108,12 @@
 
 /* Контакты по макету A: короткая форма (имя, способ связи, контакт, согласие); остальные поля остаются в форме обращения из модального окна */
 .form-card-short .f-city, .form-card-short .f-size, .form-card-short .f-deadline, .form-card-short .f-comment, .form-card-short .f-file { display: none; }
+
+/* ===== «Сотрудничество» — дизайн A ===== */
+.coop-hero-copy .btn-primary { background: var(--primary); }
+.coop-hero-copy .btn-primary:hover { background: var(--primary-dark); }
+.coop-cta-text .btn-primary { background: var(--primary); }
+.coop-hero--photo_full .coop-h1 { color: var(--primary-dark); }
+.coop-icon { border: 2px solid var(--accent); border-radius: 50%; background: #fff; }
+.coop-block-body, .coop-cta-body, .coop-lead { color: #385e7f; }
+.coop-h1 { font-size: clamp(30px, 3.6vw, 52px); overflow-wrap: normal; }

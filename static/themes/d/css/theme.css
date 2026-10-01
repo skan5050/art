@@ -356,3 +356,23 @@ a:hover { color: var(--terracotta); }
   .d-order-title { font-size: clamp(26px, 8.6vw, 34px); }
   .page-head .page-title { font-size: clamp(28px, 9vw, 36px); }
 }
+
+/* ===== «Сотрудничество» — дизайн D ===== */
+.coop-hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+.coop-hero--brand { background: var(--surface); }
+.coop-hero--brand::before, .coop-hero--text::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: clamp(8px, 1vw, 14px); background: var(--accent); z-index: 1; }
+.coop-kicker { color: var(--terracotta); letter-spacing: .06em; }
+.coop-h1 { font-size: clamp(34px, 5vw, 66px); text-transform: uppercase; letter-spacing: 0; color: var(--text); }
+.coop-subtitle { font-family: var(--font-serif); font-weight: 400; color: var(--text); max-width: 20em; }
+.coop-rule { background: var(--accent); }
+.coop-block-title, .coop-adv-title, .coop-adv-name { color: var(--text); }
+.coop-block { background: var(--bg); }
+.coop-block.is-photo-left { background: var(--bg); }
+.coop-cta { background: var(--footer-bg); color: var(--footer-ink); }
+.coop-cta-title { font-family: var(--font-serif); font-weight: 400; color: var(--footer-ink); font-size: clamp(26px, 2.8vw, 38px); }
+.coop-cta-body { color: var(--footer-ink); }
+.coop-adv-title { text-transform: uppercase; display: table; margin-left: auto; margin-right: auto; padding-bottom: 8px; border-bottom: 5px solid var(--accent); }
+.coop-icon { color: var(--terracotta); width: 72px; height: 64px; position: relative; margin-bottom: 18px; }
+.coop-icon::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 58px; height: 4px; margin-left: -29px; background: var(--accent); }
+.coop-icon-svg, .coop-icon-img { width: 44px; height: 44px; }
+.coop-h1 { font-size: clamp(28px, 3.9vw, 56px); overflow-wrap: normal; }

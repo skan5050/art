@@ -1,0 +1,2 @@
+{% comment %}Кнопка страницы «Сотрудничество»: по умолчанию открывает общую форму заявки; либо обычная ссылка. Параметры: label, action, url, cls.{% endcomment %}
+{% if label %}{% if action == "url" and url %}<a class="btn {{ cls }}" href="{{ url }}"{% if url|slice:":4" == "http" %} target="_blank" rel="noopener"{% endif %}>{{ label }}</a>{% else %}<a class="btn {{ cls }}" href="{% page_url 'contacts' %}?order=general#order" data-order data-kind="general">{{ label }}</a>{% endif %}{% endif %}

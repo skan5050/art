@@ -11,7 +11,7 @@ from core.sitemap import is_empty_listing
 from geo.major_cities import PRIORITY
 from geo.models import City
 
-from .models import Article, CertificateNominal, CityLanding, HomeSection, Page, Review, StudioImage
+from .models import Article, CertificateNominal, CityLanding, CooperationContent, HomeSection, Page, Review, StudioImage
 
 
 def crumbs_for_page(page):
@@ -91,6 +91,8 @@ def page_view(request, page):
         context["articles"] = [a for a in Article.objects.filter(published=True) if a.url(lang)]
     elif page.kind == "cities":
         context["landings"] = [c for c in CityLanding.objects.filter(published=True) if c.url(lang)]
+    elif page.kind == "cooperation":
+        context["coop"] = coop_context()
     elif page.kind in ("about", "studio"):
         context["studio_images"] = list(StudioImage.objects.filter(visible=True))
         studio = Page.objects.filter(kind="studio", published=True).first()
@@ -231,3 +233,46 @@ def _inline_form_context(request):
         "inline_sizes": sizes,
         "inline_title": label(title_key),
     }
+
+
+def _focus(x, y):
+    return f"object-position: {int(x)}% {int(y)}%"
+
+
+def coop_context():
+    """Готовое к выводу содержимое страницы «Сотрудничество»: режим постера, блоки, финальный блок, преимущества."""
+    content = CooperationContent.get()
+    t = content.t
+    hero_file = content.hero_file if content.hero_show_image else None
+    mode = content.hero_mode
+    if mode == "photo_full" and not hero_file:
+        mode = "brand"  # фото удалено или скрыто — штатный фирменный фон дизайна
+    elif mode == "split" and not hero_file:
+        mode = "text"  # текст занимает всю ширину, без пустой рамки
+    hero = {
+        "mode": mode, "file": hero_file, "mobile": content.hero_image_mobile or None, "alt": t.hero_image_alt,
+        "style": _focus(content.hero_focus_x, content.hero_focus_y),
+        "kicker": t.hero_kicker, "subtitle": t.hero_subtitle, "lead": t.hero_lead, "button": t.hero_button,
+        "action": content.hero_button_action, "url": content.hero_button_url,
+        "shade": "",
+    }
+    if mode == "photo_full":
+        ov = int(content.hero_overlay)
+        hero["dark"] = ov > 0
+        hero["shade"] = f"background: rgba(0,0,0,{ov / 100:.2f})" if ov > 0 else (f"background: rgba(255,255,255,{-ov / 100:.2f})" if ov < 0 else "")
+    blocks = []
+    for b in content.blocks.all():
+        if not b.visible:
+            continue
+        title, text = b.t.title, b.t.text
+        if not (title or text):
+            continue
+        file = b.image_file if b.show_image else None
+        blocks.append({"title": title, "text": text, "file": file, "alt": b.t.alt, "style": _focus(b.focus_x, b.focus_y),
+                       "side": b.image_side})
+    cta_file = content.cta_file if content.cta_show_image else None
+    cta = {"title": t.cta_title, "text": t.cta_text, "button": t.cta_button, "action": content.cta_button_action, "url": content.cta_button_url,
+           "file": cta_file, "alt": t.cta_image_alt, "style": _focus(content.cta_focus_x, content.cta_focus_y)}
+    cta["show"] = bool(cta["title"] or cta["text"] or cta["button"])
+    advantages = [a for a in content.advantages.all() if a.visible and (a.t.title or a.t.text)]
+    return {"h1": t.h1, "hero": hero, "blocks": blocks, "cta": cta, "adv_title": t.adv_title, "advantages": advantages}

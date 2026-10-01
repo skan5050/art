@@ -148,3 +148,13 @@ ICONS = {
     "search": '<circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="m16 16 4.5 4.5"/>',
     "zoom": '<circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="m16 16 4.5 4.5M11 8v6M8 11h6"/>',
 }
+
+
+@register.simple_tag
+def coop_icon(adv):
+    """Пиктограмма преимущества: своя загруженная (SVG/PNG) важнее набора; нет ни той, ни другой — ничего не выводится."""
+    from content.coop_icons import inline_svg
+
+    if adv.icon_file:
+        return format_html('<img class="coop-icon-img" src="{}" alt="" width="40" height="40" loading="lazy">', adv.icon_file.url)
+    return inline_svg(adv.icon_key) if adv.icon_key else ""

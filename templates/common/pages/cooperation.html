@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body_class %}page-inner page-coop{% endblock %}
+{% block content %}
+{% with c=coop h=coop.hero %}
+<section class="coop-hero coop-hero--{{ h.mode }}{% if h.dark %} is-dark{% endif %}">
+  {% if h.mode == "photo_full" %}
+  <div class="coop-hero-bg" aria-hidden="{% if h.alt %}false{% else %}true{% endif %}">
+    <picture>
+      {% if h.mobile %}<source media="(max-width: 720px)" srcset="{% img_url h.mobile 1080 %}">{% endif %}
+      <img src="{% img_url h.file 2400 %}" alt="{{ h.alt }}" style="{{ h.style }}" fetchpriority="high" decoding="async">
+    </picture>
+    {% if h.shade %}<span class="coop-hero-shade" style="{{ h.shade }}"></span>{% endif %}
+  </div>
+  {% endif %}
+  <div class="coop-hero-copy">
+    {% if h.kicker %}<p class="coop-kicker">{{ h.kicker }}</p>{% endif %}
+    <h1 class="coop-h1">{% firstof c.h1 page.t.title %}</h1>
+    {% if h.subtitle %}<p class="coop-subtitle">{{ h.subtitle }}</p>{% endif %}
+    {% if h.lead %}<p class="coop-lead">{{ h.lead }}</p>{% endif %}
+    {% if theme == "d" %}{% include "partials/coop_button.html" with label=h.button action=h.action url=h.url cls="btn-accent" %}{% else %}{% include "partials/coop_button.html" with label=h.button action=h.action url=h.url cls="btn-primary" %}{% endif %}
+  </div>
+  {% if h.mode == "split" %}
+  <figure class="coop-hero-media">{% picture h.file widths="960,1600" sizes="(min-width: 900px) 54vw, 100vw" alt=h.alt cls="coop-img" style=h.style lazy=False fetchpriority="high" %}</figure>
+  {% endif %}
+</section>
+
+{% for b in c.blocks %}
+<section class="coop-block{% if b.file and b.side == 'left' %} is-photo-left{% endif %}{% if not b.file %} no-photo{% endif %}">
+  <div class="coop-block-text">
+    <span class="coop-rule" aria-hidden="true"></span>
+    {% if b.title %}<h2 class="coop-block-title">{{ b.title }}</h2>{% endif %}
+    {% if b.text %}<div class="coop-block-body">{{ b.text|rich }}</div>{% endif %}
+  </div>
+  {% if b.file %}<figure class="coop-block-photo">{% picture b.file widths="720,1200" sizes="(min-width: 900px) 50vw, 100vw" alt=b.alt cls="coop-img" style=b.style %}</figure>{% endif %}
+</section>
+{% endfor %}
+
+{% if c.cta.show %}
+<section class="coop-cta{% if not c.cta.file %} no-photo{% endif %}">
+  <div class="coop-cta-text">
+    {% if c.cta.title %}<h2 class="coop-cta-title">{{ c.cta.title }}</h2>{% endif %}
+    {% if c.cta.text %}<div class="coop-cta-body">{{ c.cta.text|rich }}</div>{% endif %}
+    {% if theme == "d" %}{% include "partials/coop_button.html" with label=c.cta.button action=c.cta.action url=c.cta.url cls="btn-accent" %}{% else %}{% include "partials/coop_button.html" with label=c.cta.button action=c.cta.action url=c.cta.url cls="btn-primary" %}{% endif %}
+  </div>
+  {% if c.cta.file %}<figure class="coop-cta-photo">{% picture c.cta.file widths="720,1200" sizes="(min-width: 900px) 40vw, 100vw" alt=c.cta.alt cls="coop-img" style=c.cta.style %}</figure>{% endif %}
+</section>
+{% endif %}
+
+{% if c.advantages %}
+<section class="coop-adv" aria-labelledby="coop-adv-title">
+  <div class="container">
+    {% if c.adv_title %}<h2 class="coop-adv-title" id="coop-adv-title">{{ c.adv_title }}</h2>{% endif %}
+    <ul class="coop-adv-list" style="--coop-adv-count: {{ c.advantages|length }}">
+      {% for a in c.advantages %}
+      <li class="coop-adv-item">
+        {% coop_icon a as icon %}{% if icon %}<span class="coop-icon">{{ icon }}</span>{% endif %}
+        {% if a.t.title %}<b class="coop-adv-name">{{ a.t.title }}</b>{% endif %}
+        {% if a.t.text %}<small class="coop-adv-text">{{ a.t.text }}</small>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+{% endblock %}

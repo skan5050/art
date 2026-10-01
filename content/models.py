@@ -31,6 +31,7 @@ class Page(TranslatableMixin, SeoFields, Routable):
         ("sold", "Проданные картины / SOLD"),
         ("certificate", "Подарочный сертификат"),
         ("custom", "Картины на заказ"),
+        ("cooperation", "Сотрудничество"),
         ("guides", "Полезное (список статей)"),
         ("cities", "Города (список городских страниц)"),
         ("text", "Текстовая страница"),
@@ -464,3 +465,176 @@ class MediaAsset(TranslatableMixin, models.Model):
     @property
     def snippet(self):
         return f"![{self.alt_ru or self.title}]({self.image.url})" if self.image else ""
+
+
+# ---------------------------------------------------------------------------
+# Страница «Сотрудничество»: все тексты, изображения и преимущества редактируются в админке.
+# Сетка, шрифты, палитра, шапка и подвал зафиксированы дизайном A / D и из админки не меняются.
+# ---------------------------------------------------------------------------
+from django.core.validators import FileExtensionValidator, MaxValueValidator, MinValueValidator  # noqa: E402
+
+from .coop_icons import ICON_CHOICES, validate_icon_file  # noqa: E402
+
+ACTION_CHOICES = [("form", "Открыть общую форму заявки"), ("url", "Перейти по ссылке")]
+_PCT = [MinValueValidator(0), MaxValueValidator(100)]
+
+
+def _file_or_asset(file, asset):
+    if file:
+        return file
+    if asset is not None and asset.image:
+        return asset.image
+    return None
+
+
+class CooperationContent(TranslatableMixin, models.Model):
+    """Содержимое страницы «Сотрудничество» (одна запись на сайт): верхний постер, финальный блок и заголовок преимуществ."""
+
+    HERO_MODES = [
+        ("brand", "1. Фирменный фон по утверждённому дизайну"),
+        ("photo_full", "2. Фото на весь фон"),
+        ("split", "3. Фото справа + текстовый блок (по утверждённому макету)"),
+        ("none", "4. Без изображения"),
+    ]
+
+    # --- Верхний постер ---
+    hero_mode = models.CharField("Тип фона", max_length=12, choices=HERO_MODES, default="split",
+                                 help_text="Если выбран режим с фото, а фото нет или оно скрыто — показывается фирменный фон дизайна.")
+    hero_kicker_ru = models.CharField("Надзаголовок (RU)", max_length=160, blank=True)
+    hero_kicker_en = models.CharField("Надзаголовок (EN)", max_length=160, blank=True)
+    h1_ru = models.CharField("Заголовок H1 (RU)", max_length=200, blank=True, help_text="Пусто — берётся заголовок страницы.")
+    h1_en = models.CharField("Заголовок H1 (EN)", max_length=200, blank=True)
+    hero_subtitle_ru = models.CharField("Подзаголовок (RU)", max_length=300, blank=True)
+    hero_subtitle_en = models.CharField("Подзаголовок (EN)", max_length=300, blank=True)
+    hero_lead_ru = models.TextField("Абзац под подзаголовком (RU)", blank=True)
+    hero_lead_en = models.TextField("Абзац под подзаголовком (EN)", blank=True)
+    hero_button_ru = models.CharField("Кнопка постера (RU)", max_length=80, blank=True, help_text="Пусто — кнопка не показывается.")
+    hero_button_en = models.CharField("Кнопка постера (EN)", max_length=80, blank=True)
+    hero_button_action = models.CharField("Действие кнопки постера", max_length=8, choices=ACTION_CHOICES, default="form")
+    hero_button_url = models.CharField("Ссылка кнопки постера", max_length=255, blank=True, help_text="Для действия «Перейти по ссылке»: /адрес/ или https://…")
+    hero_image = models.ImageField("Фото постера (для компьютера)", upload_to="cooperation/", blank=True)
+    hero_image_asset = models.ForeignKey("content.MediaAsset", verbose_name="…или фото из медиатеки", null=True, blank=True,
+                                         on_delete=models.SET_NULL, related_name="+")
+    hero_image_mobile = models.ImageField("Фото постера для телефона (необязательно)", upload_to="cooperation/", blank=True,
+                                          help_text="Нет — используется то же фото с учётом точки фокуса.")
+    hero_image_alt_ru = models.CharField("ALT фото (RU)", max_length=255, blank=True)
+    hero_image_alt_en = models.CharField("ALT фото (EN)", max_length=255, blank=True)
+    hero_show_image = models.BooleanField("Показывать фото постера", default=True, help_text="Снимите галочку, чтобы скрыть фото, не удаляя его.")
+    hero_focus_x = models.PositiveSmallIntegerField("Точка фокуса по горизонтали, %", default=50, validators=_PCT)
+    hero_focus_y = models.PositiveSmallIntegerField("Точка фокуса по вертикали, %", default=50, validators=_PCT)
+    hero_overlay = models.SmallIntegerField("Затемнение (+) / осветление (−) для текста, %", default=35,
+                                            validators=[MinValueValidator(-80), MaxValueValidator(80)],
+                                            help_text="Только для режима «Фото на весь фон»: от −80 (осветлить) до 80 (затемнить).")
+
+    # --- Финальный блок ---
+    cta_title_ru = models.CharField("Финальный блок: заголовок (RU)", max_length=200, blank=True)
+    cta_title_en = models.CharField("Финальный блок: заголовок (EN)", max_length=200, blank=True)
+    cta_text_ru = models.TextField("Финальный блок: текст (RU)", blank=True)
+    cta_text_en = models.TextField("Финальный блок: текст (EN)", blank=True)
+    cta_button_ru = models.CharField("Финальный блок: кнопка (RU)", max_length=80, blank=True)
+    cta_button_en = models.CharField("Финальный блок: кнопка (EN)", max_length=80, blank=True)
+    cta_button_action = models.CharField("Финальный блок: действие кнопки", max_length=8, choices=ACTION_CHOICES, default="form")
+    cta_button_url = models.CharField("Финальный блок: ссылка кнопки", max_length=255, blank=True)
+    cta_image = models.ImageField("Финальный блок: изображение", upload_to="cooperation/", blank=True)
+    cta_image_asset = models.ForeignKey("content.MediaAsset", verbose_name="…или изображение из медиатеки", null=True, blank=True,
+                                        on_delete=models.SET_NULL, related_name="+")
+    cta_image_alt_ru = models.CharField("Финальный блок: ALT (RU)", max_length=255, blank=True)
+    cta_image_alt_en = models.CharField("Финальный блок: ALT (EN)", max_length=255, blank=True)
+    cta_show_image = models.BooleanField("Показывать изображение", default=True)
+    cta_focus_x = models.PositiveSmallIntegerField("Фокус по горизонтали, %", default=50, validators=_PCT)
+    cta_focus_y = models.PositiveSmallIntegerField("Фокус по вертикали, %", default=50, validators=_PCT)
+
+    # --- Преимущества ---
+    adv_title_ru = models.CharField("Заголовок блока преимуществ (RU)", max_length=200, blank=True)
+    adv_title_en = models.CharField("Заголовок блока преимуществ (EN)", max_length=200, blank=True)
+
+    updated_at = models.DateTimeField("Изменено", auto_now=True)
+
+    class Meta:
+        verbose_name = "Страница «Сотрудничество»"
+        verbose_name_plural = "Страница «Сотрудничество»"
+
+    def __str__(self):
+        return "Страница «Сотрудничество»"
+
+    @classmethod
+    def get(cls):
+        return cls.objects.order_by("pk").first() or cls.objects.create()
+
+    def _clean_action(self, action, url, field):
+        if action == "url":
+            url = (url or "").strip()
+            if not url or not url.startswith(("/", "http://", "https://", "mailto:", "tel:")):
+                raise ValidationError({field: "Укажите адрес: /страница/, https://… , mailto: или tel:."})
+
+    def clean(self):
+        self._clean_action(self.hero_button_action, self.hero_button_url, "hero_button_url")
+        self._clean_action(self.cta_button_action, self.cta_button_url, "cta_button_url")
+
+    @property
+    def hero_file(self):
+        return _file_or_asset(self.hero_image, self.hero_image_asset)
+
+    @property
+    def cta_file(self):
+        return _file_or_asset(self.cta_image, self.cta_image_asset)
+
+
+class CooperationBlock(TranslatableMixin, models.Model):
+    """Один из блоков «текст + фото» страницы «Сотрудничество»."""
+
+    SIDES = [("right", "Фото справа / текст слева"), ("left", "Фото слева / текст справа")]
+
+    content = models.ForeignKey(CooperationContent, on_delete=models.CASCADE, related_name="blocks")
+    order = models.PositiveSmallIntegerField("Порядок", default=0)
+    visible = models.BooleanField("Показывать блок", default=True)
+    title_ru = models.CharField("Заголовок (RU)", max_length=200, blank=True)
+    title_en = models.CharField("Заголовок (EN)", max_length=200, blank=True)
+    text_ru = models.TextField("Текст (RU)", blank=True)
+    text_en = models.TextField("Текст (EN)", blank=True)
+    image = models.ImageField("Изображение", upload_to="cooperation/", blank=True)
+    image_asset = models.ForeignKey("content.MediaAsset", verbose_name="…или из медиатеки", null=True, blank=True,
+                                    on_delete=models.SET_NULL, related_name="+")
+    alt_ru = models.CharField("ALT (RU)", max_length=255, blank=True)
+    alt_en = models.CharField("ALT (EN)", max_length=255, blank=True)
+    show_image = models.BooleanField("Показывать изображение", default=True)
+    image_side = models.CharField("Положение изображения", max_length=5, choices=SIDES, default="right")
+    focus_x = models.PositiveSmallIntegerField("Фокус по горизонтали, %", default=50, validators=_PCT)
+    focus_y = models.PositiveSmallIntegerField("Фокус по вертикали, %", default=50, validators=_PCT)
+
+    class Meta:
+        verbose_name = "Блок «текст + фото»"
+        verbose_name_plural = "Блоки «текст + фото»"
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title_ru or f"Блок {self.pk}"
+
+    @property
+    def image_file(self):
+        return _file_or_asset(self.image, self.image_asset)
+
+
+class CooperationAdvantage(TranslatableMixin, models.Model):
+    """Преимущество (пиктограмма, название, описание). Каждое редактируется и скрывается отдельно."""
+
+    content = models.ForeignKey(CooperationContent, on_delete=models.CASCADE, related_name="advantages")
+    order = models.PositiveSmallIntegerField("Порядок", default=0)
+    visible = models.BooleanField("Показывать", default=True)
+    icon_key = models.CharField("Пиктограмма из набора", max_length=24, blank=True, choices=ICON_CHOICES,
+                                help_text="Пусто — без пиктограммы (пустой рамки не будет).")
+    icon_file = models.FileField("…или своя пиктограмма (SVG/PNG)", upload_to="cooperation/icons/", blank=True,
+                                 validators=[FileExtensionValidator(["svg", "png", "webp"]), validate_icon_file],
+                                 help_text="Загруженный файл заменяет пиктограмму из набора. До 300 КБ.")
+    title_ru = models.CharField("Название (RU)", max_length=120, blank=True)
+    title_en = models.CharField("Название (EN)", max_length=120, blank=True)
+    text_ru = models.CharField("Короткое описание (RU)", max_length=200, blank=True)
+    text_en = models.CharField("Короткое описание (EN)", max_length=200, blank=True)
+
+    class Meta:
+        verbose_name = "Преимущество"
+        verbose_name_plural = "Преимущества"
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title_ru or f"Преимущество {self.pk}"

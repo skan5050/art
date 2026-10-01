@@ -16,7 +16,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from catalog.models import Category, Technique
-from content.models import Article, CityLanding, HomeSection, MenuItem, Page, Review, StudioImage
+from content.models import (Article, CityLanding, CooperationAdvantage, CooperationBlock, CooperationContent, HomeSection, MenuItem, Page,
+                            Review, StudioImage)
 from geo.models import City
 from core.labels import DEFAULT_LABELS
 from core.models import Label, SeoTemplate, SharedBlock, SiteSettings, StandardSize, Translation
@@ -51,6 +52,7 @@ class Command(BaseCommand):
             pages = self.pages(data.PAGES)
             self.categories(data.CATEGORIES)
             self.menu(data.MENU, pages)
+            self.cooperation(site)
             self.home_sections(data.HOME_SECTIONS)
             self.articles(articles.ARTICLES)
             self.studio(getattr(data, "STUDIO_IMAGES", []))
@@ -168,6 +170,57 @@ class Command(BaseCommand):
             page = pages.get(kind)
             if page:
                 MenuItem.objects.create(page=page, order=i * 10, **spec)
+
+    def cooperation(self, site):
+        """Страница «Сотрудничество»: страница, пункт меню, содержимое, блоки, преимущества и китайские тексты.
+
+        Без --update существующее содержимое (правки владельца) не меняется; недостающее добавляется.
+        """
+        spec = importlib.import_module("seed.cooperation")
+        page_spec = dict(spec.PAGE[site])
+        zh_page = page_spec.pop("zh")
+        existed = Page.objects.filter(kind="cooperation").exists()
+        page = self.upsert(Page, {"kind": "cooperation"}, {**page_spec, "order": 45})
+        if (not existed or self.update) and not MenuItem.objects.filter(page=page).exists():
+            MenuItem.objects.create(page=page, order=45, visible=True)
+        self.put_zh_fields(page, zh_page)
+
+        data = spec.CONTENT[site]
+        content = CooperationContent.objects.order_by("pk").first()
+        created = content is None
+        if created:
+            content = CooperationContent()
+        if created or self.update:
+            for key, value in data["scalars"].items():
+                setattr(content, key, value)
+        for field, filename in data["images"].items():
+            self.attach(content, field, filename)
+        content.save()
+        self.put_zh_fields(content, data["zh"])
+
+        for i, item in enumerate(data["blocks"]):
+            block = content.blocks.filter(order=i * 10).first()
+            fresh = block is None
+            if fresh:
+                block = CooperationBlock(content=content, order=i * 10)
+            if fresh or self.update:
+                for key in ("title_ru", "title_en", "text_ru", "text_en", "alt_ru", "alt_en"):
+                    setattr(block, key, item[key])
+                block.image_side = item["side"]
+            self.attach(block, "image", item["image"])
+            block.save()
+            self.put_zh_fields(block, item["zh"])
+        for i, item in enumerate(data["advantages"]):
+            adv = content.advantages.filter(order=i * 10).first()
+            fresh = adv is None
+            if fresh:
+                adv = CooperationAdvantage(content=content, order=i * 10)
+            if fresh or self.update:
+                adv.icon_key = item["icon"]
+                for key in ("title_ru", "title_en", "text_ru", "text_en"):
+                    setattr(adv, key, item[key])
+                adv.save()
+            self.put_zh_fields(adv, item["zh"])
 
     def home_sections(self, sections):
         for i, item in enumerate(sections):
